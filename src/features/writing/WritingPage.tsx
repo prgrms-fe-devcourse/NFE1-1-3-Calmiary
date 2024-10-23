@@ -6,7 +6,9 @@ const WritingPage = () => {
     <WritingWrapper>
       <WritingLayout>
         <QuestionBox />
-        <ResponseBox />
+        <ResponseBoxContainer>
+          <ResponseBox />
+        </ResponseBoxContainer>
         <QuestionBox />
       </WritingLayout>
     </WritingWrapper>
@@ -23,4 +25,9 @@ const WritingWrapper = styled.div`
 const WritingLayout = styled.div`
   max-width: 400px;
   margin: auto;
+`;
+
+const ResponseBoxContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
