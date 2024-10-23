@@ -4,8 +4,11 @@ import styled from 'styled-components';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import WritingPage from './features/writing/WritingPage.tsx';
 
-const router = createBrowserRouter([]);
+const router = createBrowserRouter([
+  { path: '/writing', element: <WritingPage /> },
+]);
 
 function App() {
   useScreenSize();
