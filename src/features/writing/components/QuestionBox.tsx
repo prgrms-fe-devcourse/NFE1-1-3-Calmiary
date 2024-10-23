@@ -16,5 +16,5 @@ const Div = styled.div`
   align-items: center;
   padding: 1rem;
   border-radius: 14px;
-  margin: 1rem 0 1rem 0;
+  margin: 1.5rem 0 1.5rem 0;
 `;

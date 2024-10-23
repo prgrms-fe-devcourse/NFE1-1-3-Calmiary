@@ -24,5 +24,5 @@ const Div = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 2rem;
-  margin: 0 0 1rem 0;
+  margin: 1.5rem 0 1.5rem 0;
 `;

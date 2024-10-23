@@ -20,6 +20,7 @@ import write_emotion_cry from '../../assets/write-emotion-cry.svg';
 import write_emotion_smile from '../../assets/write-emotion-smile.svg';
 import write_emotion_scary from '../../assets/write-emotion-scary.svg';
 import write_emotion_angry from '../../assets/write-emotion-angry.svg';
+import write_background from '../../assets/write-background.svg';
 
 interface IconProps {
   type:
@@ -39,6 +40,7 @@ interface IconProps {
     | 'write_emotion_smile'
     | 'write_emotion_scary'
     | 'write_emotion_angry'
+    | 'write_background'
     | 'close_x'
     | 'community_comment'
     | 'community_empty_heart'
@@ -104,6 +106,9 @@ export const Icon = ({
       break;
     case 'write_emotion_angry':
       src = write_emotion_angry;
+      break;
+    case 'write_background':
+      src = write_background;
       break;
     case 'community_empty_heart':
       src = community_empty_heart;

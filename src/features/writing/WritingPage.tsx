@@ -26,11 +26,15 @@ export default WritingPage;
 
 const WritingWrapper = styled.div`
   background: ${({ theme }) => theme.colors.brand_bg};
+  background-image: url('/src/assets/write-background.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   height: 100vh;
 `;
 
 const WritingLayout = styled.div`
-  max-width: 400px;
+  max-width: 390px;
   margin: auto;
 `;
 
