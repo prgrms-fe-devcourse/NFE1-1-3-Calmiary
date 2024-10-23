@@ -9,7 +9,9 @@ from model import models
 from database import engine, get_db
 from typing import Optional, Dict, Any
 from openai import OpenAI
+import os
 import re
+from dotenv import load_dotenv
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -27,7 +29,9 @@ app = FastAPI(
 
 app.include_router(table_router)
 
-client = OpenAI(api_key='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')
+load_dotenv()
+
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 @app.post("/user/add/", 
     response_model=UserResponse,
