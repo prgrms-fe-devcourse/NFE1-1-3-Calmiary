@@ -1,20 +1,20 @@
 import styled from 'styled-components';
 
-import close_x from '@/assets/close-x.svg';
-import community_comment from '@/assets/community-comment.svg';
-import community_empty_heart from '@/assets/community-empty_heart.svg';
-import community_filed_heart from '@/assets/community-filed_heart.svg';
-import diary_left from '@/assets/diary-left.svg';
-import diary_right from '@/assets/diary-right.svg';
-import home_calender from '@/assets/home-calendar.svg';
-import home_history from '@/assets/home-history.svg';
-import home_pen from '@/assets/home-pen.svg';
-import nav_community from '@/assets/nav-community.svg';
-import nav_home from '@/assets/nav-home.svg';
-import nav_log from '@/assets/nav-log.svg';
-import nav_profile from '@/assets/nav-profile.svg';
-import nav_write from '@/assets/nav-write.svg';
-import write_submit from '@/assets/write-submit.svg';
+import close_x from '../../assets/close-x.svg';
+import community_comment from '../../assets/community-comment.svg';
+import community_empty_heart from '../../assets/community-empty_heart.svg';
+import community_filed_heart from '../../assets/community-filed_heart.svg';
+import diary_left from '../../assets/diary-left.svg';
+import diary_right from '../../assets/diary-right.svg';
+import home_calender from '../../assets/home-calendar.svg';
+import home_history from '../../assets/home-history.svg';
+import home_pen from '../../assets/home-pen.svg';
+import nav_community from '../../assets/nav-community.svg';
+import nav_home from '../../assets/nav-home.svg';
+import nav_log from '../../assets/nav-log.svg';
+import nav_profile from '../../assets/nav-profile.svg';
+import nav_write from '../../assets/nav-write.svg';
+import write_submit from '../../assets/write-submit.svg';
 
 interface IconProps {
   type:
