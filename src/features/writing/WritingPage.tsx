@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { QuestionBox, ResponseBox } from './components';
+import { EmotionInput, QuestionBox, ResponseBox } from './components';
 
 const WritingPage = () => {
   return (
@@ -10,6 +10,7 @@ const WritingPage = () => {
           <ResponseBox />
         </ResponseBoxContainer>
         <QuestionBox />
+        <EmotionInput />
       </WritingLayout>
     </WritingWrapper>
   );

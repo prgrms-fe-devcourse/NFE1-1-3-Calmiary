@@ -8,7 +8,7 @@ export default QuestionBox;
 
 const Div = styled.div`
   background: ${({ theme }) => theme.colors.write_purple300};
-  width: 240px;
+  width: 15rem;
   color: ${({ theme }) => theme.colors.write_white200};
   display: flex;
   flex-direction: column;

@@ -18,7 +18,7 @@ export default ResponseBox;
 const Div = styled.div`
   background: none;
   border: 2px solid ${({ theme }) => theme.colors.write_gray100};
-  width: 240px;
+  width: 15rem;
   border-radius: 14px;
   color: ${({ theme }) => theme.colors.write_white200};
   display: flex;
