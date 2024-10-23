@@ -1,9 +1,14 @@
 import styled from 'styled-components';
+import { QuestionBox, ResponseBox } from './components';
 
 const WritingPage = () => {
   return (
     <WritingWrapper>
-      <WritingLayout></WritingLayout>
+      <WritingLayout>
+        <QuestionBox />
+        <ResponseBox />
+        <QuestionBox />
+      </WritingLayout>
     </WritingWrapper>
   );
 };
@@ -18,5 +23,4 @@ const WritingWrapper = styled.div`
 const WritingLayout = styled.div`
   max-width: 400px;
   margin: auto;
-  padding: 1rem 0 1rem 0;
 `;
