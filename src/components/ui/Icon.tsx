@@ -21,6 +21,12 @@ import emoji_sad from '../../assets/Emoji-sad.svg';
 import emoji_smail from '../../assets/Emoji-smail.svg';
 import emoji_angry from '../../assets/Emoji-angry.svg';
 import emoji_petulance from '../../assets/Emoji-petulance.svg';
+import write_emotion_soso from '../../assets/write-emotion-soso.svg';
+import write_emotion_cry from '../../assets/write-emotion-cry.svg';
+import write_emotion_smile from '../../assets/write-emotion-smile.svg';
+import write_emotion_scary from '../../assets/write-emotion-scary.svg';
+import write_emotion_angry from '../../assets/write-emotion-angry.svg';
+import write_background from '../../assets/write-background.svg';
 
 interface IconProps {
   type:
@@ -36,6 +42,12 @@ interface IconProps {
     | 'diary_right'
     | 'diary_info'
     | 'write_submit'
+    | 'write_emotion_soso'
+    | 'write_emotion_cry'
+    | 'write_emotion_smile'
+    | 'write_emotion_scary'
+    | 'write_emotion_angry'
+    | 'write_background'
     | 'close_x'
     | 'community_comment'
     | 'community_empty_heart'
@@ -94,6 +106,24 @@ export const Icon = ({
       break;
     case 'write_submit':
       src = write_submit;
+      break;
+    case 'write_emotion_soso':
+      src = write_emotion_soso;
+      break;
+    case 'write_emotion_cry':
+      src = write_emotion_cry;
+      break;
+    case 'write_emotion_smile':
+      src = write_emotion_smile;
+      break;
+    case 'write_emotion_scary':
+      src = write_emotion_scary;
+      break;
+    case 'write_emotion_angry':
+      src = write_emotion_angry;
+      break;
+    case 'write_background':
+      src = write_background;
       break;
     case 'community_empty_heart':
       src = community_empty_heart;
