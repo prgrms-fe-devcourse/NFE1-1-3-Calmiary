@@ -12,7 +12,13 @@ declare module 'styled-components' {
       system_blue: string;
       home_100: string;
       diary_100: string;
-      write_100: string;
+      write_purple100: string;
+      write_purple200: string;
+      write_purple300: string;
+      write_gray100: string;
+      write_gray200: string;
+      write_white100: string;
+      write_white200: string;
     };
     border: {
       default: string;
