@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface QuestionBoxProp {
+interface QuestionBoxPropTypes {
   comment?: string;
   loadingSpinner?: ReactNode;
 }
-const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxProp) => {
+const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxPropTypes) => {
   return (
     <Div>
       <div>{comment}</div>

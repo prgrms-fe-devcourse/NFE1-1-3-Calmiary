@@ -1,40 +1,59 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
+import { UseFormRegister } from 'react-hook-form';
+import { FormTypes } from '../types/formTypes';
 
-const ContentInput = () => {
+interface ContentInputPropTypes {
+  register: UseFormRegister<FormTypes>;
+}
+
+const ContentInput = ({ register }: ContentInputPropTypes) => {
   return (
-    <Form>
-      <Input />
-      <SubmitButton>
+    <ContentInputWrapper>
+      <InputWrapper>
+        <Input {...register('content')} maxLength={500} />
+      </InputWrapper>
+      <ButtonWrapper type="submit">
         <Icon type="write_submit" size={22} />
-      </SubmitButton>
-    </Form>
+      </ButtonWrapper>
+    </ContentInputWrapper>
   );
 };
 
 export default ContentInput;
 
-const Form = styled.form`
+const ContentInputWrapper = styled.div`
   position: relative;
 `;
 
-const Input = styled.textarea`
+const InputWrapper = styled.div`
   background: ${({ theme }) => theme.colors.write_purple200};
-  color: ${({ theme }) => theme.colors.write_white200};
-  border-radius: 15px;
-  border: none;
-  outline: none;
-  width: 100%;
+  position: relative;
   height: 150px;
-  padding: 1rem 4rem 1rem 1rem;
-  resize: none;
+  padding: 1rem 0;
+  border-radius: 15px;
   overflow: auto;
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const SubmitButton = styled.button`
+const Input = styled.textarea`
+  background: transparent;
+  color: ${({ theme }) => theme.colors.write_white200};
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  padding: 0 4rem 0 1rem;
+  resize: none;
+  overflow: visible;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const ButtonWrapper = styled.button`
   background: ${({ theme }) => theme.colors.write_gray200};
   border-radius: 50%;
   border: none;

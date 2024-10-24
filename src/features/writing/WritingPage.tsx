@@ -3,6 +3,7 @@ import {
   ContentInput,
   ContentPublicButton,
   EmotionInput,
+  EntireInput,
   LoadingSpinner,
   MoveToMainButton,
   QuestionBox,
@@ -18,8 +19,7 @@ const WritingPage = () => {
           <ResponseBox />
         </ResponseBoxContainer>
         <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
-        <EmotionInput />
-        <ContentInput />
+        <EntireInput />
         <ButtonContainer>
           <ContentPublicButton />
           <MoveToMainButton />
