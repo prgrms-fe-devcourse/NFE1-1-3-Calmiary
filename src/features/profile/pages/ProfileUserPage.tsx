@@ -102,7 +102,7 @@ const InputArea = styled.div`
     height: 57px;
     border-radius: 1rem;
     border: none;
-    background-color: #${({ theme }) => theme.colors.modal_purple300};
+    background-color: ${({ theme }) => theme.colors.modal_purple300};
     color: #ffffff;
     padding: 1rem;
   }
