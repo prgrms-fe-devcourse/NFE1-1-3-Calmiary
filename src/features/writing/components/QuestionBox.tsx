@@ -1,14 +1,25 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const QuestionBox = () => {
-  return <Div>오늘 어떤 고민이 있나요?</Div>;
+interface QuestionBoxProp {
+  comment?: string;
+  loadingSpinner?: ReactNode;
+}
+const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxProp) => {
+  return (
+    <Div>
+      <div>{comment}</div>
+      <div>{loadingSpinner}</div>
+    </Div>
+  );
 };
 
 export default QuestionBox;
 
 const Div = styled.div`
   background: ${({ theme }) => theme.colors.write_purple300};
-  width: 15rem;
+  max-width: 15rem;
+  width: auto;
   color: ${({ theme }) => theme.colors.write_white200};
   display: flex;
   flex-direction: column;

@@ -3,6 +3,7 @@ import {
   ContentInput,
   ContentPublicButton,
   EmotionInput,
+  LoadingSpinner,
   MoveToMainButton,
   QuestionBox,
   ResponseBox,
@@ -12,11 +13,11 @@ const WritingPage = () => {
   return (
     <WritingWrapper>
       <WritingLayout>
-        <QuestionBox />
+        <QuestionBox comment="오늘 어떤 고민이 있나요?" />
         <ResponseBoxContainer>
           <ResponseBox />
         </ResponseBoxContainer>
-        <QuestionBox />
+        <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
         <EmotionInput />
         <ContentInput />
         <ButtonContainer>
