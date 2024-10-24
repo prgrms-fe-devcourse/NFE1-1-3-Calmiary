@@ -16,6 +16,11 @@ import nav_log from '../../assets/nav-log.svg';
 import nav_profile from '../../assets/nav-profile.svg';
 import nav_write from '../../assets/nav-write.svg';
 import write_submit from '../../assets/write-submit.svg';
+import emoji_soso from '../../assets/Emoji-soso.svg';
+import emoji_sad from '../../assets/Emoji-sad.svg';
+import emoji_smail from '../../assets/Emoji-smail.svg';
+import emoji_angry from '../../assets/Emoji-angry.svg';
+import emoji_petulance from '../../assets/Emoji-petulance.svg';
 
 interface IconProps {
   type:
@@ -34,7 +39,12 @@ interface IconProps {
     | 'close_x'
     | 'community_comment'
     | 'community_empty_heart'
-    | 'community_filed_heart';
+    | 'community_filed_heart'
+    | 'emoji_soso'
+    | 'emoji_sad'
+    | 'emoji_smail'
+    | 'emoji_angry'
+    | 'emoji_petulance';
   alt?: string;
   size?: number;
   [x: string]: unknown;
@@ -96,6 +106,21 @@ export const Icon = ({
       break;
     case 'close_x':
       src = close_x;
+      break;
+    case 'emoji_soso':
+      src = emoji_soso;
+      break;
+    case 'emoji_sad':
+      src = emoji_sad;
+      break;
+    case 'emoji_smail':
+      src = emoji_smail;
+      break;
+    case 'emoji_angry':
+      src = emoji_angry;
+      break;
+    case 'emoji_petulance':
+      src = emoji_petulance;
       break;
     default:
       throw new Error('지원하는 아이콘 타입이 존재하지 않습니다.');
