@@ -21,13 +21,15 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.write_purple200};
 `;
 
-const InputLayout = styled.input`
+const InputLayout = styled.textarea`
   border: none;
   background-color: transparent;
+  width: 100%;
+  margin-right: 4px;
 
   ::placeholder {
     font-size: 1rem;
-    font-wieght: 500;
+    font-weight: 500;
     color: #ffffff;
   }
 
