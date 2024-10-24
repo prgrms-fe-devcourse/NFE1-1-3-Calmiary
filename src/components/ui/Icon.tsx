@@ -6,6 +6,7 @@ import community_empty_heart from '../../assets/community-empty_heart.svg';
 import community_filed_heart from '../../assets/community-filed_heart.svg';
 import diary_left from '../../assets/diary-left.svg';
 import diary_right from '../../assets/diary-right.svg';
+import diary_info from '../../assets/diary-info.svg';
 import home_calender from '../../assets/home-calendar.svg';
 import home_history from '../../assets/home-history.svg';
 import home_pen from '../../assets/home-pen.svg';
@@ -28,6 +29,7 @@ interface IconProps {
     | 'home_pen'
     | 'diary_left'
     | 'diary_right'
+    | 'diary_info'
     | 'write_submit'
     | 'close_x'
     | 'community_comment'
@@ -76,6 +78,9 @@ export const Icon = ({
       break;
     case 'diary_right':
       src = diary_right;
+      break;
+    case 'diary_info':
+      src = diary_info;
       break;
     case 'write_submit':
       src = write_submit;
