@@ -1,21 +1,33 @@
 import styled from 'styled-components';
-import { Icon } from '../../../components/ui/Icon';
+import EmotionIcon from './EmotionIcon';
+import { EmotionIconTypes, FormTypes } from '../types/formTypes';
+import { UseFormRegister } from 'react-hook-form';
 
-const EmotionInput = () => {
+interface EmotionInputPropTypes {
+  register: UseFormRegister<FormTypes>;
+}
+
+const EmotionInput = ({ register }: EmotionInputPropTypes) => {
+  const ICON_TYPE: EmotionIconTypes[] = [
+    'write_emotion_soso',
+    'write_emotion_cry',
+    'write_emotion_smile',
+    'write_emotion_scary',
+    'write_emotion_angry',
+  ];
+
   return (
-    <Div>
-      <Icon type="write_emotion_soso" size={54} />
-      <Icon type="write_emotion_cry" size={54} />
-      <Icon type="write_emotion_smile" size={54} />
-      <Icon type="write_emotion_scary" size={54} />
-      <Icon type="write_emotion_angry" size={54} />
-    </Div>
+    <DivWrapper>
+      {ICON_TYPE.map((elem) => (
+        <EmotionIcon key={elem} type={elem} register={register} />
+      ))}
+    </DivWrapper>
   );
 };
 
 export default EmotionInput;
 
-const Div = styled.div`
+const DivWrapper = styled.div`
   background: ${({ theme }) => theme.colors.write_purple200};
   border-radius: 15px;
   border: none;

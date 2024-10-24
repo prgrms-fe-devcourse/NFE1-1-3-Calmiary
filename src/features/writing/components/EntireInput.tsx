@@ -21,7 +21,7 @@ const EntireInput = () => {
 
   return (
     <Form onSubmit={handleSubmit(handleSubmitContent)}>
-      <EmotionInput />
+      <EmotionInput register={register} />
       <ContentInput register={register} />
     </Form>
   );

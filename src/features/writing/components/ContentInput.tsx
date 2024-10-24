@@ -10,12 +10,12 @@ interface ContentInputPropTypes {
 const ContentInput = ({ register }: ContentInputPropTypes) => {
   return (
     <ContentInputWrapper>
-      <InputWrapper>
+      <InputLayout>
         <Input {...register('content')} maxLength={500} />
-      </InputWrapper>
-      <ButtonWrapper type="submit">
+      </InputLayout>
+      <ButtonLayout type="submit">
         <Icon type="write_submit" size={22} />
-      </ButtonWrapper>
+      </ButtonLayout>
     </ContentInputWrapper>
   );
 };
@@ -26,7 +26,7 @@ const ContentInputWrapper = styled.div`
   position: relative;
 `;
 
-const InputWrapper = styled.div`
+const InputLayout = styled.div`
   background: ${({ theme }) => theme.colors.write_purple200};
   position: relative;
   height: 150px;
@@ -53,7 +53,7 @@ const Input = styled.textarea`
   }
 `;
 
-const ButtonWrapper = styled.button`
+const ButtonLayout = styled.button`
   background: ${({ theme }) => theme.colors.write_gray200};
   border-radius: 50%;
   border: none;
