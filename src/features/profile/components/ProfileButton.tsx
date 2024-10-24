@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-interface ButtonProps {
+interface ButtonPropTypes {
   width?: string;
   height?: string;
   color?: string;
   opacity?: number;
 }
 
-const ProfileButton = styled.button<ButtonProps>`
+const ProfileButton = styled.button<ButtonPropTypes>`
   width: ${({ width }) => width || '264px'};
   height: ${({ height }) => height || '57px'};
   background-color: ${({ color }) => color || '#9C99AE'};

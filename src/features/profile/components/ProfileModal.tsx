@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import ProfileButton from './ProfileButton';
 import { Icon } from '../../../components/ui/Icon';
 
-interface ProfileModalProps {
+interface ProfileModalPropTypes {
   onClose: () => void;
 }
 
-export default function ProfileModal({ onClose }: ProfileModalProps) {
+export default function ProfileModal({ onClose }: ProfileModalPropTypes) {
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -47,7 +47,7 @@ const ModalContainer = styled.div`
   position: relative;
   width: 300px;
   height: 300px;
-  background: #f3efff;
+  background: ${({ theme }) => theme.colors.modal_purple100};
   border-radius: 10px;
   display: flex;
   flex-direction: column;

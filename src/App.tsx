@@ -8,6 +8,7 @@ import WritingPage from './features/writing/WritingPage.tsx';
 
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
+import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: '/userProfile',
     element: <ProfileUserPage />,
+  },
+  {
+    path: '/likePost',
+    element: <ProfileLikePage />,
   },
   { path: '/writing', element: <WritingPage /> },
 ]);
