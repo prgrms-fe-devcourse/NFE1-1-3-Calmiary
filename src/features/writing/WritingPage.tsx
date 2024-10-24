@@ -31,7 +31,11 @@ const WritingPage = () => {
         {isAIResponseMode && (
           <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
         )}
-        {isInputMode && <EntireInput />}
+        {isInputMode && (
+          <InputContainer>
+            <EntireInput />
+          </InputContainer>
+        )}
         {isEndMode && (
           <ButtonContainer>
             <ContentPublicButton />
@@ -62,6 +66,13 @@ const WritingLayout = styled.div`
 const ResponseBoxContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+const InputContainer = styled.div`
+  position: fixed;
+  left: 50%;
+  bottom: 5rem;
+  transform: translateX(-50%);
 `;
 
 const ButtonContainer = styled.div`

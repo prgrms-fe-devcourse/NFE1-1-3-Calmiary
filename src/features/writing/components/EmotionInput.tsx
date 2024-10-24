@@ -34,6 +34,7 @@ const DivWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  gap: 0.5rem;
   align-items: center;
   padding: 0.5rem 2rem;
   margin: 1.5rem 0 1.5rem 0;

@@ -11,11 +11,14 @@ const EntireInput = () => {
   const { setEmotion, setContent } = useWritingResponseStore(
     (state) => state.actions
   );
-  const { setIsInputMode, setIsAIResponseMode } = useWritingModeStore(
-    (state) => state.actions
-  );
+  const { setIsInputMode, setIsUserResponseMode, setIsAIResponseMode } =
+    useWritingModeStore((state) => state.actions);
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
+    if (data.emotion === null) {
+      alert('⚠️ 감정을 선택해주세요!');
+      return;
+    }
     if (data.content.trim() === '') {
       alert('⚠️ 고민을 입력해주세요!');
     } else {
@@ -24,8 +27,11 @@ const EntireInput = () => {
       setContent(data.content);
       setIsInputMode(false);
       setTimeout(() => {
-        setIsAIResponseMode(true);
+        setIsUserResponseMode(true);
       }, 1500);
+      setTimeout(() => {
+        setIsAIResponseMode(true);
+      }, 3000);
     }
 
     Promise.resolve()
@@ -45,4 +51,5 @@ export default EntireInput;
 
 const Form = styled.form`
   position: relative;
+  max-width: 390px;
 `;
