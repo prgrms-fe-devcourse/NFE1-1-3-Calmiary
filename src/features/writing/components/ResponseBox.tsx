@@ -1,11 +1,18 @@
 import styled from 'styled-components';
+import useWritingStore from '../../../stores/writingStore';
 
 interface ResponseBoxPropTypes {
   comment: string;
 }
 
-const ResponseBox = ({ comment }: ResponseBoxPropTypes) => {
-  return <Div>{comment}</Div>;
+const ResponseBox = () => {
+  const emotion = useWritingStore((state) => state.emotion);
+  const content = useWritingStore((state) => state.content);
+  return (
+    <Div>
+      {emotion}, {content}
+    </Div>
+  );
 };
 
 export default ResponseBox;

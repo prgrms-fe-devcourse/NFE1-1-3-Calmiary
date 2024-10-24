@@ -14,7 +14,7 @@ const WritingPage = () => {
       <WritingLayout>
         <QuestionBox comment="오늘 어떤 고민이 있나요?" />
         <ResponseBoxContainer>
-          <ResponseBox comment="사용자 답변" />
+          <ResponseBox />
         </ResponseBoxContainer>
         <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
         <EntireInput />
