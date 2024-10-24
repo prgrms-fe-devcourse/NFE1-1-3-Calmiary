@@ -1,8 +1,4 @@
-// interface DiaryFilterProps {
-
 import styled from 'styled-components';
-
-// }
 
 function DiaryFilter() {
   return (
@@ -16,4 +12,19 @@ function DiaryFilter() {
 
 export default DiaryFilter;
 
-const S_DiaryFilter = styled.div``;
+const S_DiaryFilter = styled.div`
+  width: 100%;
+  height: 8.33vh;
+  display: flex;
+  justify-content: space-around;
+  margin-left: 5px;
+  color: ${({ theme }) => theme.colors.write_white200};
+
+  button {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+`;
