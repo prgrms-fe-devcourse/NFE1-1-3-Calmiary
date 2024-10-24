@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import DropDownArrow from '../../../assets/comuunity-dropdown.svg';
 
@@ -12,6 +12,7 @@ interface DropDownPropTypes {
 
 const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const SelectContainerRef = useRef<HTMLDivElement | null>(null);
   const sortOptions: SortOptions = {
     desc: '최신순',
     asc: '나중순',
@@ -27,12 +28,27 @@ const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        SelectContainerRef.current &&
+        !SelectContainerRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const availableOptions = Object.entries(sortOptions).filter(
     ([key]) => key !== isSorted
   );
 
   return (
-    <Wrapper>
+    <Wrapper ref={SelectContainerRef}>
       <DefaultLayout onClick={handleOpen}>
         <Default>{sortOptions[isSorted]}</Default>
         {isOpen ? (
