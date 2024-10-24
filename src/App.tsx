@@ -4,10 +4,15 @@ import styled from 'styled-components';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import CommunityPage from './features/community/CommunityPage.tsx';
 import WritingPage from './features/writing/WritingPage.tsx';
 
 const router = createBrowserRouter([
   { path: '/writing', element: <WritingPage /> },
+  {
+    path: '/community',
+    element: <CommunityPage />,
+  },
 ]);
 
 function App() {
