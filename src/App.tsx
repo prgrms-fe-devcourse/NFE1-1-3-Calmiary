@@ -5,7 +5,19 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-const router = createBrowserRouter([]);
+import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
+import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
+
+const router = createBrowserRouter([
+  {
+    path: '/profile',
+    element: <ProfileMainPage />,
+  },
+  {
+    path: '/userProfile',
+    element: <ProfileUserPage />,
+  },
+]);
 
 function App() {
   useScreenSize();
