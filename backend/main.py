@@ -12,7 +12,7 @@ from openai import OpenAI
 import os
 import re
 from dotenv import load_dotenv
-from routes import auth, data
+from routes import auth, data, stats
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -30,6 +30,7 @@ app = FastAPI(
 
 app.include_router(data.router)
 app.include_router(auth.router)
+app.include_router(stats.router)
 
 load_dotenv()
 
