@@ -2,17 +2,12 @@ import styled from 'styled-components';
 import { mockPosts } from './mockData';
 import communityComment from '../../../assets/community-comment.svg';
 import communityFiledHeart from '../../../assets/community-filed_heart.svg';
+import { UserInfo } from '../components';
 
 const Post = () => {
   return (
     <Wrapper>
-      <InfoLayout>
-        <UserContinaer>
-          <img src={mockPosts[0].author.profileUrl} alt="userImg" />
-          <p>{mockPosts[0].author.nickname}</p>
-        </UserContinaer>
-        <p>{mockPosts[0].date}</p>
-      </InfoLayout>
+      <UserInfo />
       <ContentLayout>
         <Content>{mockPosts[0].content}</Content>
       </ContentLayout>
@@ -31,32 +26,15 @@ const Post = () => {
 };
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   height: 243px;
   border-radius: 15px;
   background-color: rgba(231, 225, 255, 0.4);
   margin-bottom: 36px;
-  padding: 26px;
-`;
-
-const InfoLayout = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 500;
-  color: #ffffff;
-`;
-
-const UserContinaer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  img {
-    width: 44px;
-    height: 44px;
-    border-radius: 999px;
-  }
+  padding: 20px 26px;
 `;
 
 const ContentLayout = styled.div`
