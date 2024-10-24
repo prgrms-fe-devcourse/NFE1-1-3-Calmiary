@@ -28,4 +28,8 @@ const Div = styled.div`
   padding: 1rem;
   border-radius: 14px;
   margin: 1.5rem 0 1.5rem 0;
+
+  overflow-wrap: anywhere; // 어떤 문자든 강제로 줄바꿈
+  word-break: break-all; // 모든 가능한 지점에서 줄바꿈
+  white-space: normal; // 공백 처리를 기본값으로
 `;
