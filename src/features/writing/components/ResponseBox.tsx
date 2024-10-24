@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import useWritingStore from '../../../stores/writingStore';
-
-interface ResponseBoxPropTypes {
-  comment: string;
-}
+import useWritingStore from '../../../stores/writingResponseStore';
 
 const ResponseBox = () => {
   const emotion = useWritingStore((state) => state.emotion);

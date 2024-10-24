@@ -7,9 +7,9 @@ const LoadingSpinner = () => {
       size={10}
       margin={4}
       color={theme.colors.write_white200}
-      loading={false}
+      loading={true}
       cssOverride={{ animationFillMode: 'forwards' }}
-      speedMultiplier={0.7}
+      speedMultiplier={0.6}
     />
   );
 };

@@ -3,11 +3,17 @@ import ContentInput from './ContentInput';
 import EmotionInput from './EmotionInput';
 import styled from 'styled-components';
 import { FormTypes } from '../types/formTypes';
-import useWritingStore from '../../../stores/writingStore';
+import useWritingResponseStore from '../../../stores/writingResponseStore';
+import useWritingModeStore from '../../../stores/writingModeStore';
 
 const EntireInput = () => {
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
-  const { setEmotion, setContent } = useWritingStore((state) => state.actions);
+  const { setEmotion, setContent } = useWritingResponseStore(
+    (state) => state.actions
+  );
+  const { setIsInputMode, setIsAIResponseMode } = useWritingModeStore(
+    (state) => state.actions
+  );
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
     if (data.content.trim() === '') {
@@ -16,6 +22,10 @@ const EntireInput = () => {
       console.log(data);
       setEmotion(data.emotion);
       setContent(data.content);
+      setIsInputMode(false);
+      setTimeout(() => {
+        setIsAIResponseMode(true);
+      }, 1500);
     }
 
     Promise.resolve()

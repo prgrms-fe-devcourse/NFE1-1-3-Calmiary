@@ -7,21 +7,37 @@ import {
   QuestionBox,
   ResponseBox,
 } from './components';
+import useWritingModeStore from '../../stores/writingModeStore';
+import useChangeMode from './hooks/useChangeMode';
 
 const WritingPage = () => {
+  const {
+    isQuestionMode,
+    isInputMode,
+    isUserResponseMode,
+    isAIResponseMode,
+    isEndMode,
+  } = useWritingModeStore((state) => state);
+  useChangeMode();
   return (
     <WritingWrapper>
       <WritingLayout>
-        <QuestionBox comment="오늘 어떤 고민이 있나요?" />
-        <ResponseBoxContainer>
-          <ResponseBox />
-        </ResponseBoxContainer>
-        <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
-        <EntireInput />
-        <ButtonContainer>
-          <ContentPublicButton />
-          <MoveToMainButton />
-        </ButtonContainer>
+        {isQuestionMode && <QuestionBox comment="오늘 어떤 고민이 있나요?" />}
+        {isUserResponseMode && (
+          <ResponseBoxContainer>
+            <ResponseBox />
+          </ResponseBoxContainer>
+        )}
+        {isAIResponseMode && (
+          <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
+        )}
+        {isInputMode && <EntireInput />}
+        {isEndMode && (
+          <ButtonContainer>
+            <ContentPublicButton />
+            <MoveToMainButton />
+          </ButtonContainer>
+        )}
       </WritingLayout>
     </WritingWrapper>
   );
