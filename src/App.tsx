@@ -17,6 +17,10 @@ const router = createBrowserRouter([
     path: '/userProfile',
     element: <ProfileUserPage />,
   },
+  {
+    path: '/writing',
+    element: <WritingPage />,
+  },
 ]);
 
 function App() {
