@@ -19,11 +19,11 @@ export default DiaryMonth;
 
 const S_DiaryMonth = styled.div`
   width: 100%;
-  height: 8.33vh;
+  height: 8.33dvh;
   display: flex;
   justify-content: center;
   align-items: center;
-
+  margin-bottom: 20px;
   p {
     font-size: 20px;
   }
@@ -32,7 +32,6 @@ const S_DiaryMonth = styled.div`
 const S_Button = styled.button`
   background: none;
   border: none;
-  /* padding: 0; */
   cursor: pointer;
 `;
 

@@ -1,17 +1,19 @@
-// interface DiaryMainPageProps {
-
+import styled from 'styled-components';
 import { DiaryEmoji, DiaryFilter, DiaryMonth } from '../components';
-
-// }
 
 function DiaryMainPage() {
   return (
-    <div>
+    <S_DiaryMainPage>
       <DiaryFilter />
       <DiaryMonth />
       <DiaryEmoji />
-    </div>
+    </S_DiaryMainPage>
   );
 }
 
 export default DiaryMainPage;
+
+const S_DiaryMainPage = styled.section`
+  width: 100%;
+  overflow: hidden;
+`;

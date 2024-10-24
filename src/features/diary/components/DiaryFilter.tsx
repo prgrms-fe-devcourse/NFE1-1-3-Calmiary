@@ -14,7 +14,7 @@ export default DiaryFilter;
 
 const S_DiaryFilter = styled.div`
   width: 100%;
-  height: 8.33vh;
+  height: 8.33dvh;
   display: flex;
   justify-content: space-around;
   margin-left: 5px;

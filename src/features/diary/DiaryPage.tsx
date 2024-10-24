@@ -18,11 +18,11 @@ export default DiaryPage;
 
 const S_DiaryWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.brand_bg};
-  height: 100%;
+  height: 100dvh;
   padding: 60px 30px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  color: white;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;

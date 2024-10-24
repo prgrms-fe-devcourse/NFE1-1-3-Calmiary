@@ -6,11 +6,12 @@ function DiaryHeader() {
 
 export default DiaryHeader;
 
-const S_DiaryHeader = styled.h1`
+const S_DiaryHeader = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 20px 0px;
-  color: white;
-  margin-bottom: 50px;
+  height: 8.33dvh;
+  margin-bottom: 20px;
+  color: ${({ theme }) => theme.colors.write_white200};
+  font-size: 20px;
 `;
