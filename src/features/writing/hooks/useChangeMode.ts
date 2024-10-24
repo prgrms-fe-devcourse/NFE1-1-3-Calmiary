@@ -15,7 +15,6 @@ const useChangeMode = () => {
   useEffect(() => {
     setTimeout(() => {
       setIsQuestionMode(true);
-      console.log(1);
     }, 1000);
   }, [setIsQuestionMode]);
 
@@ -24,7 +23,6 @@ const useChangeMode = () => {
 
     setTimeout(() => {
       setIsInputMode(true);
-      console.log(2);
     }, 1500);
   }, [isQuestionMode, setIsUserResponseMode, setIsInputMode]);
 
@@ -33,7 +31,6 @@ const useChangeMode = () => {
 
     setTimeout(() => {
       setIsEndMode(true);
-      console.log(4);
     }, 2000);
   }, [isAIResponseMode, setIsEndMode]);
 };

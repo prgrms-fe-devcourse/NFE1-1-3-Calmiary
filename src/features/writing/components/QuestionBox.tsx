@@ -5,6 +5,7 @@ interface QuestionBoxPropTypes {
   comment?: string;
   loadingSpinner?: ReactNode;
 }
+
 const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxPropTypes) => {
   return (
     <Div>

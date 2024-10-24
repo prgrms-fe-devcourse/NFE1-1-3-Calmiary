@@ -22,16 +22,15 @@ const EntireInput = () => {
     if (data.content.trim() === '') {
       alert('⚠️ 고민을 입력해주세요!');
     } else {
-      console.log(data);
       setEmotion(data.emotion);
       setContent(data.content);
       setIsInputMode(false);
       setTimeout(() => {
         setIsUserResponseMode(true);
-      }, 1500);
+      }, 1000);
       setTimeout(() => {
         setIsAIResponseMode(true);
-      }, 3000);
+      }, 2500);
     }
 
     Promise.resolve()
