@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import {
-  ContentInput,
   ContentPublicButton,
-  EmotionInput,
   EntireInput,
   LoadingSpinner,
   MoveToMainButton,

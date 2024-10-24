@@ -17,7 +17,9 @@ const EmotionIcon = ({ type, register }: EmotionIconPropTypes) => {
         {...register('emotion')}
         hidden
       />
-      <Icon type={type} size={54} />
+      <IconLayout>
+        <Icon type={type} size={54} />
+      </IconLayout>
     </IconWrapper>
   );
 };
@@ -26,4 +28,16 @@ export default EmotionIcon;
 
 const IconWrapper = styled.label`
   cursor: pointer;
+`;
+
+const IconLayout = styled.div`
+  transition: all 0.4s ease;
+
+  ${IconWrapper}:hover & {
+    transform: translateY(-6px);
+  }
+
+  input[type='radio']:checked + & {
+    transform: translateY(-12px);
+  }
 `;
