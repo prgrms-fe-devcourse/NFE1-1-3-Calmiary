@@ -3,8 +3,8 @@ from fastapi import FastAPI, Depends, Depends, HTTPException, Path
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from utils.security import SecurityUtils
 from model.schemas import CommentResponse, LikeCreate, LikeResponse, PostResponse, UserResponse
-from table.data import router as table_router
 from model import models
 from database import engine, get_db
 from typing import Optional, Dict, Any
@@ -12,6 +12,7 @@ from openai import OpenAI
 import os
 import re
 from dotenv import load_dotenv
+from routes import auth, data
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -27,11 +28,28 @@ app = FastAPI(
 
 )
 
-app.include_router(table_router)
+app.include_router(data.router)
+app.include_router(auth.router)
 
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+class UserCreate(BaseModel):
+    id: str
+    nickname: str
+    password: str
+    profile_image: Optional[str] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "test123",
+                "nickname": "테스트유저",
+                "password": "test123!@#",
+                "profile_image": None
+            }
+        }
 
 @app.post("/user/add/", 
     response_model=UserResponse,
@@ -47,19 +65,37 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     response_description="생성된 사용자 정보",
     tags=["Users"]
 )
-def create_user(id: str, nickname: str, password: str, profile_image: Optional[str] = None, db: Session = Depends(get_db)):
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
+    # 기존 사용자 확인
+    existing_user = db.query(models.User).filter(models.User.id == user_data.id).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="이미 등록된 아이디입니다."
+        )
 
-  db_user = models.User(
-    id=id,
-    nickname=nickname,
-    password=password,
-    profile_image=profile_image
-  )
+    # 비밀번호 해싱
+    hashed_password = SecurityUtils.get_password_hash(user_data.password)
+    
+    # 사용자 생성
+    db_user = models.User(
+        id=user_data.id,
+        nickname=user_data.nickname,
+        password=hashed_password,
+        profile_image=user_data.profile_image
+    )
 
-  db.add(db_user)
-  db.commit()
-  db.refresh(db_user)
-  return db_user
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="사용자 생성 중 오류가 발생했습니다."
+        )
 
 class PostCreate(BaseModel):
     user_id: int
