@@ -5,8 +5,12 @@ export default function ProfileLikePage() {
   return (
     <>
       <ProfileContainer>
-        <div>좋아요 한 고민들</div>
-        <div>필터</div>
+        <TextArea>좋아요 한 고민들</TextArea>
+        <div className="dropdown">
+          <select>
+            <option value="최신순">최신순</option>
+          </select>
+        </div>
         <LikePost />
       </ProfileContainer>
     </>
@@ -17,12 +21,27 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  max-width: 390px;
+  max-width: 430px;
+  min-height: 100vh;
   width: 100%;
-  height: 100%;
   margin: 0 auto;
   background-color: #181625;
   gap: 3rem;
+  color: #fff;
+  overflow: auto;
+
+  .dropdown {
+    display: flex;
+    width: 100%;
+    justify-content: end;
+  }
+
+  .dropdown select {
+    margin-right: 2rem;
+  }
+`;
+
+const TextArea = styled.div`
+  padding-top: 3rem;
   color: #fff;
 `;
