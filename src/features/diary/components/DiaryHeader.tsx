@@ -12,6 +12,5 @@ const S_DiaryHeader = styled.div`
   align-items: center;
   height: 8.33dvh;
   margin-bottom: 20px;
-  color: ${({ theme }) => theme.colors.write_white200};
   font-size: 20px;
 `;

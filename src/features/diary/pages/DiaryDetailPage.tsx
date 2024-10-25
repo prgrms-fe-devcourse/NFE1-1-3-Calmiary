@@ -22,4 +22,5 @@ export default DiaryDetailPage;
 const S_DiaryDetailPage = styled.section`
   width: 100%;
   overflow: hidden;
+  min-height: 75dvh;
 `;
