@@ -1,28 +1,47 @@
 import styled from 'styled-components';
 import {
-  ContentInput,
   ContentPublicButton,
-  EmotionInput,
+  EntireInput,
+  LoadingSpinner,
   MoveToMainButton,
   QuestionBox,
   ResponseBox,
 } from './components';
+import useWritingModeStore from '../../stores/writingModeStore';
+import useChangeMode from './hooks/useChangeMode';
 
 const WritingPage = () => {
+  const {
+    isQuestionMode,
+    isInputMode,
+    isUserResponseMode,
+    isAIResponseMode,
+    isEndMode,
+  } = useWritingModeStore((state) => state);
+  useChangeMode();
   return (
     <WritingWrapper>
       <WritingLayout>
-        <QuestionBox />
-        <ResponseBoxContainer>
-          <ResponseBox />
-        </ResponseBoxContainer>
-        <QuestionBox />
-        <EmotionInput />
-        <ContentInput />
-        <ButtonContainer>
-          <ContentPublicButton />
-          <MoveToMainButton />
-        </ButtonContainer>
+        {isQuestionMode && <QuestionBox comment="오늘 어떤 고민이 있나요?" />}
+        {isUserResponseMode && (
+          <ResponseBoxContainer>
+            <ResponseBox />
+          </ResponseBoxContainer>
+        )}
+        {isAIResponseMode && (
+          <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
+        )}
+        {isInputMode && (
+          <InputContainer>
+            <EntireInput />
+          </InputContainer>
+        )}
+        {isEndMode && (
+          <ButtonContainer>
+            <ContentPublicButton />
+            <MoveToMainButton />
+          </ButtonContainer>
+        )}
       </WritingLayout>
     </WritingWrapper>
   );
@@ -47,6 +66,13 @@ const WritingLayout = styled.div`
 const ResponseBoxContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+`;
+
+const InputContainer = styled.div`
+  position: fixed;
+  left: 50%;
+  bottom: 5rem;
+  transform: translateX(-50%);
 `;
 
 const ButtonContainer = styled.div`
