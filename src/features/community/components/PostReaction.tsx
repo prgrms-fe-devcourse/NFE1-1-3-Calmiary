@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 import { mockPosts } from './mockData';
-import communityComment from '../../../assets/community-comment.svg';
-import communityFiledHeart from '../../../assets/community-filed_heart.svg';
+import { Icon } from '../../../components/ui/Icon';
 
 const PostReaction = () => {
   return (
     <Wrapper>
       <EmpathyLayout>
-        <img src={communityFiledHeart} alt="filledHeart" />
+        <Icon type="community_filed_heart" alt="filledHeart" />
         <p>{mockPosts[0].likes}</p>
       </EmpathyLayout>
       <CommentLayout>
-        <img src={communityComment} alt="comment" />
+        <Icon type="community_comment" alt="comment" />
         <p>{mockPosts[0].comments}</p>
       </CommentLayout>
     </Wrapper>
