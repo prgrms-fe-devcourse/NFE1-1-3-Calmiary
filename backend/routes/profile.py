@@ -1,3 +1,4 @@
+from enum import Enum
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
@@ -25,14 +26,40 @@ class ProfileUpdate(BaseModel):
             }
         }
 
+class SortOption(str, Enum):
+    LATEST = "latest"
+    COMMENTS = "comments"
+    LIKES = "likes"
+
+class ProfilePostsFilter(BaseModel):
+    sort_by: Optional[SortOption] = SortOption.LATEST
+    page: int = Field(default=1, ge=1)
+    limit: int = Field(default=10, ge=1, le=100)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "sort_by": "latest",
+                "page": 1,
+                "limit": 10
+            }
+        }
+
+
 # 공유한 게시글 조회
-@router.get("/posts/shared/{user_id}",
+@router.post("/posts/shared/{user_id}",  # GET에서 POST로 변경
     response_model=List[PostResponse],
     summary="사용자가 공유한 게시글 목록",
-    description="특정 사용자가 공유한 게시글들을 조회합니다."
+    description="""
+    특정 사용자가 공유한 게시글들을 조회합니다.
+    - sort_by: 정렬 기준 (latest: 최신순, comments: 댓글 많은 순, likes: 공감 많은 순)
+    - page: 페이지 번호
+    - limit: 페이지당 게시글 수
+    """
 )
 async def get_shared_posts(
     user_id: int,
+    filter_data: ProfilePostsFilter,
     db: Session = Depends(get_db)
 ):
     # 좋아요 수를 계산하는 서브쿼리
@@ -64,10 +91,19 @@ async def get_shared_posts(
             models.Post.user_id == user_id,
             models.Post.is_shared == True
         )
-        .order_by(desc(models.Post.created_at))
     )
-    
-    results = query.all()
+
+    # 정렬 적용
+    if filter_data.sort_by == SortOption.LATEST:
+        query = query.order_by(desc(models.Post.created_at))
+    elif filter_data.sort_by == SortOption.COMMENTS:
+        query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
+    elif filter_data.sort_by == SortOption.LIKES:
+        query = query.order_by(desc(func.coalesce(likes_count.c.like_count, 0)))
+
+    # 페이지네이션 적용
+    offset = (filter_data.page - 1) * filter_data.limit
+    results = query.offset(offset).limit(filter_data.limit).all()
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
@@ -88,14 +124,19 @@ async def get_shared_posts(
 
     return posts
 
-
-@router.get("/posts/liked/{user_id}",
+@router.post("/posts/liked/{user_id}",  # GET에서 POST로 변경
     response_model=List[PostResponse],
     summary="사용자가 공감한 게시글 목록",
-    description="특정 사용자가 공감한 게시글들을 조회합니다."
+    description="""
+    특정 사용자가 공감한 게시글들을 조회합니다.
+    - sort_by: 정렬 기준 (latest: 최신순, comments: 댓글 많은 순, likes: 공감 많은 순)
+    - page: 페이지 번호
+    - limit: 페이지당 게시글 수
+    """
 )
 async def get_liked_posts(
     user_id: int,
+    filter_data: ProfilePostsFilter,
     db: Session = Depends(get_db)
 ):
     # 좋아요 수를 계산하는 서브쿼리
@@ -128,10 +169,19 @@ async def get_liked_posts(
             models.Like.user_id == user_id,
             models.Post.is_shared == True
         )
-        .order_by(desc(models.Post.created_at))
     )
-    
-    results = query.all()
+
+    # 정렬 적용
+    if filter_data.sort_by == SortOption.LATEST:
+        query = query.order_by(desc(models.Post.created_at))
+    elif filter_data.sort_by == SortOption.COMMENTS:
+        query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
+    elif filter_data.sort_by == SortOption.LIKES:
+        query = query.order_by(desc(func.coalesce(likes_count.c.like_count, 0)))
+
+    # 페이지네이션 적용
+    offset = (filter_data.page - 1) * filter_data.limit
+    results = query.offset(offset).limit(filter_data.limit).all()
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
