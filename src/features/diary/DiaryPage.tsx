@@ -2,13 +2,15 @@
 
 import styled from 'styled-components';
 import { DiaryHeader } from './components';
-import DiaryMainPage from './pages/DiaryMainPage';
+import DiaryDetailPage from './pages/DiaryDetailPage';
+// import DiaryMainPage from './pages/DiaryMainPage';
 
 function DiaryPage() {
   return (
     <S_DiaryWrapper>
       <DiaryHeader />
-      <DiaryMainPage />
+      <DiaryDetailPage />
+      {/* <DiaryMainPage /> */}
       {/* <Outlet /> */}
     </S_DiaryWrapper>
   );
