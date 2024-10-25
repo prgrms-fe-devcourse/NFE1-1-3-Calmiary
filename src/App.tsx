@@ -4,10 +4,31 @@ import styled from 'styled-components';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import CommunityPage from './features/community/CommunityPage.tsx';
 import WritingPage from './features/writing/WritingPage.tsx';
 
+import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
+import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
+import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
+
 const router = createBrowserRouter([
+  {
+    path: '/profile',
+    element: <ProfileMainPage />,
+  },
+  {
+    path: '/userProfile',
+    element: <ProfileUserPage />,
+  },
+  {
+    path: '/likePost',
+    element: <ProfileLikePage />,
+  },
   { path: '/writing', element: <WritingPage /> },
+  {
+    path: '/community',
+    element: <CommunityPage />,
+  },
 ]);
 
 function App() {

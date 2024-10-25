@@ -3,8 +3,8 @@ from fastapi import FastAPI, Depends, Depends, HTTPException, Path
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from utils.security import SecurityUtils
 from model.schemas import CommentResponse, LikeCreate, LikeResponse, PostResponse, UserResponse
-from table.data import router as table_router
 from model import models
 from database import engine, get_db
 from typing import Optional, Dict, Any
@@ -12,6 +12,7 @@ from openai import OpenAI
 import os
 import re
 from dotenv import load_dotenv
+from routes import auth, data, stats, diary, community
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -27,11 +28,31 @@ app = FastAPI(
 
 )
 
-app.include_router(table_router)
+app.include_router(data.router)
+app.include_router(auth.router)
+app.include_router(stats.router)
+app.include_router(diary.router)
+app.include_router(community.router)
 
 load_dotenv()
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+class UserCreate(BaseModel):
+    id: str
+    nickname: str
+    password: str
+    profile_image: Optional[str] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "test123",
+                "nickname": "테스트유저",
+                "password": "test123!@#",
+                "profile_image": None
+            }
+        }
 
 @app.post("/user/add/", 
     response_model=UserResponse,
@@ -47,19 +68,37 @@ client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
     response_description="생성된 사용자 정보",
     tags=["Users"]
 )
-def create_user(id: str, nickname: str, password: str, profile_image: Optional[str] = None, db: Session = Depends(get_db)):
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
+    # 기존 사용자 확인
+    existing_user = db.query(models.User).filter(models.User.id == user_data.id).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="이미 등록된 아이디입니다."
+        )
 
-  db_user = models.User(
-    id=id,
-    nickname=nickname,
-    password=password,
-    profile_image=profile_image
-  )
+    # 비밀번호 해싱
+    hashed_password = SecurityUtils.get_password_hash(user_data.password)
+    
+    # 사용자 생성
+    db_user = models.User(
+        id=user_data.id,
+        nickname=user_data.nickname,
+        password=hashed_password,
+        profile_image=user_data.profile_image
+    )
 
-  db.add(db_user)
-  db.commit()
-  db.refresh(db_user)
-  return db_user
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="사용자 생성 중 오류가 발생했습니다."
+        )
 
 class PostCreate(BaseModel):
     user_id: int
@@ -233,54 +272,54 @@ def delete_comment(
     db.commit()
     return {"message": "댓글이 삭제되었습니다."}
 
-@app.post("/like/add",
-    response_model=LikeResponse,
-    summary="좋아요 추가",
-    description="""
-    포스트에 좋아요를 추가합니다.
+# @app.post("/like/add",
+#     response_model=LikeResponse,
+#     summary="좋아요 추가",
+#     description="""
+#     포스트에 좋아요를 추가합니다.
     
-    - **user_id**: 좋아요를 누른 사용자 ID
-    - **post_id**: 좋아요를 받은 포스트 ID
+#     - **user_id**: 좋아요를 누른 사용자 ID
+#     - **post_id**: 좋아요를 받은 포스트 ID
     
-    동일한 사용자가 같은 포스트에 중복으로 좋아요를 누를 수 없습니다.
-    """,
-    response_description="추가된 좋아요 정보",
-    tags=["Likes"]
-)
-def create_like(like_data: LikeCreate, db: Session = Depends(get_db)):
-    existing_like = db.query(models.Like).filter(
-        models.Like.user_id == like_data.user_id,
-        models.Like.post_id == like_data.post_id
-    ).first()
-    if existing_like:
-        raise HTTPException(
-            status_code=400, 
-            detail="이미 이 포스트에 좋아요를 누르셨습니다."
-        )
+#     동일한 사용자가 같은 포스트에 중복으로 좋아요를 누를 수 없습니다.
+#     """,
+#     response_description="추가된 좋아요 정보",
+#     tags=["Likes"]
+# )
+# def create_like(like_data: LikeCreate, db: Session = Depends(get_db)):
+#     existing_like = db.query(models.Like).filter(
+#         models.Like.user_id == like_data.user_id,
+#         models.Like.post_id == like_data.post_id
+#     ).first()
+#     if existing_like:
+#         raise HTTPException(
+#             status_code=400, 
+#             detail="이미 이 포스트에 좋아요를 누르셨습니다."
+#         )
     
-    db_like = models.Like(**like_data.model_dump())
-    db.add(db_like)
-    db.commit()
-    db.refresh(db_like)
-    return db_like
+#     db_like = models.Like(**like_data.model_dump())
+#     db.add(db_like)
+#     db.commit()
+#     db.refresh(db_like)
+#     return db_like
 
-@app.delete("/like/remove/{like_id}",
-    response_model=dict,
-    summary="좋아요 삭제",
-    description="지정된 ID의 좋아요를 삭제합니다(좋아요 취소).",
-    response_description="삭제 완료 메시지",
-    tags=["Likes"]
-)
-def delete_like(
-    like_id: int = Path(..., description="삭제할 좋아요의 ID", example=1),
-    db: Session = Depends(get_db)
-):
-    like = db.query(models.Like).filter(models.Like.id == like_id).first()
-    if not like:
-        raise HTTPException(status_code=404, detail="Like not found")
-    db.delete(like)
-    db.commit()
-    return {"message": "좋아요가 취소되었습니다."}
+# @app.delete("/like/remove/{like_id}",
+#     response_model=dict,
+#     summary="좋아요 삭제",
+#     description="지정된 ID의 좋아요를 삭제합니다(좋아요 취소).",
+#     response_description="삭제 완료 메시지",
+#     tags=["Likes"]
+# )
+# def delete_like(
+#     like_id: int = Path(..., description="삭제할 좋아요의 ID", example=1),
+#     db: Session = Depends(get_db)
+# ):
+#     like = db.query(models.Like).filter(models.Like.id == like_id).first()
+#     if not like:
+#         raise HTTPException(status_code=404, detail="Like not found")
+#     db.delete(like)
+#     db.commit()
+#     return {"message": "좋아요가 취소되었습니다."}
 
 def remove_markdown(text):
     text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
