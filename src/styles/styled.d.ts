@@ -19,6 +19,9 @@ declare module 'styled-components' {
       write_gray200: string;
       write_white100: string;
       write_white200: string;
+      modal_purple100: string;
+      modal_purple200: string;
+      modal_purple300: string;
     };
     border: {
       default: string;

@@ -20,6 +20,7 @@ const theme = {
     community_100: '#E7E1FF',
     modal_purple100: '#F3EFFF',
     modal_purple200: '#65558F',
+    modal_purple300: '#9C99AE',
   },
   border: {
     default: '1px solid #eeeeee',

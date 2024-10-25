@@ -15,6 +15,7 @@ import nav_log from '../../assets/nav-log.svg';
 import nav_profile from '../../assets/nav-profile.svg';
 import nav_write from '../../assets/nav-write.svg';
 import write_submit from '../../assets/write-submit.svg';
+
 import write_emotion_soso from '../../assets/write-emotion-soso.svg';
 import write_emotion_cry from '../../assets/write-emotion-cry.svg';
 import write_emotion_smile from '../../assets/write-emotion-smile.svg';
