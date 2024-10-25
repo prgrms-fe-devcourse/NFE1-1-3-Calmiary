@@ -30,11 +30,36 @@ class PostStats(BaseModel):
     response_model=PostStats,
     summary="사용자의 게시물 통계 조회",
     description="""
-    특정 사용자의 게시물 통계를 조회합니다:
+    특정 사용자의 게시물 관련 통계 정보를 조회합니다.
     
-    - this_week_posts: 이번 주에 작성한 걱정 게시물 수
-    - total_posts: 전체 걱정 게시물 수
-    - resolved_posts: 해결된 걱정 게시물 수 (is_solved가 True인 게시물)
+    **제공되는 통계 정보:**
+    1. 이번 주 작성 게시물 (this_week_posts)
+       - 이번 주 월요일 00:00:00부터 현재까지 작성된 게시물 수
+       - 주의 시작은 월요일 기준
+    
+    2. 전체 게시물 (total_posts)
+       - 사용자가 작성한 모든 게시물의 총 개수
+       - 공개/비공개 모두 포함
+    
+    3. 해결된 게시물 (resolved_posts)
+       - is_solved가 true인 게시물의 수
+       - 해결된 걱정거리의 총 개수
+    
+    **통계 기준:**
+    - 시간 기준: 서버 시간 기준
+    - 주간 집계: 월요일 00:00:00 ~ 현재
+    - 전체 집계: 가입일부터 현재까지
+    
+    **사용 예시:**
+    ```bash
+    # 특정 사용자의 통계 조회
+    curl "http://api.example.com/stats/posts/123"
+    ```
+    
+    **참고사항:**
+    1. 통계는 실시간으로 계산됩니다.
+    2. 삭제된 게시물은 통계에서 제외됩니다.
+    3. 비공개 게시물도 통계에 포함됩니다.
     """,
     responses={
         200: {
@@ -119,7 +144,7 @@ async def get_post_stats(user_id: int, db: Session = Depends(get_db)):
 async def get_overall_stats(db: Session = Depends(get_db)):
     total_users = db.query(models.User).count()
     total_posts = db.query(models.Post).count()
-    resolved_posts = db.query(models.Post).filter(models.Post.field6 == True).count()
+    resolved_posts = db.query(models.Post).filter(models.Post.is_solved == True).count()
     
     resolution_rate = (resolved_posts / total_posts * 100) if total_posts > 0 else 0
 

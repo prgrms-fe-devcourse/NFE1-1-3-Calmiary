@@ -118,15 +118,67 @@ class LikeResponse(BaseModel):
             datetime: lambda v: v.isoformat()
         }
 
-@router.post("/posts", 
+@router.get(
+    "/posts",
     response_model=List[PostResponse],
     summary="공유된 걱정거리 목록 조회",
     description="""
-    공유된 걱정거리 목록을 조회합니다.
-    - sort_by: 정렬 기준 (latest: 최신순, comments: 댓글 많은 순, likes: 공감 많은 순)
-    - page: 페이지 번호
-    - limit: 페이지당 게시글 수
-    """
+    커뮤니티에 공개된 걱정거리 목록을 조회합니다.
+    
+    **필터링 옵션:**
+    - sort_by: 정렬 기준
+      - latest: 최신순 (기본값)
+      - comments: 댓글 많은 순
+      - likes: 공감 많은 순
+    - page: 페이지 번호 (기본값: 1)
+    - limit: 페이지당 게시글 수 (기본값: 10, 최대: 100)
+    
+    **응답 데이터:**
+    - id: 게시글 ID
+    - user_id: 작성자 ID
+    - emotion_type: 감정 유형
+    - content: 게시글 내용
+    - ai_content: AI 답변 내용
+    - created_at: 작성 일시
+    - is_shared: 공개 여부
+    - is_solved: 해결 여부
+    - like_count: 공감 수
+    - comment_count: 댓글 수
+    
+    **페이지네이션:**
+    - 전체 게시글을 페이지 단위로 나누어 제공
+    - page와 limit 파라미터로 원하는 범위 지정 가능
+    
+    **사용 예시:**
+    ```bash
+    # 최신순으로 첫 페이지 조회
+    curl "http://api.example.com/community/posts?sort_by=latest&page=1&limit=10"
+    
+    # 공감 많은 순으로 조회
+    curl "http://api.example.com/community/posts?sort_by=likes&page=1&limit=20"
+    ```
+    """,
+    responses={
+        200: {
+            "description": "조회 성공",
+            "content": {
+                "application/json": {
+                    "example": [{
+                        "id": 1,
+                        "user_id": 1,
+                        "emotion_type": "ANXIETY",
+                        "content": "취업 준비가 너무 걱정됩니다.",
+                        "ai_content": "걱정하시는 마음...",
+                        "created_at": "2024-03-21T12:00:00",
+                        "is_shared": True,
+                        "is_solved": False,
+                        "like_count": 5,
+                        "comment_count": 3
+                    }]
+                }
+            }
+        }
+    }
 )
 def get_shared_posts(
     filter_data: SharedPostsFilter,
@@ -192,17 +244,79 @@ def get_shared_posts(
     return posts
 
 
-@router.get("/post/{post_id}",
+@router.get(
+    "/post/{post_id}",
     response_model=PostDetailResponse,
     summary="게시글 상세 조회",
     description="""
-    게시글의 상세 정보를 조회합니다.
-    - 게시글 내용
-    - 좋아요 수
-    - 댓글 수
-    - 댓글 목록
-    이 포함됩니다.
-    """
+    특정 게시글의 상세 정보를 조회합니다.
+    
+    **응답 포함 정보:**
+    1. 게시글 기본 정보
+       - 제목, 내용, 작성자, 작성일시
+       - 감정 유형, AI 답변 내용
+       - 공개 여부, 해결 여부
+    
+    2. 통계 정보
+       - 좋아요 수
+       - 댓글 수
+    
+    3. 댓글 목록
+       - 댓글 작성자
+       - 댓글 내용
+       - 작성 일시
+       - 최신순 정렬
+    
+    **접근 권한:**
+    - 공개 게시글: 모든 사용자 조회 가능
+    - 비공개 게시글: 작성자만 조회 가능
+    
+    **사용 예시:**
+    ```bash
+    curl "http://api.example.com/community/post/123"
+    ```
+    
+    **오류 처리:**
+    - 게시글이 없는 경우 404 반환
+    - 비공개 게시글에 무단 접근 시 403 반환
+    """,
+    responses={
+        200: {
+            "description": "조회 성공",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "id": 1,
+                        "user_id": 1,
+                        "emotion_type": "ANXIETY",
+                        "content": "발표가 걱정됩니다.",
+                        "ai_content": "발표에 대한 걱정...",
+                        "created_at": "2024-03-21T12:00:00",
+                        "is_shared": True,
+                        "is_solved": False,
+                        "like_count": 5,
+                        "comment_count": 3,
+                        "comments": [
+                            {
+                                "comment_id": 1,
+                                "user_id": 2,
+                                "content": "힘내세요!",
+                                "created_at": "2024-03-21T12:30:00"
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "게시글 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "게시글을 찾을 수 없습니다."}
+                }
+            }
+        }
+    }
 )
 def get_post_detail(
     post_id: int,
@@ -259,13 +373,71 @@ def get_post_detail(
         "comments": comments
     }
 
-@router.post("/post/{post_id}/like",
+@router.post(
+    "/post/{post_id}/like",
     response_model=LikeResponse,
-    summary="게시글 공감",
+    summary="게시글 공감 토글",
     description="""
-    게시글에 공감을 표시하거나 취소합니다.
-    이미 공감한 경우 공감이 취소되고, 공감하지 않은 경우 공감이 추가됩니다.
-    """
+    게시글에 대한 공감을 추가하거나 취소합니다.
+    
+    **동작 방식:**
+    1. 공감하지 않은 상태
+       - 공감 추가
+       - created_at 시간 기록
+       - is_canceled = false
+    
+    2. 이미 공감한 상태
+       - 공감 취소
+       - is_canceled = true
+    
+    **요청 데이터:**
+    - user_id: 공감을 누르는 사용자의 ID
+    
+    **응답 데이터:**
+    - id: 공감 기록 ID (추가 시에만)
+    - user_id: 사용자 ID
+    - post_id: 게시글 ID
+    - created_at: 공감 생성 시각
+    - is_canceled: 공감 취소 여부
+    - message: 처리 결과 메시지
+    
+    **제약사항:**
+    1. 본인 게시글에도 공감 가능
+    2. 비공개 게시글에는 공감 불가
+    3. 동일 게시글에 중복 공감 불가
+    
+    **사용 예시:**
+    ```bash
+    curl -X POST "http://api.example.com/community/post/123/like" \\
+         -H "Content-Type: application/json" \\
+         -d '{"user_id": 1}'
+    ```
+    """,
+    responses={
+        200: {
+            "description": "처리 성공",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "id": 1,
+                        "user_id": 1,
+                        "post_id": 123,
+                        "created_at": "2024-03-21T12:00:00",
+                        "is_canceled": False,
+                        "message": "공감을 표시했습니다."
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "게시글 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "게시글을 찾을 수 없거나 비공개 게시글입니다."}
+                }
+            }
+        }
+    }
 )
 def toggle_like(
     post_id: int,
@@ -326,23 +498,57 @@ def toggle_like(
             detail="공감 처리 중 오류가 발생했습니다."
         )
     
-@router.post("/post/{post_id}/comment",
+@router.post(
+    "/post/{post_id}/comment",
     response_model=CommentResponse,
     summary="댓글 작성",
     description="""
     게시글에 새로운 댓글을 작성합니다.
-    - 비공개 게시글에는 댓글을 작성할 수 없습니다.
-    - 댓글 내용은 1자 이상 500자 이하여야 합니다.
+    
+    **요청 데이터:**
+    - user_id: 댓글 작성자 ID (필수)
+    - content: 댓글 내용 (필수)
+    
+    **댓글 작성 규칙:**
+    1. 내용 제한
+       - 최소 1자 이상
+       - 최대 500자 이하
+       - 빈 문자열 불가
+    
+    2. 작성 권한
+       - 공개 게시글만 댓글 작성 가능
+       - 비로그인 사용자 작성 불가
+       - 차단된 사용자 작성 불가
+    
+    **응답 데이터:**
+    - comment_id: 생성된 댓글 ID
+    - user_id: 작성자 ID
+    - content: 댓글 내용
+    - created_at: 작성 시각
+    
+    **사용 예시:**
+    ```bash
+    curl -X POST "http://api.example.com/community/post/123/comment" \\
+         -H "Content-Type: application/json" \\
+         -d '{
+           "user_id": 1,
+           "content": "힘내세요! 저도 비슷한 경험이 있어요."
+         }'
+    ```
+    
+    **주의사항:**
+    1. 댓글은 수정 불가 (삭제 후 재작성)
+    2. 부적절한 내용은 신고 대상
+    3. 작성자 정보는 수정 불가
     """,
     responses={
         201: {
-            "description": "댓글이 성공적으로 생성됨",
+            "description": "댓글 작성 성공",
             "content": {
                 "application/json": {
                     "example": {
                         "comment_id": 1,
                         "user_id": 1,
-                        "post_id": 1,
                         "content": "힘내세요! 저도 비슷한 경험이 있어요.",
                         "created_at": "2024-03-21T12:00:00"
                     }
@@ -350,7 +556,7 @@ def toggle_like(
             }
         },
         404: {
-            "description": "게시글을 찾을 수 없거나 비공개 게시글",
+            "description": "게시글 없음",
             "content": {
                 "application/json": {
                     "example": {"detail": "게시글을 찾을 수 없거나 비공개 게시글입니다."}
@@ -358,10 +564,10 @@ def toggle_like(
             }
         },
         422: {
-            "description": "입력값 검증 실패",
+            "description": "유효성 검사 실패",
             "content": {
                 "application/json": {
-                    "example": {"detail": "댓글 내용은 필수입니다."}
+                    "example": {"detail": "댓글 내용은 500자를 초과할 수 없습니다."}
                 }
             }
         }

@@ -47,7 +47,7 @@ class ProfilePostsFilter(BaseModel):
 
 
 # 공유한 게시글 조회
-@router.post("/posts/shared/{user_id}",  # GET에서 POST로 변경
+@router.get("/posts/shared/{user_id}",  # GET에서 POST로 변경
     response_model=List[PostResponse],
     summary="사용자가 공유한 게시글 목록",
     description="""
@@ -124,7 +124,7 @@ async def get_shared_posts(
 
     return posts
 
-@router.post("/posts/liked/{user_id}",  # GET에서 POST로 변경
+@router.get("/posts/liked/{user_id}",  # GET에서 POST로 변경
     response_model=List[PostResponse],
     summary="사용자가 공감한 게시글 목록",
     description="""
@@ -203,14 +203,33 @@ async def get_liked_posts(
     return posts
 
 # 프로필 수정
-@router.patch("/update/{user_id}",
+@router.patch(
+    "/update/{user_id}",
     response_model=UserResponse,
     summary="프로필 정보 수정",
     description="""
     사용자의 프로필 정보를 수정합니다.
-    - 닉네임과 비밀번호를 변경할 수 있습니다.
-    - 변경하지 않을 항목은 생략 가능합니다.
-    - 비밀번호 변경 시 현재 비밀번호 확인이 필요합니다.
+    
+    **수정 가능한 항목:**
+    - nickname: 닉네임 (2-20자)
+    - password: 새 비밀번호 (최소 6자)
+    
+    **주의사항:**
+    - 변경하지 않을 항목은 요청에서 제외 가능
+    - 각 필드별 부분 수정 가능
+    
+    **사용 예시:**
+    ```bash
+    # 닉네임만 변경
+    curl -X PATCH "http://api.example.com/profile/update/123" \\
+         -H "Content-Type: application/json" \\
+         -d '{"nickname": "새로운닉네임"}'
+    
+    # 비밀번호만 변경
+    curl -X PATCH "http://api.example.com/profile/update/123" \\
+         -H "Content-Type: application/json" \\
+         -d '{"password": "newpassword123"}'
+    ```
     """,
     responses={
         200: {
@@ -231,7 +250,31 @@ async def get_liked_posts(
             "description": "잘못된 요청",
             "content": {
                 "application/json": {
+                    "example": {"detail": "닉네임이 중복되었습니다."}
+                }
+            }
+        },
+        401: {
+            "description": "인증 실패",
+            "content": {
+                "application/json": {
                     "example": {"detail": "현재 비밀번호가 일치하지 않습니다."}
+                }
+            }
+        },
+        404: {
+            "description": "사용자를 찾을 수 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "사용자를 찾을 수 없습니다."}
+                }
+            }
+        },
+        422: {
+            "description": "유효성 검사 실패",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "닉네임은 2자 이상 20자 이하여야 합니다."}
                 }
             }
         }
