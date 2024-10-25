@@ -1,5 +1,5 @@
 
-from fastapi import FastAPI, Depends, Depends, HTTPException, Path
+from fastapi import FastAPI, Depends, Depends, HTTPException, Path, Request
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -13,6 +13,9 @@ import os
 import re
 from dotenv import load_dotenv
 from routes import auth, stats, diary, community, profile, admin
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import RedirectResponse
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -25,14 +28,23 @@ app = FastAPI(
   contract={
     "github": "https://github.com/prgrms-fe-devcourse/NFE1-1-3-Calmiary"
   }
-
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
-@app.middleware("http")
-async def add_timezone_header(request, call_next):
-    response = await call_next(request)
-    response.headers["Timezone"] = "Asia/Seoul"
-    return response
+
+
+# @app.middleware("http")
+# async def add_timezone_header(request, call_next):
+#     response = await call_next(request)
+#     response.headers["Timezone"] = "Asia/Seoul"
+#     return response
+
 
 """
 API 엔드포인트 구조
