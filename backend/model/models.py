@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from database import Base
+from database import Base, get_seoul_datetime
 
 class User(Base):
     __tablename__ = "users"
@@ -11,7 +11,7 @@ class User(Base):
     nickname = Column(String)
     password = Column(String)
     profile_image = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=get_seoul_datetime)
     posts = relationship("Post", back_populates="user", cascade="all, delete-orphan" )
     comments = relationship("Comment", back_populates="user", cascade="all, delete-orphan" )
     likes = relationship("Like", back_populates="user", cascade="all, delete-orphan" )
@@ -24,7 +24,7 @@ class Post(Base):
     emotion_type = Column(String)
     content = Column(String)
     ai_content = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=get_seoul_datetime)
     is_shared = Column(Boolean, default=False)
     is_solved = Column(Boolean, default=False)
     
@@ -39,7 +39,7 @@ class Comment(Base):
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"))
     content = Column(String)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=get_seoul_datetime)
     
     user = relationship("User", back_populates="comments")
     post = relationship("Post", back_populates="comments")
@@ -50,7 +50,7 @@ class Like(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
     post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=get_seoul_datetime)
     
     user = relationship("User", back_populates="likes")
     post = relationship("Post", back_populates="likes")

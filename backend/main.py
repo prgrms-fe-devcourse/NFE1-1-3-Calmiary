@@ -28,6 +28,12 @@ app = FastAPI(
 
 )
 
+@app.middleware("http")
+async def add_timezone_header(request, call_next):
+    response = await call_next(request)
+    response.headers["Timezone"] = "Asia/Seoul"
+    return response
+
 """
 API 엔드포인트 구조
 
