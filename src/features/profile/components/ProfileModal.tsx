@@ -22,7 +22,7 @@ export default function ProfileModal({ onClose }: ProfileModalPropTypes) {
         </div>
         <ModalContent>내용을 확인하셨다면 버튼을 누르세요</ModalContent>
 
-        <ProfileButton width={'180px'} height={'52px'} color={'#65558F'}>
+        <ProfileButton width="180px" height="52px" color="#65558F">
           확인하기
         </ProfileButton>
       </ModalContainer>
@@ -64,7 +64,7 @@ const ModalContainer = styled.div`
   }
 `;
 
-const ModalHeader = styled.h2`
+const ModalHeader = styled.div`
   font-size: 1rem;
   color: #181a20;
 `;
