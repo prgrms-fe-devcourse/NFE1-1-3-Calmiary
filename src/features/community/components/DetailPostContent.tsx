@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { UserInfo } from '../../community/components';
-import communityFiledHeart from '../../../assets/community-filed_heart.svg';
+import { UserInfo } from './index';
+import { Icon } from '../../../components/ui/Icon';
 import { mockPosts } from '../../../features/community/components/mockData';
 
 const DetailPostContent = () => {
@@ -9,7 +9,7 @@ const DetailPostContent = () => {
       <UserInfo />
       <Content>{mockPosts[0].content}</Content>
       <EmpathyLayout>
-        <img src={communityFiledHeart} alt="filledHeart" />
+        <Icon type="community_filed_heart" alt="filledHeart" />
         <p>{mockPosts[0].likes}</p>
       </EmpathyLayout>
     </Wrapper>

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import LikePost from '../components/LikePost';
+// import LikePost from '../components/LikePost';
 
 export default function ProfileLikePage() {
   return (
@@ -7,7 +7,7 @@ export default function ProfileLikePage() {
       <ProfileContainer>
         <div>좋아요 한 고민들</div>
         <div>필터</div>
-        <LikePost />
+        {/* <LikePost /> */}
       </ProfileContainer>
     </>
   );

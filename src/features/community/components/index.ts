@@ -4,3 +4,8 @@ export { default as UserInfo } from './UserInfo';
 export { default as Content } from './PostContent';
 export { default as PostReaction } from './PostReaction';
 export { default as DropDown } from './DropDown';
+export { default as WorryContent } from './WorryContent';
+export { default as DetailPostContent } from './DetailPostContent';
+export { default as CommentsContent } from './CommentsContent';
+export { default as Comments } from './Comments';
+export { default as CommentInput } from './CommentInput';

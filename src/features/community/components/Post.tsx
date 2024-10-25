@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Content, PostReaction, UserInfo } from '../components';
+import { Content, PostReaction, UserInfo } from './index';
 
 const Post = () => {
   return (
