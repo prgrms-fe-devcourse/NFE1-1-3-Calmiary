@@ -11,6 +11,13 @@ from enum import Enum
 
 router = APIRouter(prefix="/community", tags=["Community"])
 
+class UserInfo(BaseModel):
+    nickname: str
+    profile_image: Optional[str]
+
+    class Config:
+        from_attributes = True
+
 class SortOption(str, Enum):
     LATEST = "latest"
     COMMENTS = "comments"
@@ -74,6 +81,7 @@ class PostResponse(BaseModel):
     is_solved: bool
     like_count: int = Field(default=0)
     comment_count: int = Field(default=0)
+    user_info: UserInfo  # 사용자 정보 필드 추가
 
     class Config:
         from_attributes = True
@@ -118,7 +126,7 @@ class LikeResponse(BaseModel):
             datetime: lambda v: v.isoformat()
         }
 
-@router.get(
+@router.post(
     "/posts",
     response_model=List[PostResponse],
     summary="공유된 걱정거리 목록 조회",
@@ -144,6 +152,9 @@ class LikeResponse(BaseModel):
     - is_solved: 해결 여부
     - like_count: 공감 수
     - comment_count: 댓글 수
+    - user_info: 작성자 정보
+      - nickname: 작성자 닉네임
+      - profile_image: 프로필 이미지 URL
     
     **페이지네이션:**
     - 전체 게시글을 페이지 단위로 나누어 제공
@@ -173,7 +184,11 @@ class LikeResponse(BaseModel):
                         "is_shared": True,
                         "is_solved": False,
                         "like_count": 5,
-                        "comment_count": 3
+                        "comment_count": 3,
+                        "user_info": {
+                            "nickname": "test1",
+                            "profile_image": "http://www.image.com"
+                        }
                     }]
                 }
             }
@@ -200,13 +215,16 @@ def get_shared_posts(
         .subquery()
     )
 
-    # 메인 쿼리
+    # 메인 쿼리 - User 테이블 조인 추가
     query = (
         db.query(
             models.Post,
             func.coalesce(likes_count.c.like_count, 0).label('like_count'),
-            func.coalesce(comments_count.c.comment_count, 0).label('comment_count')
+            func.coalesce(comments_count.c.comment_count, 0).label('comment_count'),
+            models.User.nickname,
+            models.User.profile_image
         )
+        .join(models.User, models.Post.user_id == models.User.user_id)  # User 테이블 조인
         .outerjoin(likes_count, models.Post.id == likes_count.c.post_id)
         .outerjoin(comments_count, models.Post.id == comments_count.c.post_id)
         .filter(models.Post.is_shared == True)
@@ -226,7 +244,7 @@ def get_shared_posts(
 
     # 결과를 PostResponse 형식으로 변환
     posts = []
-    for post, like_count, comment_count in results:
+    for post, like_count, comment_count, nickname, profile_image in results:
         post_dict = {
             "id": post.id,
             "user_id": post.user_id,
@@ -237,7 +255,11 @@ def get_shared_posts(
             "is_shared": post.is_shared,
             "is_solved": post.is_solved,
             "like_count": like_count,
-            "comment_count": comment_count
+            "comment_count": comment_count,
+            "user_info": {
+                "nickname": nickname,
+                "profile_image": profile_image
+            }
         }
         posts.append(post_dict)
 
