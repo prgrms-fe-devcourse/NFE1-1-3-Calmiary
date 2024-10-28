@@ -1,14 +1,6 @@
 import styled from 'styled-components';
 import { FormEvent, useState } from 'react';
-
-interface LoginFormProps {
-  onSubmit?: (loginData: LoginData) => void;
-}
-
-interface LoginData {
-  username: string;
-  password: string;
-}
+import { LoginFormProps, LoginData } from '../types/loginTypes';
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const [loginData, setLoginData] = useState<LoginData>({
