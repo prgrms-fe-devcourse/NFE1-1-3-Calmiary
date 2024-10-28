@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import useWritingModeStore from '../../../stores/writingModeStore';
 
 interface QuestionBoxPropTypes {
   comment?: string;
@@ -7,9 +8,10 @@ interface QuestionBoxPropTypes {
 }
 
 const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxPropTypes) => {
+  const { isLoadingMode } = useWritingModeStore((state) => state);
   return (
     <Div>
-      <div>{loadingSpinner}</div>
+      {isLoadingMode && <div>{loadingSpinner}</div>}
       <div>{comment}</div>
     </Div>
   );
