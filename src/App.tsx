@@ -11,6 +11,7 @@ import DetailCommunityPage from './features/detailCommunity/DetailCommunityPage.
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
 import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
+import HomeMainPage from './features/home/pages/HomeMainPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: '/detail/community/:id',
     element: <DetailCommunityPage />,
+  },
+  {
+    path: '/home',
+    element: <HomeMainPage />,
   },
 ]);
 
