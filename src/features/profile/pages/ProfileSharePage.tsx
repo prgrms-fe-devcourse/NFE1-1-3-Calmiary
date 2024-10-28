@@ -34,11 +34,14 @@ export default function ProfileSharePage() {
     },
   ];
 
-  const sortedPosts = [...posts].sort((a, b) => {
+  const sortedPosts = [...posts].sort((firstPost, secondPost) => {
     if (sortOption === '최신순') {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return (
+        new Date(secondPost.createdAt).getTime() -
+        new Date(firstPost.createdAt).getTime()
+      );
     } else if (sortOption === '좋아요순') {
-      return b.likes - a.likes;
+      return secondPost.likes - firstPost.likes;
     }
     return 0;
   });
@@ -83,20 +86,10 @@ const ProfileContainer = styled.div`
   min-height: 100vh;
   width: 100%;
   margin: 0 auto;
-  background-color: #181625;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
   gap: 3rem;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.write_white200};
   overflow: auto;
-
-  .dropdown {
-    display: flex;
-    width: 100%;
-    justify-content: end;
-  }
-
-  .dropdown select {
-    margin-right: 2rem;
-  }
 `;
 
 const DropdownArea = styled.div`
@@ -108,5 +101,5 @@ const DropdownArea = styled.div`
 
 const TextArea = styled.div`
   padding-top: 3rem;
-  color: #fff;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;
