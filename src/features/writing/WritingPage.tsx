@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import {
   ContentPublicButton,
   EntireInput,
@@ -21,20 +21,29 @@ const WritingPage = () => {
   } = useWritingModeStore((state) => state);
   useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
+
   return (
     <WritingWrapper>
       <WritingLayout>
-        {isQuestionMode && <QuestionBox comment="오늘 어떤 고민이 있나요?" />}
+        {isQuestionMode && (
+          <FadeIn>
+            <QuestionBox comment="오늘 어떤 고민이 있나요?" />
+          </FadeIn>
+        )}
         {isUserResponseMode && (
-          <ResponseBoxContainer>
-            <ResponseBox />
-          </ResponseBoxContainer>
+          <FadeIn>
+            <ResponseBoxContainer>
+              <ResponseBox />
+            </ResponseBoxContainer>
+          </FadeIn>
         )}
         {isAIResponseMode && (
-          <QuestionBox
-            comment={AiContent}
-            loadingSpinner={<LoadingSpinner />}
-          />
+          <FadeIn>
+            <QuestionBox
+              comment={AiContent}
+              loadingSpinner={<LoadingSpinner />}
+            />
+          </FadeIn>
         )}
         {isInputMode && (
           <InputContainer>
@@ -42,10 +51,12 @@ const WritingPage = () => {
           </InputContainer>
         )}
         {isEndMode && (
-          <ButtonContainer>
-            <ContentPublicButton />
-            <MoveToMainButton />
-          </ButtonContainer>
+          <FadeIn>
+            <ButtonContainer>
+              <ContentPublicButton />
+              <MoveToMainButton />
+            </ButtonContainer>
+          </FadeIn>
         )}
       </WritingLayout>
     </WritingWrapper>
@@ -73,11 +84,20 @@ const ResponseBoxContainer = styled.div`
   justify-content: flex-end;
 `;
 
+const fadeIn = keyframes`
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+`;
+
 const InputContainer = styled.div`
-  position: fixed;
+  position: absolute;
   left: 50%;
   bottom: 5rem;
-  transform: translateX(-50%);
+  transform: translate(-50%, 20px);
+  animation: ${fadeIn} 0.5s forwards;
+  opacity: 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -87,4 +107,17 @@ const ButtonContainer = styled.div`
   align-items: center;
   max-width: 270px;
   margin: auto;
+`;
+
+const FadeIn = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.5s forwards;
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
