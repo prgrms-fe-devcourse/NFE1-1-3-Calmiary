@@ -2,6 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 
+
 class UserResponse(BaseModel):
     user_id: int
     id: str
@@ -19,8 +20,10 @@ class PostResponse(BaseModel):
     content: str
     ai_content: str
     created_at: datetime
-    field5: bool
-    field6: bool
+    is_shared: bool
+    is_solved: bool
+    like_count: int = Field(default=0, description="게시글의 좋아요 수")
+    comment_count: int = Field(default=0, description="게시글의 댓글 수")
 
     class Config:
         from_attributes = True
@@ -89,5 +92,19 @@ class LikeCreate(BaseModel):
             "example": {
                 "user_id": 1,
                 "post_id": 1
+            }
+        }
+
+class MessageResponse(BaseModel):
+    """
+    표준화된 메시지 응답을 위한 스키마
+    성공/실패 메시지, 상태 업데이트 등 일반적인 응답에 사용
+    """
+    message: str = Field(..., description="응답 메시지")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": "작업이 성공적으로 완료되었습니다."
             }
         }
