@@ -12,7 +12,7 @@ from openai import OpenAI
 import os
 import re
 from dotenv import load_dotenv
-from routes import auth, data, stats, diary, community
+from routes import auth, stats, diary, community, profile, admin
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -28,11 +28,35 @@ app = FastAPI(
 
 )
 
-app.include_router(data.router)
+@app.middleware("http")
+async def add_timezone_header(request, call_next):
+    response = await call_next(request)
+    response.headers["Timezone"] = "Asia/Seoul"
+    return response
+
+"""
+API 엔드포인트 구조
+
+변경사항:
+1. HTTP 메소드 일관성
+   - 리소스 조회: GET
+   - 리소스 생성: POST
+   - 리소스 수정: PATCH
+   - 리소스 삭제: DELETE
+   
+2. 엔드포인트 패턴 일관성
+   - 단일 리소스 조회: GET /{resource}/{id}
+   - 리소스 목록 조회: GET /{resource}
+   - 필터링된 목록: GET /{resource}/filter
+   - 상태 토글: PATCH /{resource}/{id}/{action}
+"""
+
 app.include_router(auth.router)
 app.include_router(stats.router)
 app.include_router(diary.router)
 app.include_router(community.router)
+app.include_router(profile.router)
+app.include_router(admin.router)
 
 load_dotenv()
 
@@ -419,6 +443,7 @@ async def root():
             <div class="doc-links">
                 <a href="/docs" class="doc-link">Swagger UI</a>
                 <a href="/redoc" class="doc-link">ReDoc</a>
+                <a href="/admin/dashboard" class="doc-link">DB Dashboard</a>
             </div>
 
             <div class="api-section">
