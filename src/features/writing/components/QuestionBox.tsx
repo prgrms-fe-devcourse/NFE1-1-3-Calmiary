@@ -9,8 +9,8 @@ interface QuestionBoxPropTypes {
 const QuestionBox = ({ comment, loadingSpinner }: QuestionBoxPropTypes) => {
   return (
     <Div>
-      <div>{comment}</div>
       <div>{loadingSpinner}</div>
+      <div>{comment}</div>
     </Div>
   );
 };

@@ -9,6 +9,7 @@ import {
 } from './components';
 import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
+import useWritingResponseStore from '../../stores/writingResponseStore';
 
 const WritingPage = () => {
   const {
@@ -19,6 +20,7 @@ const WritingPage = () => {
     isEndMode,
   } = useWritingModeStore((state) => state);
   useChangeMode();
+  const { AiContent } = useWritingResponseStore((state) => state);
   return (
     <WritingWrapper>
       <WritingLayout>
@@ -29,7 +31,10 @@ const WritingPage = () => {
           </ResponseBoxContainer>
         )}
         {isAIResponseMode && (
-          <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
+          <QuestionBox
+            comment={AiContent}
+            loadingSpinner={<LoadingSpinner />}
+          />
         )}
         {isInputMode && (
           <InputContainer>
