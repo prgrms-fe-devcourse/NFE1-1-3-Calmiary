@@ -493,3 +493,55 @@ async def update_profile_image(
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
     finally:
         await file.seek(0)
+
+@router.get(
+    "/{user_id}",
+    response_model=UserResponse,
+    summary="사용자 프로필 조회",
+    description="""
+    특정 사용자의 프로필 정보를 조회합니다.
+    
+    **반환 정보:**
+    - user_id: 사용자 고유 ID
+    - id: 사용자 로그인 ID
+    - nickname: 닉네임
+    - profile_image: 프로필 이미지 URL
+    - created_at: 계정 생성일
+    """,
+    responses={
+        200: {
+            "description": "프로필 조회 성공",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "user_id": 1,
+                        "id": "user123",
+                        "nickname": "사용자닉네임",
+                        "profile_image": "https://imagedelivery.net/xxx/yyy/public",
+                        "created_at": "2024-03-21T12:00:00"
+                    }
+                }
+            }
+        },
+        404: {
+            "description": "사용자를 찾을 수 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "사용자를 찾을 수 없습니다."}
+                }
+            }
+        }
+    }
+)
+async def get_user_profile(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    user = db.query(models.User).filter(models.User.user_id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="사용자를 찾을 수 없습니다."
+        )
+    
+    return user
