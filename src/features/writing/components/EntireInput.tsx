@@ -5,8 +5,29 @@ import styled from 'styled-components';
 import { FormTypes } from '../types/formTypes';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+
+interface WriteData {
+  user_id: number;
+  emotion_type: string;
+  content: string;
+}
 
 const EntireInput = () => {
+  const mutation = useMutation({
+    mutationFn: async (newContent: WriteData) => {
+      const response = await axios.post('/api/post/write', newContent);
+      return response.data;
+    },
+    onSuccess: (data) => {
+      console.log(data);
+      console.log('success');
+    },
+    onError: async () => {
+      console.log('fail');
+    },
+  });
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
   const { setEmotion, setContent } = useWritingResponseStore(
     (state) => state.actions
@@ -24,6 +45,11 @@ const EntireInput = () => {
     } else {
       setEmotion(data.emotion);
       setContent(data.content);
+      mutation.mutate({
+        user_id: 5,
+        emotion_type: data.emotion,
+        content: data.content,
+      });
       setIsInputMode(false);
       setTimeout(() => {
         setIsUserResponseMode(true);
