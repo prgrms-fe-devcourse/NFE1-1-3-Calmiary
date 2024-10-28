@@ -1,5 +1,5 @@
 from enum import Enum
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, func
 from typing import List, Optional
@@ -8,6 +8,11 @@ from model import models
 from model.schemas import MessageResponse, PostResponse, UserResponse
 from pydantic import BaseModel, Field
 from utils.security import SecurityUtils
+import os
+import aiohttp
+from dotenv import load_dotenv
+
+load_dotenv()
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
 
@@ -362,3 +367,129 @@ async def withdraw_user(
             status_code=500,
             detail="회원 탈퇴 처리 중 오류가 발생했습니다."
         )
+    
+class ImageResponse(BaseModel):
+    id: str
+    url: str
+
+# 에러 응답 모델 정의
+class ErrorResponse(BaseModel):
+    detail: str
+
+@router.put(
+    "/{user_id}/profile-image",
+    summary="프로필 이미지 업데이트",
+    description="""
+    사용자의 프로필 이미지를 업로드하고 업데이트합니다.
+    
+    **요청 형식:**
+    - Multipart form data
+    - 이미지 파일만 허용됨
+    
+    **처리 과정:**
+    1. 이미지 파일 유효성 검증
+    2. Cloudflare Images API를 통한 이미지 업로드
+    3. 업로드된 이미지 URL을 사용자 프로필에 저장
+    
+    **제약사항:**
+    - 이미지 파일 형식만 허용 (image/*)
+    - 파일 크기 제한: 10MB
+    """,
+    responses={
+        200: {
+            "description": "이미지 업로드 성공",
+            "content": {
+                "application/json": {
+                    "example": {
+                        "message": "Profile image updated successfully",
+                        "profile_image_url": "https://imagedelivery.net/xxx/yyy/public"
+                    }
+                }
+            }
+        },
+        400: {
+            "description": "잘못된 요청",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "File must be an image"}
+                }
+            }
+        },
+        404: {
+            "description": "사용자를 찾을 수 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "User not found"}
+                }
+            }
+        },
+        500: {
+            "description": "서버 오류",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "Internal server error"}
+                }
+            }
+        }
+    }
+)
+async def update_profile_image(
+    user_id: int,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    user = db.query(models.User).filter(models.User.user_id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    try:
+        # 이미지 파일 검증
+        if not file.content_type.startswith('image/'):
+            raise HTTPException(status_code=400, detail="File must be an image")
+
+        # 파일 읽기
+        contents = await file.read()
+
+        # Cloudflare API 엔드포인트
+        url = f"https://api.cloudflare.com/client/v4/accounts/{os.getenv('CF_ACCOUNT_ID')}/images/v1"
+        
+        # 파일 데이터 준비
+        form_data = aiohttp.FormData()
+        form_data.add_field('file', 
+                          contents,
+                          filename=file.filename,
+                          content_type=file.content_type)
+
+        headers = {
+            "Authorization": f"Bearer {os.getenv('CF_API_TOKEN')}"
+        }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, data=form_data, headers=headers) as response:
+                result = await response.json()
+                
+                if not result.get("success"):
+                    raise HTTPException(
+                        status_code=400, 
+                        detail=str(result.get("errors", ["Unknown error"])[0])
+                    )
+                
+                # 이미지 URL 생성
+                image_id = result["result"]["id"]
+                image_url = f"https://imagedelivery.net/{os.getenv('CF_ACCOUNT_HASH')}/{image_id}/public"
+                
+                # DB 업데이트
+                user.profile_image = image_url
+                db.commit()
+                
+                return {
+                    "message": "Profile image updated successfully",
+                    "profile_image_url": image_url
+                }
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    finally:
+        await file.seek(0)
