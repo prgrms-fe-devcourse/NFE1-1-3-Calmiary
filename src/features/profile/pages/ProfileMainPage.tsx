@@ -16,8 +16,12 @@ export default function ProfileMainPage() {
             <Link to="/userProfile">
               <ProfileButton>회원 정보 관리</ProfileButton>
             </Link>
-            <ProfileButton>공유한 고민</ProfileButton>
-            <ProfileButton>좋아요 한 고민</ProfileButton>
+            <Link to="/sharePost">
+              <ProfileButton>공유한 고민</ProfileButton>
+            </Link>
+            <Link to="/likePost">
+              <ProfileButton>좋아요 한 고민</ProfileButton>
+            </Link>
           </ButtonArea>
 
           <ProfileButton color="#A594F9">로그아웃</ProfileButton>
