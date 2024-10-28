@@ -1,28 +1,40 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 
-export default function LikePost() {
+interface LikePostPropTypes {
+  content: string;
+  likes: number;
+  createdAt: string;
+  nickname: string;
+  comments: number;
+}
+
+export default function LikePost({
+  content,
+  likes,
+  createdAt,
+  nickname,
+  comments,
+}: LikePostPropTypes) {
   return (
-    <>
-      <LikePostArea>
-        <PostHead>
-          <UserBox>
-            <ImageArea></ImageArea>
-            <span>닉네임</span>
-          </UserBox>
-          <DateBox>24/10/17</DateBox>
-        </PostHead>
-        <TextArea>content</TextArea>
-        <DataArea>
-          <div>
-            <Icon type="community_filed_heart" alt="좋아요" size={24} /> 3
-          </div>
-          <div>
-            <Icon type="community_comment" alt="댓글" size={24} /> 3
-          </div>
-        </DataArea>
-      </LikePostArea>
-    </>
+    <LikePostArea>
+      <PostHead>
+        <UserBox>
+          <ImageArea />
+          <span>{nickname}</span>
+        </UserBox>
+        <DateBox>{createdAt}</DateBox>
+      </PostHead>
+      <TextArea>{content}</TextArea>
+      <DataArea>
+        <div>
+          <Icon type="community_filed_heart" alt="좋아요" size={24} /> {likes}
+        </div>
+        <div>
+          <Icon type="community_comment" alt="댓글" size={24} /> {comments}
+        </div>
+      </DataArea>
+    </LikePostArea>
   );
 }
 
