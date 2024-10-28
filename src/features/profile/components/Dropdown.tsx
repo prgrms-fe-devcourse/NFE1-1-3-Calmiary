@@ -12,7 +12,6 @@ const DropdownToggle = styled.div`
   padding: 10px;
   background-color: inherit;
   text-align: center;
-  border-radius: 0.8rem;
   transform: translateY(2rem);
 `;
 
@@ -23,8 +22,8 @@ const DropdownMenu = styled.ul`
   border-radius: 1rem;
   right: 0;
   border: 1px solid #ccc;
-  background-color: white;
-  color: #181625;
+  background-color: ${({ theme }) => theme.colors.write_white200};
+  color: ${({ theme }) => theme.colors.brand_bg};
   list-style: none;
   padding: 0;
   margin: 0;
@@ -32,11 +31,7 @@ const DropdownMenu = styled.ul`
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   overflow: auto;
-  max-height: 15rem;
   transform: translateY(2rem);
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
   li {
     padding: 10px;
     border-bottom: 1px solid #eee;
