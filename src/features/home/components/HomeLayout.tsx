@@ -19,25 +19,18 @@ const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
 export default HomeLayout;
 
 const HomeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 390px;
   width: 100%;
-  height: 100%;
-  margin: 0 auto;
-  background: ${({ theme }) => theme.colors.brand_bg};
-  gap: 3rem;
+  height: 100vh;
   position: relative;
 `;
 
-const HomeBackRight = styled.img`
+export const HomeBackRight = styled.img`
   position: absolute;
   top: 72px;
   right: 0px;
 `;
 
-const HomeBackLeft = styled.img`
+export const HomeBackLeft = styled.img`
   position: absolute;
   left: 0px;
   bottom: 15px;

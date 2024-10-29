@@ -5,10 +5,10 @@ import Butterfly from '../../../assets/imgs/home-butterfly.png';
 const HomeLogo: React.FC = () => {
   return (
     <>
-      <LogoWrapper>
+      <LogoContainer>
         <Text>나를 기록하는 시간</Text>
         <img src={Logo} alt="" />
-      </LogoWrapper>
+      </LogoContainer>
       <HomeImageButterfly src={Butterfly} alt="home butterfly" />
     </>
   );
@@ -16,7 +16,7 @@ const HomeLogo: React.FC = () => {
 
 export default HomeLogo;
 
-const LogoWrapper = styled.div`
+const LogoContainer = styled.div`
   margin-top: 173px;
   display: flex;
   flex-direction: column;
@@ -34,4 +34,6 @@ const Text = styled.h1`
 const HomeImageButterfly = styled.img`
   position: absolute;
   top: 173px;
+  left: 50%;
+  transform: translateX(-50%);
 `;
