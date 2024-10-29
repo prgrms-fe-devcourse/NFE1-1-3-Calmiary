@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../../network/axiosInstance';
 
 interface LoginResponse {
   access_token: string;
@@ -28,8 +28,8 @@ interface SignUpData {
 export const loginApi = async (
   loginData: LoginData
 ): Promise<LoginResponse> => {
-  const { data } = await axios.post<LoginResponse>(
-    'https://www.calmiary-be.org/auth/login',
+  const { data } = await axiosInstance.post<LoginResponse>(
+    '/auth/login',
     {
       id: loginData.userid,
       password: loginData.password,
@@ -46,8 +46,8 @@ export const loginApi = async (
 export const signUpApi = async (
   signUpData: SignUpData
 ): Promise<SignUpResponse> => {
-  const { data } = await axios.post<SignUpResponse>(
-    'https://calmiary-be.org/auth/signup',
+  const { data } = await axiosInstance.post<SignUpResponse>(
+    '/auth/signup',
     {
       id: signUpData.userid,
       nickname: signUpData.nickname,
