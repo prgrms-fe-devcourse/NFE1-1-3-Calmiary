@@ -31,9 +31,15 @@ export const useAuth = () => {
         sameSite: 'strict',
         path: '/',
       });
+      Cookies.set('nickname', data.nickname, {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
 
       // 로그인 성공 후 페이지 이동
-      navigate('/diary');
+      navigate('/growth');
     },
     onError: (error: any) => {
       if (axios.isAxiosError(error)) {
@@ -50,7 +56,7 @@ export const useAuth = () => {
 
   const signUpMutation = useMutation({
     mutationFn: signUpApi,
-    onSuccess: (data) => {
+    onSuccess: () => {
       alert('회원가입이 완료되었습니다.');
       navigate('/login');
     },

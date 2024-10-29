@@ -5,6 +5,7 @@ interface LoginResponse {
   refresh_token: string;
   token_type: string;
   user_id: number;
+  nickname: string;
 }
 
 interface LoginData {
