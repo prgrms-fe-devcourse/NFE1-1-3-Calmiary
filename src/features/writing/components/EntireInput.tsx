@@ -21,10 +21,8 @@ const EntireInput = () => {
       return response.data;
     },
     onSuccess: (data) => {
-      setTimeout(() => {
-        setIsLoadingMode(false);
-        setAiContent(data.content);
-      }, 2500);
+      setAiContent(data.ai_content);
+      setIsLoadingMode(false);
       console.log('success');
     },
     onError: async () => {
