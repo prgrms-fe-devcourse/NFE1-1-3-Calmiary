@@ -405,6 +405,30 @@ async def admin_dashboard():
           font-size: 14px;
           line-height: 1.6;
       }
+
+      .profile-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.image-action-button {
+    padding: 4px 8px;
+    font-size: 12px;
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.image-action-button:hover {
+    background-color: #0056b3;
+}
+
     </style>
   </head>
   <body>
@@ -436,7 +460,7 @@ async def admin_dashboard():
 
         <div id="users" class="tab-content active">
           <button class="add-button" onclick="showModal('userModal')">
-            사용자 추가
+              사용자 추가
           </button>
           <table id="usersTable">
             <thead>
@@ -444,12 +468,14 @@ async def admin_dashboard():
                 <th>ID</th>
                 <th>사용자 ID</th>
                 <th>닉네임</th>
+                <th>프로필 이미지</th>
                 <th>생성일</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
+
 
         <div id="posts" class="tab-content">
           <button class="add-button" onclick="showModal('postModal')">
@@ -563,6 +589,21 @@ async def admin_dashboard():
           </form>
       </div>
     </div>
+
+    <div id="profileImageModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>프로필 이미지 업데이트</h2>
+        <form id="profileImageForm">
+            <input type="hidden" name="user_id" id="profileImageUserId">
+            <div class="form-group">
+                <label>이미지 파일</label>
+                <input type="file" name="file" accept="image/*" required>
+            </div>
+            <button type="submit" class="submit-btn">업로드</button>
+        </form>
+    </div>
+</div>
 
     <div id="commentModal" class="modal">
       <div class="modal-content">
@@ -1187,13 +1228,21 @@ async def admin_dashboard():
           const row = document.createElement('tr');
           switch (tableName) {
             case 'users':
-              row.innerHTML = `
-                                <td>${item.user_id}</td>
-                                <td>${item.id}</td>
-                                <td>${item.nickname}</td>
-                                <td>${formatDate(item.created_at)}</td>
-                            `;
-              break;
+    row.innerHTML = `
+        <td>${item.user_id}</td>
+        <td>${item.id}</td>
+        <td>${item.nickname}</td>
+        <td>
+            ${item.profile_image ? 
+                `<img src="${item.profile_image}" alt="프로필" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                 <button onclick="updateProfileImage(${item.user_id})" class="action-button">이미지 변경</button>` 
+                : 
+                `<button onclick="updateProfileImage(${item.user_id})" class="action-button">이미지 추가</button>`
+            }
+        </td>
+        <td>${formatDate(item.created_at)}</td>
+    `;
+    break;
             case 'posts':
               row.innerHTML = `
         <td>${item.id}</td>
@@ -1252,6 +1301,40 @@ async def admin_dashboard():
           tbody.appendChild(row);
         });
       }
+
+      async function updateProfileImage(userId) {
+    const modal = document.getElementById('profileImageModal');
+    document.getElementById('profileImageUserId').value = userId;
+    modal.style.display = 'block';
+}
+
+// 프로필 이미지 업로드 폼 제출 핸들러
+document.getElementById('profileImageForm').onsubmit = async function(e) {
+    e.preventDefault();
+    const userId = document.getElementById('profileImageUserId').value;
+    const formData = new FormData();
+    const fileInput = this.querySelector('input[type="file"]');
+    formData.append('file', fileInput.files[0]);
+
+    try {
+        const response = await fetch(`/profile/${userId}/profile-image`, {
+            method: 'PUT',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('프로필 이미지 업데이트 실패');
+        }
+
+        const result = await response.json();
+        alert('프로필 이미지가 업데이트되었습니다.');
+        document.getElementById('profileImageModal').style.display = 'none';
+        refreshData();
+    } catch (error) {
+        alert('프로필 이미지 업데이트 중 오류가 발생했습니다.');
+        console.error(error);
+    }
+};
 
       async function resetDatabase() {
         if (!confirm('정말로 데이터베이스를 초기화하시겠습니까?')) {

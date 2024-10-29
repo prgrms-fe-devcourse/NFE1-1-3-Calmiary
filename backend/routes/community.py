@@ -126,7 +126,7 @@ class LikeResponse(BaseModel):
             datetime: lambda v: v.isoformat()
         }
 
-@router.post(
+@router.get(
     "/posts",
     response_model=List[PostResponse],
     summary="공유된 걱정거리 목록 조회",
@@ -195,8 +195,10 @@ class LikeResponse(BaseModel):
         }
     }
 )
-def get_shared_posts(
-    filter_data: SharedPostsFilter,
+async def get_shared_posts(
+    sort_by: Optional[SortOption] = SortOption.LATEST,
+    page: int = Query(1, ge=1),
+    limit: int = Query(10, ge=1, le=100),
     db: Session = Depends(get_db)
 ):
     # 좋아요 수를 계산하는 서브쿼리
@@ -231,16 +233,16 @@ def get_shared_posts(
     )
 
     # 정렬 적용
-    if filter_data.sort_by == SortOption.LATEST:
+    if sort_by == SortOption.LATEST:
         query = query.order_by(desc(models.Post.created_at))
-    elif filter_data.sort_by == SortOption.COMMENTS:
+    elif sort_by == SortOption.COMMENTS:
         query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
-    elif filter_data.sort_by == SortOption.LIKES:
+    elif sort_by == SortOption.LIKES:
         query = query.order_by(desc(func.coalesce(likes_count.c.like_count, 0)))
 
     # 페이지네이션 적용
-    offset = (filter_data.page - 1) * filter_data.limit
-    results = query.offset(offset).limit(filter_data.limit).all()
+    offset = (page - 1) * limit
+    results = query.offset(offset).limit(limit).all()
 
     # 결과를 PostResponse 형식으로 변환
     posts = []
@@ -264,7 +266,6 @@ def get_shared_posts(
         posts.append(post_dict)
 
     return posts
-
 
 @router.get(
     "/post/{post_id}",
@@ -395,7 +396,7 @@ def get_post_detail(
         "comments": comments
     }
 
-@router.post(
+@router.patch(
     "/post/{post_id}/like",
     response_model=LikeResponse,
     summary="게시글 공감 토글",
@@ -427,10 +428,11 @@ def get_post_detail(
     1. 본인 게시글에도 공감 가능
     2. 비공개 게시글에는 공감 불가
     3. 동일 게시글에 중복 공감 불가
+    4. 존재하지 않는 사용자는 공감 불가
     
     **사용 예시:**
     ```bash
-    curl -X POST "http://api.example.com/community/post/123/like" \\
+    curl -X PATCH "http://api.example.com/community/post/123/like" \\
          -H "Content-Type: application/json" \\
          -d '{"user_id": 1}'
     ```
@@ -452,10 +454,12 @@ def get_post_detail(
             }
         },
         404: {
-            "description": "게시글 없음",
+            "description": "게시글 또는 사용자 없음",
             "content": {
                 "application/json": {
-                    "example": {"detail": "게시글을 찾을 수 없거나 비공개 게시글입니다."}
+                    "example": {
+                        "detail": "게시글을 찾을 수 없거나 비공개 게시글입니다."
+                    }
                 }
             }
         }
@@ -466,6 +470,14 @@ def toggle_like(
     user_id: int,
     db: Session = Depends(get_db)
 ):
+    # 사용자 존재 확인
+    user = db.query(models.User).filter(models.User.user_id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="사용자를 찾을 수 없습니다."
+        )
+
     # 공개된 게시글인지 확인
     post = db.query(models.Post).filter(
         models.Post.id == post_id,
@@ -519,7 +531,7 @@ def toggle_like(
             status_code=500,
             detail="공감 처리 중 오류가 발생했습니다."
         )
-    
+
 @router.post(
     "/post/{post_id}/comment",
     response_model=CommentResponse,
