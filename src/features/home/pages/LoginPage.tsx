@@ -3,7 +3,7 @@ import HomeLayout from '../components/HomeLayout';
 import HomeLogo from '../components/HomeLogo';
 import LoginForm from '../components/LoginForm';
 import { LoginData } from '../types/homeTypes';
-import { useAuth } from '../../../hook/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginPage = () => {
   const { loginMutation } = useAuth();
