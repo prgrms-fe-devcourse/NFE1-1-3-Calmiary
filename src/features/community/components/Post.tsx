@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Content, PostReaction, UserInfo } from './index';
+import { PostContent, PostReaction, UserInfo } from './index';
 import { PostTypes } from '../CommunityPage';
 
 const Post = (props: Partial<PostTypes>) => {
@@ -10,7 +10,7 @@ const Post = (props: Partial<PostTypes>) => {
       ) : (
         <p>Loading...</p>
       )}
-      <Content />
+      {props.content && <PostContent content={props.content} />}
       <PostReaction />
     </Wrapper>
   );
