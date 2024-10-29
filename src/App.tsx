@@ -11,7 +11,9 @@ import DetailCommunityPage from './features/detailCommunity/DetailCommunityPage.
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
 import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
-import HomeMainPage from './features/home/pages/HomeMainPage.tsx';
+import LoginPage from './features/home/pages/LoginPage.tsx';
+import SignUpPage from './features/home/pages/SignUpPage.tsx';
+import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -36,8 +38,16 @@ const router = createBrowserRouter([
     element: <DetailCommunityPage />,
   },
   {
-    path: '/home',
-    element: <HomeMainPage />,
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignUpPage />,
+  },
+  {
+    path: '/growth',
+    element: <GrowthFactorPage />,
   },
 ]);
 
