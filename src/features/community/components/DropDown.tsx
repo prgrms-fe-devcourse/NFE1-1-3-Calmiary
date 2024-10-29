@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import DropDownArrow from '../../../assets/comuunity-dropdown.svg';
 
-type SortKey = 'asc' | 'desc' | 'likes';
+type SortKey = 'latest' | 'asc' | 'likes';
 type SortOptions = Record<SortKey, string>;
 
 interface DropDownPropTypes {
@@ -14,7 +14,7 @@ const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const SelectContainerRef = useRef<HTMLDivElement | null>(null);
   const sortOptions: SortOptions = {
-    desc: '최신순',
+    latest: '최신순',
     asc: '나중순',
     likes: '좋아요순',
   };

@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import { Content, PostReaction, UserInfo } from './index';
+import { PostTypes } from '../CommunityPage';
 
-const Post = () => {
+const Post = (props: Partial<PostTypes>) => {
   return (
     <Wrapper>
-      <UserInfo />
+      {props.user_info && props.created_at ? (
+        <UserInfo user_info={props.user_info} created_at={props.created_at} />
+      ) : (
+        <p>Loading...</p>
+      )}
       <Content />
       <PostReaction />
     </Wrapper>

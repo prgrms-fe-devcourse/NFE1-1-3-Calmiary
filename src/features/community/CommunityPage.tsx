@@ -1,11 +1,51 @@
 import styled from 'styled-components';
 import { DropDown, Post, Title } from './components';
 import { useState } from 'react';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
-type SortKey = 'asc' | 'desc' | 'likes';
+type SortKey = 'latest' | 'asc' | 'likes';
+
+export interface UserDataType {
+  nickname: string;
+  profile_image: string;
+}
+export interface PostTypes {
+  id: string;
+  user_id: string;
+  emotion_type: string;
+  content: string;
+  ai_content: string;
+  created_at: Date;
+  is_shared: boolean;
+  is_solved: boolean;
+  like_count: number;
+  comment_count: number;
+  user_info: UserDataType;
+}
 
 const CommunityPage = () => {
-  const [isSorted, setIsSorted] = useState<SortKey>('desc');
+  const [isSorted, setIsSorted] = useState<SortKey>('latest');
+  const SIZE = 10;
+
+  const getPosts = async (
+    sortedOption: string,
+    page: number,
+    SIZE: number
+  ): Promise<PostTypes[]> => {
+    const { data } = await axios.get(
+      `/api/community/posts?sort_by=${sortedOption}&page=${page}&limit=${SIZE}`
+    );
+
+    return data;
+  };
+
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ['posts'],
+    queryFn: () => getPosts(isSorted, 1, SIZE),
+  });
+
+  console.log(data, isPending, isError, error);
 
   return (
     <Wrapper>
@@ -13,7 +53,7 @@ const CommunityPage = () => {
       <DropDownLayout>
         <DropDown isSorted={isSorted} setIsSorted={setIsSorted} />
       </DropDownLayout>
-      <Post />
+      {data?.map((post) => <Post key={post.id} {...post} />)}
     </Wrapper>
   );
 };
