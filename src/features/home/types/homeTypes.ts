@@ -1,4 +1,4 @@
-export interface LoginFormProps {
+export interface LoginFormPropTypes {
   onSubmit?: (loginData: LoginData) => void;
 }
 
@@ -25,7 +25,7 @@ export interface LoginData {
   password: string;
 }
 
-export interface SignUpFormProps {
+export interface SignUpFormPropTypes {
   onSubmit: (data: SignUpData) => void;
   isLoading?: boolean;
 }

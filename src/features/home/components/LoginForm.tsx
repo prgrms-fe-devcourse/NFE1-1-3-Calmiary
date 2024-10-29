@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { LoginFormProps, LoginData } from '../types/homeTypes';
+import { LoginFormPropTypes, LoginData } from '../types/homeTypes';
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit }: LoginFormPropTypes) => {
   const {
     register,
     handleSubmit,

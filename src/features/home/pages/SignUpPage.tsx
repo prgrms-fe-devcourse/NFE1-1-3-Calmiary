@@ -5,7 +5,7 @@ import SignUpForm from '../components/SignUpForm';
 import { SignUpData } from '../types/homeTypes';
 import { useAuth } from '../../../hook/useAuth';
 
-const SignUpPage: React.FC = () => {
+const SignUpPage = () => {
   const { signUpMutation } = useAuth();
 
   const handleSubmit = (signUpData: SignUpData) => {

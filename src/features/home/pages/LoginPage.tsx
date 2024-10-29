@@ -5,7 +5,7 @@ import LoginForm from '../components/LoginForm';
 import { LoginData } from '../types/homeTypes';
 import { useAuth } from '../../../hook/useAuth';
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const { loginMutation } = useAuth();
 
   const handleSubmit = (loginData: LoginData) => {

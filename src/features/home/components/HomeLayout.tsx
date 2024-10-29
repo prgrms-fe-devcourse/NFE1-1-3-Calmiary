@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import BackRight from '../../../assets/home-back-right.svg';
 import BackLeft from '../../../assets/home-back-left.svg';
 
-interface HomeLayoutProps {
+interface HomePropTypes {
   children: React.ReactNode;
 }
 
-const HomeLayout: React.FC<HomeLayoutProps> = ({ children }) => {
+const HomeLayout = ({ children }: HomePropTypes) => {
   return (
     <HomeContainer>
       {children}
