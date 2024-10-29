@@ -10,6 +10,8 @@ import {
 import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
 import useWritingResponseStore from '../../stores/writingResponseStore';
+import { useState } from 'react';
+import Modal from '../../components/ui/Modal';
 
 const WritingPage = () => {
   const {
@@ -21,6 +23,14 @@ const WritingPage = () => {
   } = useWritingModeStore((state) => state);
   useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <WritingWrapper>
       <WritingLayout>
@@ -52,10 +62,19 @@ const WritingPage = () => {
         {isEndMode && (
           <FadeIn>
             <ButtonContainer>
-              <ContentPublicButton />
+              <ContentPublicButton onClick={openModal} />
               <MoveToMainButton />
             </ButtonContainer>
           </FadeIn>
+        )}
+
+        {isModalOpen && (
+          <Modal
+            onClose={closeModal}
+            header="내 고민 공유하기"
+            contentFirst="고민을 공유한 후에는"
+            contentSecond="비공개로 전환할 수 없습니다!"
+          />
         )}
       </WritingLayout>
     </WritingWrapper>

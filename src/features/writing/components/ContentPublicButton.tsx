@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 
-const ContentPublicButton = () => {
-  return <Button>내 고민 공유하기</Button>;
+interface ContentPublicButtonPropTypes {
+  onClick: () => void;
+}
+const ContentPublicButton = ({ onClick }: ContentPublicButtonPropTypes) => {
+  return <Button onClick={onClick}>내 고민 공유하기</Button>;
 };
 
 export default ContentPublicButton;
