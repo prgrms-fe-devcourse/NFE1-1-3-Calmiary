@@ -3,11 +3,19 @@ import HomeLayout from '../components/HomeLayout';
 import HomeLogo from '../components/HomeLogo';
 import SignUpForm from '../components/SignUpForm';
 import { SignUpData } from '../types/homeTypes';
+import { useAuth } from '../../../hook/useAuth';
 
 const SignUpPage: React.FC = () => {
+  const { signUpMutation } = useAuth();
+
   const handleSubmit = (signUpData: SignUpData) => {
-    if (signUpData.userid && signUpData.password && signUpData.password_check) {
-      //Query 들어갈 부분
+    if (
+      signUpData.userid &&
+      signUpData.password &&
+      signUpData.password_check &&
+      signUpData.nickname
+    ) {
+      signUpMutation.mutate(signUpData);
     }
   };
 
@@ -15,7 +23,10 @@ const SignUpPage: React.FC = () => {
     <SignUpWrapper>
       <HomeLayout>
         <HomeLogo />
-        <SignUpForm onSubmit={handleSubmit} />
+        <SignUpForm
+          onSubmit={handleSubmit}
+          isLoading={signUpMutation.isPending}
+        />
       </HomeLayout>
     </SignUpWrapper>
   );

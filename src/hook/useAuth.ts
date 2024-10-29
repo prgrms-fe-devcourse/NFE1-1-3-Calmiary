@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { loginApi } from '../features/home/auth';
+import { loginApi, signUpApi } from '../features/home/auth';
 import axios from 'axios';
 
 export const useAuth = () => {
@@ -29,5 +29,24 @@ export const useAuth = () => {
     },
   });
 
-  return { loginMutation };
+  const signUpMutation = useMutation({
+    mutationFn: signUpApi,
+    onSuccess: (data) => {
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
+    },
+    onError: (error: any) => {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 409) {
+          alert('이미 존재하는 아이디입니다.');
+        } else if (error.response?.status === 422) {
+          alert('입력값이 올바르지 않습니다.');
+        } else {
+          alert('회원가입 중 오류가 발생했습니다.');
+        }
+      }
+    },
+  });
+
+  return { loginMutation, signUpMutation };
 };
