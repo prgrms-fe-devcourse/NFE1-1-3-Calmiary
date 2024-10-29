@@ -22,21 +22,20 @@ const EntireInput = () => {
     },
     onSuccess: (data) => {
       setAiContent(data.ai_content);
+      setContentId(data.id);
       setIsLoadingMode(false);
-      console.log('success');
     },
     onError: async () => {
       setTimeout(() => {
-        setIsLoadingMode(false);
         setAiContent('고민 등록에 실패했습니다 😢');
+        setContentId(0);
+        setIsLoadingMode(false);
       }, 2500);
-      console.log('fail');
     },
   });
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
-  const { setEmotion, setContent, setAiContent } = useWritingResponseStore(
-    (state) => state.actions
-  );
+  const { setEmotion, setContent, setAiContent, setContentId } =
+    useWritingResponseStore((state) => state.actions);
   const {
     setIsInputMode,
     setIsUserResponseMode,

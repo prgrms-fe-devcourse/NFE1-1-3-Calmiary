@@ -1,6 +1,10 @@
 import styled from 'styled-components';
-import { Icon } from './Icon';
+import { Icon } from '../../../components/ui/Icon';
 import Button from './Button';
+import useWritingResponseStore from '../../../stores/writingResponseStore';
+import { useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -9,7 +13,34 @@ interface ModalPropTypes {
   contentSecond: string;
 }
 
+interface VisibilityData {
+  user_id: number;
+}
+
 export default function Modal(props: ModalPropTypes) {
+  const { contentId } = useWritingResponseStore((state) => state);
+  useEffect(() => {
+    console.log(contentId);
+  }, [contentId]);
+
+  const mutation = useMutation({
+    mutationFn: async (userId: VisibilityData) => {
+      await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
+    },
+    onSuccess: () => {
+      console.log('success');
+    },
+    onError: () => {
+      console.log('fail');
+    },
+  });
+
+  const handleConfirm = () => {
+    mutation.mutate({
+      user_id: 5,
+    });
+  };
+
   return (
     <ModalOverlay onClick={props.onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -23,7 +54,12 @@ export default function Modal(props: ModalPropTypes) {
         </div>
         <ModalContent>내용을 확인하셨다면 버튼을 누르세요</ModalContent>
 
-        <Button width="180px" height="52px" color="#65558F">
+        <Button
+          onClick={handleConfirm}
+          width="180px"
+          height="52px"
+          color="#65558F"
+        >
           확인하기
         </Button>
       </ModalContainer>

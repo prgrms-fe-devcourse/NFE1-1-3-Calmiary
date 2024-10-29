@@ -11,7 +11,7 @@ import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
 import useWritingResponseStore from '../../stores/writingResponseStore';
 import { useState } from 'react';
-import Modal from '../../components/ui/Modal';
+import Modal from './components/Modal';
 
 const WritingPage = () => {
   const {
