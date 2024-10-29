@@ -23,7 +23,7 @@ export default function LikePost({
           <ImageArea />
           <span>{nickname}</span>
         </UserBox>
-        <DateBox>{createdAt}</DateBox>
+        <DateBox>{createdAt.split('T')[0]}</DateBox>
       </PostHead>
       <TextArea>{content}</TextArea>
       <DataArea>
