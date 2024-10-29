@@ -14,6 +14,7 @@ import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
 import LoginPage from './features/home/pages/LoginPage.tsx';
 import SignUpPage from './features/home/pages/SignUpPage.tsx';
 import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
+import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: '/likePost',
     element: <ProfileLikePage />,
+  },
+  {
+    path: '/sharePost',
+    element: <ProfileSharePage />,
   },
   { path: '/writing', element: <WritingPage /> },
   {
