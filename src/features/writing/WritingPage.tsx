@@ -21,13 +21,12 @@ const WritingPage = () => {
   } = useWritingModeStore((state) => state);
   useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
-
   return (
     <WritingWrapper>
       <WritingLayout>
         {isQuestionMode && (
           <FadeIn>
-            <QuestionBox comment="오늘 어떤 고민이 있나요?" />
+            <QuestionBox comment="요즘 어떤 고민이 있나요?" />
           </FadeIn>
         )}
         {isUserResponseMode && (
