@@ -3,9 +3,7 @@ import useWritingModeStore from '../../../stores/writingModeStore';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 
 const useChangeMode = () => {
-  const { isQuestionMode, isAIResponseMode } = useWritingModeStore(
-    (state) => state
-  );
+  const { isQuestionMode } = useWritingModeStore((state) => state);
   const { AiContent } = useWritingResponseStore((state) => state);
   const {
     setIsQuestionMode,
