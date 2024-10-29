@@ -11,6 +11,7 @@ import DetailCommunityPage from './features/detailCommunity/DetailCommunityPage.
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
 import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
+import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/likePost',
     element: <ProfileLikePage />,
+  },
+  {
+    path: '/sharePost',
+    element: <ProfileSharePage />,
   },
   { path: '/writing', element: <WritingPage /> },
   {
