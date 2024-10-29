@@ -3,6 +3,7 @@ import { DropDown, Post, Title } from './components';
 import { useState } from 'react';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 
 type SortKey = 'latest' | 'asc' | 'likes';
 
@@ -26,6 +27,8 @@ export interface PostTypes {
 
 const CommunityPage = () => {
   const [isSorted, setIsSorted] = useState<SortKey>('latest');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sortBy = (searchParams.get('sort_by') as SortKey) || 'latest';
   const SIZE = 10;
 
   const getPosts = async (
@@ -41,17 +44,20 @@ const CommunityPage = () => {
   };
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ['posts'],
+    queryKey: ['posts', isSorted],
     queryFn: () => getPosts(isSorted, 1, SIZE),
   });
 
-  console.log(data, isPending, isError, error);
+  const handleSortChange = (option: SortKey) => {
+    setIsSorted(option);
+    setSearchParams({ sort_by: option }, { replace: true });
+  };
 
   return (
     <Wrapper>
       <Title />
       <DropDownLayout>
-        <DropDown isSorted={isSorted} setIsSorted={setIsSorted} />
+        <DropDown isSorted={isSorted} setIsSorted={handleSortChange} />
       </DropDownLayout>
       {data?.map((post) => <Post key={post.id} {...post} />)}
     </Wrapper>
