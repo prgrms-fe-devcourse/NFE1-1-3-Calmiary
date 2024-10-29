@@ -11,7 +11,10 @@ const Post = (props: Partial<PostTypes>) => {
         <p>Loading...</p>
       )}
       {props.content && <PostContent content={props.content} />}
-      <PostReaction />
+      <PostReaction
+        like_count={props.like_count}
+        comment_count={props.comment_count}
+      />
     </Wrapper>
   );
 };

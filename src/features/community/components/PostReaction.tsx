@@ -1,17 +1,22 @@
 import styled from 'styled-components';
-import { mockPosts } from './mockData';
 import { Icon } from '../../../components/ui/Icon';
 
-const PostReaction = () => {
+const PostReaction = ({
+  like_count,
+  comment_count,
+}: {
+  like_count?: number;
+  comment_count?: number;
+}) => {
   return (
     <Wrapper>
       <EmpathyLayout>
         <Icon type="community_filed_heart" alt="filledHeart" />
-        <p>{mockPosts[0].likes}</p>
+        <p>{like_count}</p>
       </EmpathyLayout>
       <CommentLayout>
         <Icon type="community_comment" alt="comment" />
-        <p>{mockPosts[0].comments}</p>
+        <p>{comment_count}</p>
       </CommentLayout>
     </Wrapper>
   );
