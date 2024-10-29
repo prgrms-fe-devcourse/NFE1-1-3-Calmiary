@@ -108,11 +108,6 @@ const FactorBox = styled.div`
   gap: 16px;
 `;
 
-const FactorIcon = styled.span`
-  font-size: 24px;
-  margin-bottom: 8px;
-`;
-
 const FactorCount = styled.span`
   color: white;
   font-size: 16px;

@@ -3,11 +3,14 @@ import HomeLayout from '../components/HomeLayout';
 import HomeLogo from '../components/HomeLogo';
 import LoginForm from '../components/LoginForm';
 import { LoginData } from '../types/homeTypes';
+import { useAuth } from '../../../hook/useAuth';
 
 const LoginPage: React.FC = () => {
+  const { loginMutation } = useAuth();
+
   const handleSubmit = (loginData: LoginData) => {
     if (loginData.userid && loginData.password) {
-      //Query 들어갈 부분
+      loginMutation.mutate(loginData);
     }
   };
 
