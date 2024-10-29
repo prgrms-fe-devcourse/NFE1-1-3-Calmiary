@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { loginApi, signUpApi } from '../features/home/auth';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -10,8 +11,26 @@ export const useAuth = () => {
     mutationFn: loginApi,
     onSuccess: (data) => {
       // 토큰 저장
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('refresh_token', data.refresh_token);
+      Cookies.set('access_token', data.access_token, {
+        expires: 1,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+
+      Cookies.set('refresh_token', data.refresh_token, {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+
+      Cookies.set('user_id', data.user_id.toString(), {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
 
       // 로그인 성공 후 페이지 이동
       navigate('/diary');
