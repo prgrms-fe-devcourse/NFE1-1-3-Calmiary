@@ -71,7 +71,7 @@ const WritingWrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const WritingLayout = styled.div`
@@ -92,7 +92,7 @@ const fadeIn = keyframes`
 `;
 
 const InputContainer = styled.div`
-  position: absolute;
+  position: fixed;
   left: 50%;
   bottom: 5rem;
   transform: translate(-50%, 20px);

@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import useWritingModeStore from '../../../stores/writingModeStore';
+import useWritingResponseStore from '../../../stores/writingResponseStore';
 
 const useChangeMode = () => {
   const { isQuestionMode, isAIResponseMode } = useWritingModeStore(
     (state) => state
   );
+  const { AiContent } = useWritingResponseStore((state) => state);
   const {
     setIsQuestionMode,
     setIsInputMode,
@@ -27,12 +29,12 @@ const useChangeMode = () => {
   }, [isQuestionMode, setIsUserResponseMode, setIsInputMode]);
 
   useEffect(() => {
-    if (!isAIResponseMode) return;
+    if (!AiContent) return;
 
     setTimeout(() => {
       setIsEndMode(true);
-    }, 2000);
-  }, [isAIResponseMode, setIsEndMode]);
+    }, 1000);
+  }, [AiContent, setIsEndMode]);
 };
 
 export default useChangeMode;
