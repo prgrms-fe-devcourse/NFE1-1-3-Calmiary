@@ -19,6 +19,10 @@ const Wrapper = styled.div`
   width: 100%;
   height: 64px;
   background-color: ${({ theme }) => theme.colors.write_purple200};
+
+  img {
+    cursor: pointer;
+  }
 `;
 
 const InputLayout = styled.textarea`
