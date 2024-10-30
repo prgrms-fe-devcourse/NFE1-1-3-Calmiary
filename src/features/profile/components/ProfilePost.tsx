@@ -1,14 +1,6 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
-
-interface UserPostPropTypes {
-  content: string;
-  likes: number;
-  createdAt: string;
-  nickname: string;
-  comments: number;
-  profileImg: string;
-}
+import { UserPostPropTypes } from '../types/profileTypes';
 
 export default function ProfilePost({
   content,

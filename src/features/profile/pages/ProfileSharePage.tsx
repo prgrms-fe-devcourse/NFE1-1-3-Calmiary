@@ -1,25 +1,17 @@
 import styled from 'styled-components';
-import LikePost from '../components/LikePost';
 import Dropdown from '../components/Dropdown';
 import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
-
-interface PostPropTypes {
-  id: number;
-  content: string;
-  like_count: number;
-  created_at: string;
-  nickname: string;
-  comment_count: number;
-}
+import { PostPropTypes, SortOption } from '../types/profileTypes';
+import ProfilePost from '../components/ProfilePost';
 
 const fetchSharedPosts = async ({
   pageParam = 1,
   sortOption,
 }: {
   pageParam?: number;
-  sortOption: '최신순' | '좋아요순' | '오래된순';
+  sortOption: SortOption;
 }) => {
   const sortBy =
     sortOption === '최신순'
@@ -96,12 +88,13 @@ export default function ProfileSharePage() {
         {isLoading && <p>Loading...</p>}
         {data?.pages.map((page) =>
           page.data.map((post: PostPropTypes) => (
-            <LikePost
+            <ProfilePost
               key={post.id}
               content={post.content}
               likes={post.like_count}
               createdAt={post.created_at}
               nickname={post.nickname}
+              profileImg={post.user_info.profile_image}
               comments={post.comment_count}
             />
           ))
