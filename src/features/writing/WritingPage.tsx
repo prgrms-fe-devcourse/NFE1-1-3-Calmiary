@@ -6,6 +6,7 @@ import {
   MoveToMainButton,
   QuestionBox,
   ResponseBox,
+  RetryButton,
 } from './components';
 import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
@@ -19,6 +20,7 @@ const WritingPage = () => {
     isInputMode,
     isUserResponseMode,
     isAIResponseMode,
+    isErrorMode,
     isEndMode,
   } = useWritingModeStore((state) => state);
   useChangeMode();
@@ -62,7 +64,11 @@ const WritingPage = () => {
         {isEndMode && (
           <FadeIn>
             <ButtonContainer>
-              <ContentPublicButton onClick={openModal} />
+              {isErrorMode ? (
+                <RetryButton />
+              ) : (
+                <ContentPublicButton onClick={openModal} />
+              )}
               <MoveToMainButton />
             </ButtonContainer>
           </FadeIn>

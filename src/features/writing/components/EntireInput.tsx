@@ -34,6 +34,7 @@ const EntireInput = () => {
         setAiContent('고민 등록에 실패했습니다 😢');
         setContentId(0);
         setIsLoadingMode(false);
+        setIsErrorMode(true);
       }, 2500);
     },
   });
@@ -46,6 +47,7 @@ const EntireInput = () => {
     setIsUserResponseMode,
     setIsLoadingMode,
     setIsAIResponseMode,
+    setIsErrorMode,
   } = useWritingModeStore((state) => state.actions);
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
@@ -71,7 +73,6 @@ const EntireInput = () => {
         emotion_type: data.emotion,
         content: data.content,
       });
-      console.log(userId);
     }
 
     Promise.resolve()
