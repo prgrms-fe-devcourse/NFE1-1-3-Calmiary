@@ -55,7 +55,7 @@ const MobileWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 430px;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: auto;
   position: relative;
   -ms-overflow-style: none;
