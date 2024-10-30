@@ -92,8 +92,6 @@ async def get_shared_posts(
             models.Post,
             func.coalesce(likes_count.c.like_count, 0).label('like_count'),
             func.coalesce(comments_count.c.comment_count, 0).label('comment_count'),
-            models.User.nickname,
-            models.User.profile_image
         )
         .outerjoin(likes_count, models.Post.id == likes_count.c.post_id)
         .outerjoin(comments_count, models.Post.id == comments_count.c.post_id)
@@ -116,10 +114,12 @@ async def get_shared_posts(
     # 페이지네이션 적용
     offset = (page - 1) * limit
     results = query.offset(offset).limit(limit).all()
+
+    user = db.query(models.User).filter(models.User.user_id == user_id).first()
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
-    for post, like_count, comment_count, nickname, profile_image in results:
+    for post, like_count, comment_count in results:
         post_dict = {
             "id": post.id,
             "user_id": post.user_id,
@@ -132,8 +132,8 @@ async def get_shared_posts(
             "like_count": like_count,
             "comment_count": comment_count,
             "user_info": {
-                "nickname": nickname,
-                "profile_image": profile_image
+                "nickname": user.nickname if user else "",
+                "profile_image":user.profile_image if user else ""
             }
         }
         posts.append(post_dict)
