@@ -49,9 +49,9 @@ const ProfileContainer = styled.div`
   justify-content: center;
   max-width: 430px;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   margin: 0 auto;
-  background-color: #181625;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
   gap: 3rem;
 `;
 
@@ -78,7 +78,7 @@ const MainArea = styled.div`
 `;
 
 const TextArea = styled.div`
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;
 
 const ImageArea = styled.div`
@@ -103,11 +103,11 @@ const InputArea = styled.div`
     border-radius: 1rem;
     border: none;
     background-color: ${({ theme }) => theme.colors.modal_purple300};
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.write_white200};
     padding: 1rem;
   }
 
   input::placeholder {
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.write_white200};
   }
 `;
