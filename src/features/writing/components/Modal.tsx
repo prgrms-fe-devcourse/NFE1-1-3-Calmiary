@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 import Button from './Button';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
-import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -19,9 +19,7 @@ interface VisibilityData {
 
 export default function Modal(props: ModalPropTypes) {
   const { contentId } = useWritingResponseStore((state) => state);
-  useEffect(() => {
-    console.log(contentId);
-  }, [contentId]);
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: async (userId: VisibilityData) => {
@@ -39,6 +37,7 @@ export default function Modal(props: ModalPropTypes) {
     mutation.mutate({
       user_id: 5,
     });
+    navigate('/growth');
   };
 
   return (
