@@ -1,7 +1,7 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import desc, func, select
+from sqlalchemy import asc, desc, func, select
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from database import get_db
@@ -136,6 +136,7 @@ class LikeResponse(BaseModel):
     **필터링 옵션:**
     - sort_by: 정렬 기준
       - latest: 최신순 (기본값)
+      - oldest: 오래된순
       - comments: 댓글 많은 순
       - likes: 공감 많은 순
     - page: 페이지 번호 (기본값: 1)
@@ -164,6 +165,9 @@ class LikeResponse(BaseModel):
     ```bash
     # 최신순으로 첫 페이지 조회
     curl "http://api.example.com/community/posts?sort_by=latest&page=1&limit=10"
+
+    # 오래된순으로 첫 페이지 조회
+    curl "http://api.example.com/community/posts?sort_by=oldest&page=1&limit=10"
     
     # 공감 많은 순으로 조회
     curl "http://api.example.com/community/posts?sort_by=likes&page=1&limit=20"
@@ -235,6 +239,8 @@ async def get_shared_posts(
     # 정렬 적용
     if sort_by == SortOption.LATEST:
         query = query.order_by(desc(models.Post.created_at))
+    elif sort_by == SortOption.OLDEST:
+        query = query.order_by(asc(models.Post.created_at))
     elif sort_by == SortOption.COMMENTS:
         query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
     elif sort_by == SortOption.LIKES:

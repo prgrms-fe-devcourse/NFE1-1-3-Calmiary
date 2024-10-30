@@ -1,7 +1,7 @@
 from enum import Enum
-from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, Query, status, File, UploadFile
 from sqlalchemy.orm import Session
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, asc
 from typing import List, Optional
 from database import get_db
 from model import models
@@ -35,6 +35,7 @@ class SortOption(str, Enum):
     LATEST = "latest"
     COMMENTS = "comments"
     LIKES = "likes"
+    OLDEST = "oldest"
 
 class ProfilePostsFilter(BaseModel):
     sort_by: Optional[SortOption] = SortOption.LATEST
@@ -52,19 +53,21 @@ class ProfilePostsFilter(BaseModel):
 
 
 # 공유한 게시글 조회
-@router.get("/posts/shared/{user_id}",  # GET에서 POST로 변경
+@router.get("/posts/shared/{user_id}",
     response_model=List[PostResponse],
     summary="사용자가 공유한 게시글 목록",
     description="""
     특정 사용자가 공유한 게시글들을 조회합니다.
-    - sort_by: 정렬 기준 (latest: 최신순, comments: 댓글 많은 순, likes: 공감 많은 순)
+    - sort_by: 정렬 기준 (latest: 최신순, oldest: 오래된순, comments: 댓글 많은 순, likes: 공감 많은 순)
     - page: 페이지 번호
     - limit: 페이지당 게시글 수
     """
 )
 async def get_shared_posts(
     user_id: int,
-    filter_data: ProfilePostsFilter,
+    sort_by: SortOption = Query(SortOption.LATEST, description="정렬 기준"),
+    page: int = Query(1, ge=1, description="페이지 번호"),
+    limit: int = Query(10, ge=1, le=100, description="페이지당 게시글 수"),
     db: Session = Depends(get_db)
 ):
     # 좋아요 수를 계산하는 서브쿼리
@@ -99,16 +102,18 @@ async def get_shared_posts(
     )
 
     # 정렬 적용
-    if filter_data.sort_by == SortOption.LATEST:
+    if sort_by == SortOption.LATEST:
         query = query.order_by(desc(models.Post.created_at))
-    elif filter_data.sort_by == SortOption.COMMENTS:
+    elif sort_by == SortOption.OLDEST:
+        query = query.order_by(asc(models.Post.created_at))
+    elif sort_by == SortOption.COMMENTS:
         query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
-    elif filter_data.sort_by == SortOption.LIKES:
+    elif sort_by == SortOption.LIKES:
         query = query.order_by(desc(func.coalesce(likes_count.c.like_count, 0)))
 
     # 페이지네이션 적용
-    offset = (filter_data.page - 1) * filter_data.limit
-    results = query.offset(offset).limit(filter_data.limit).all()
+    offset = (page - 1) * limit
+    results = query.offset(offset).limit(limit).all()
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
@@ -129,19 +134,21 @@ async def get_shared_posts(
 
     return posts
 
-@router.get("/posts/liked/{user_id}",  # GET에서 POST로 변경
+@router.get("/posts/liked/{user_id}",
     response_model=List[PostResponse],
     summary="사용자가 공감한 게시글 목록",
     description="""
     특정 사용자가 공감한 게시글들을 조회합니다.
-    - sort_by: 정렬 기준 (latest: 최신순, comments: 댓글 많은 순, likes: 공감 많은 순)
+    - sort_by: 정렬 기준 (latest: 최신순, oldest: 오래된순 comments: 댓글 많은 순, likes: 공감 많은 순)
     - page: 페이지 번호
     - limit: 페이지당 게시글 수
     """
 )
 async def get_liked_posts(
     user_id: int,
-    filter_data: ProfilePostsFilter,
+    sort_by: SortOption = Query(SortOption.LATEST, description="정렬 기준"),
+    page: int = Query(1, ge=1, description="페이지 번호"),
+    limit: int = Query(10, ge=1, le=100, description="페이지당 게시글 수"),
     db: Session = Depends(get_db)
 ):
     # 좋아요 수를 계산하는 서브쿼리
@@ -177,16 +184,18 @@ async def get_liked_posts(
     )
 
     # 정렬 적용
-    if filter_data.sort_by == SortOption.LATEST:
+    if sort_by == SortOption.LATEST:
         query = query.order_by(desc(models.Post.created_at))
-    elif filter_data.sort_by == SortOption.COMMENTS:
+    elif sort_by == SortOption.OLDEST:
+        query = query.order_by(asc(models.Post.created_at))
+    elif sort_by == SortOption.COMMENTS:
         query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
-    elif filter_data.sort_by == SortOption.LIKES:
+    elif sort_by == SortOption.LIKES:
         query = query.order_by(desc(func.coalesce(likes_count.c.like_count, 0)))
 
     # 페이지네이션 적용
-    offset = (filter_data.page - 1) * filter_data.limit
-    results = query.offset(offset).limit(filter_data.limit).all()
+    offset = (page - 1) * limit
+    results = query.offset(offset).limit(limit).all()
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
