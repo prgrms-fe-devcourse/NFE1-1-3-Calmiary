@@ -8,8 +8,8 @@ import { SortKey, PostTypes } from './types';
 
 const CommunityPage = () => {
   const [isSorted, setIsSorted] = useState<SortKey>('latest');
-  const [searchParams, setSearchParams] = useSearchParams();
-  const sortBy = (searchParams.get('sort_by') as SortKey) || 'latest';
+  const [, setSearchParams] = useSearchParams();
+
   const SIZE = 10;
 
   const getPosts = async (
