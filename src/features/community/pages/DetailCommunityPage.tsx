@@ -2,27 +2,7 @@ import styled from 'styled-components';
 import { CommentsContent, WorryContent } from '../components';
 import { Title } from '../components';
 import axios from 'axios';
-
-interface CommentDataType {
-  comment_id: number;
-  user_id: number;
-  content: string;
-  created_at: Date;
-}
-
-interface DetailPostTypes {
-  id: string;
-  user_id: string;
-  emotion_type: string;
-  content: string;
-  ai_content: string;
-  created_at: Date;
-  is_shared: boolean;
-  is_solved: boolean;
-  like_count: number;
-  comment_count: number;
-  comments: CommentDataType;
-}
+import { DetailPostTypes } from '../types';
 
 const DetailCommunityPage = () => {
   const getDetailPost = async (id: number): Promise<DetailPostTypes[]> => {

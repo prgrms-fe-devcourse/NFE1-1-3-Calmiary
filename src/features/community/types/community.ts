@@ -6,7 +6,15 @@ export interface UserDataType {
   profile_image: string;
 }
 
-export interface PostTypes {
+export interface PostTypes extends BasePostTypes {
+  user_info: UserDataType;
+}
+
+export interface PostContentPropTypes {
+  content: string;
+}
+
+export interface BasePostTypes {
   id: string;
   user_id: string;
   emotion_type: string;
@@ -17,9 +25,4 @@ export interface PostTypes {
   is_solved: boolean;
   like_count: number;
   comment_count: number;
-  user_info: UserDataType;
-}
-
-export interface PostContentPropTypes {
-  content: string;
 }
