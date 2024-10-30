@@ -39,7 +39,7 @@ const router = createBrowserRouter([
     element: <CommunityPage />,
   },
   {
-    path: '/detail/community/:id',
+    path: '/community/post/:id',
     element: <DetailCommunityPage />,
   },
   {

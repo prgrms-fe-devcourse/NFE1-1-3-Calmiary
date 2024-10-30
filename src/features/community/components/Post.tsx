@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { PostContent, PostReaction, UserInfo } from './index';
-import { PostTypes } from '../types';
+import { PostProps } from '../types';
 
-const Post = (props: Partial<PostTypes>) => {
+const Post = (postProps: PostProps) => {
+  const { onClick, ...props } = postProps;
+
   return (
     <Wrapper>
       {props.user_info && props.created_at ? (
