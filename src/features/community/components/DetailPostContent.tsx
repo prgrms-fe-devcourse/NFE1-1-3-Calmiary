@@ -14,7 +14,11 @@ const DetailPostContent = ({
       <UserInfo />
       <Content>{content}</Content>
       <EmpathyLayout>
-        <Icon type="community_filed_heart" alt="filledHeart" />
+        {likesCount === 0 ? (
+          <Icon type="community_empty_heart" alt="emptyHeart" />
+        ) : (
+          <Icon type="community_filed_heart" alt="filledHeart" />
+        )}
         <p>{likesCount}</p>
       </EmpathyLayout>
     </Wrapper>
