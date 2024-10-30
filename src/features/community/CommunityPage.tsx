@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { DropDown, Post, Title } from './components';
+import { BeatLoader } from 'react-spinners';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -80,7 +81,18 @@ const CommunityPage = () => {
       {data?.pages.flatMap((page) =>
         page.map((post: PostTypes) => <Post key={post.id} {...post} />)
       )}
-      {isFetchingNextPage && <p>Loading more...</p>}
+      {isFetchingNextPage && (
+        <LoaderWrapper>
+          <BeatLoader
+            size={10}
+            margin={4}
+            color={'#ffffff'}
+            loading={true}
+            cssOverride={{ animationFillMode: 'forwards' }}
+            speedMultiplier={0.6}
+          />
+        </LoaderWrapper>
+      )}
       {isError && <p>Error: {error.message}</p>}
       <div ref={loadMoreRef} style={{ height: '1px' }} />
     </Wrapper>
@@ -97,6 +109,11 @@ const DropDownLayout = styled.div`
   display: flex;
   justify-content: end;
   width: 100%;
+`;
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 export default CommunityPage;
