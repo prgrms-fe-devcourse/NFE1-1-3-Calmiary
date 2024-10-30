@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { DropDown, Post, Title } from './components';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 
 type SortKey = 'latest' | 'asc' | 'likes';
@@ -43,15 +43,52 @@ const CommunityPage = () => {
     return data;
   };
 
-  const { data, isPending, isError, error } = useQuery({
+  const {
+    data,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['posts', isSorted],
-    queryFn: () => getPosts(isSorted, 1, SIZE),
+    queryFn: ({ pageParam = 1 }) => getPosts(isSorted, pageParam, SIZE),
+    getNextPageParam: (lastPage, allPages) => {
+      return Array.isArray(lastPage) && lastPage.length > 0
+        ? allPages.length + 1
+        : undefined;
+    },
+    initialPageParam: 1,
   });
+
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  const handleObserver = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      const target = entries[0];
+
+      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    [fetchNextPage, hasNextPage, isFetchingNextPage]
+  );
 
   const handleSortChange = (option: SortKey) => {
     setIsSorted(option);
     setSearchParams({ sort_by: option }, { replace: true });
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleObserver, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0,
+    });
+    if (loadMoreRef.current) observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [handleObserver]);
 
   return (
     <Wrapper>
@@ -59,7 +96,12 @@ const CommunityPage = () => {
       <DropDownLayout>
         <DropDown isSorted={isSorted} setIsSorted={handleSortChange} />
       </DropDownLayout>
-      {data?.map((post) => <Post key={post.id} {...post} />)}
+      {data?.pages.flatMap((page) =>
+        page.map((post: PostTypes) => <Post key={post.id} {...post} />)
+      )}
+      {isFetchingNextPage && <p>Loading more...</p>}
+      {isError && <p>Error: {error.message}</p>}
+      <div ref={loadMoreRef} style={{ height: '1px' }} />
     </Wrapper>
   );
 };
