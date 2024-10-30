@@ -1,16 +1,21 @@
 import styled from 'styled-components';
 import { UserInfo } from './index';
 import { Icon } from '../../../components/ui/Icon';
-import { mockPosts } from '../../../features/community/components/mockData';
 
-const DetailPostContent = () => {
+const DetailPostContent = ({
+  content,
+  likesCount,
+}: {
+  content?: string;
+  likesCount?: number;
+}) => {
   return (
     <Wrapper>
       <UserInfo />
-      <Content>{mockPosts[0].content}</Content>
+      <Content>{content}</Content>
       <EmpathyLayout>
         <Icon type="community_filed_heart" alt="filledHeart" />
-        <p>{mockPosts[0].likes}</p>
+        <p>{likesCount}</p>
       </EmpathyLayout>
     </Wrapper>
   );

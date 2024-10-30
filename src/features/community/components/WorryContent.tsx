@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 import { DetailPostContent } from './index';
 
-const WorryContent = () => {
+const WorryContent = ({
+  content,
+  likesCount,
+}: {
+  content?: string;
+  likesCount?: number;
+}) => {
   return (
     <Wrapper>
       <h2>고민</h2>
-      <DetailPostContent />
+      <DetailPostContent content={content} likesCount={likesCount} />
     </Wrapper>
   );
 };

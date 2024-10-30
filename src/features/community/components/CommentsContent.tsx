@@ -1,12 +1,19 @@
 import styled from 'styled-components';
-import { mockPosts } from '../../../features/community/components/mockData';
 import { Comments, CommentInput } from './index';
+import { CommentsContentPropTypes } from '../types';
 
-const CommentsContent = () => {
+const CommentsContent = ({ comment }: CommentsContentPropTypes) => {
   return (
     <Wrapper>
       <h2>댓글</h2>
-      {mockPosts[0].comment && <Comments />}
+      {comment &&
+        comment.map((comment) => (
+          <Comments
+            key={comment.comment_id}
+            userId={comment.user_id}
+            content={comment.content}
+          />
+        ))}
       <CommentInput />
     </Wrapper>
   );

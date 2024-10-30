@@ -1,11 +1,16 @@
 import styled from 'styled-components';
-import { mockPosts } from '../../../features/community/components/mockData';
 
-const Comments = () => {
+const Comments = ({
+  userId,
+  content,
+}: {
+  userId?: number;
+  content?: string;
+}) => {
   return (
     <Wrapper>
-      <p className="nickname">{mockPosts[0].author.nickname}</p>
-      <p className="comment">{mockPosts[0].comment}</p>
+      <p className="nickname">{userId}</p>
+      <p className="comment">{content}</p>
     </Wrapper>
   );
 };

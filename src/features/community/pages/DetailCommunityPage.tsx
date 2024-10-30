@@ -3,18 +3,29 @@ import { CommentsContent, WorryContent } from '../components';
 import { Title } from '../components';
 import axios from 'axios';
 import { DetailPostTypes } from '../types';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 
 const DetailCommunityPage = () => {
-  const getDetailPost = async (id: number): Promise<DetailPostTypes[]> => {
+  const { id } = useParams();
+
+  const getDetailPost = async (id: number): Promise<DetailPostTypes> => {
     const { data } = await axios.get(`/api/community/post/${id}`);
-    console.log(data);
+
     return data;
   };
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['post', id],
+    queryFn: () => getDetailPost(Number(id)),
+  });
+  console.log(data);
+
   return (
     <Wrapper>
       <Title />
-      <WorryContent />
-      <CommentsContent />
+      <WorryContent content={data?.content} likesCount={data?.like_count} />
+      <CommentsContent comment={data?.comments} />
     </Wrapper>
   );
 };

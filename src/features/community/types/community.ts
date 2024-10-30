@@ -15,7 +15,7 @@ export interface PostContentPropTypes {
 }
 
 export interface BasePostTypes {
-  id: string;
+  id: number;
   user_id: string;
   emotion_type: string;
   content: string;
