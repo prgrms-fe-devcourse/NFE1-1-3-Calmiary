@@ -5,7 +5,10 @@ export const useUser = () => {
     const userId = Cookies.get('user_id');
     const nickname = Cookies.get('nickname');
     if (!userId) {
-      throw new Error('User ID not found');
+      return {
+        user_id: 'none',
+        nickname: 'none',
+      };
     }
     return {
       user_id: userId,
