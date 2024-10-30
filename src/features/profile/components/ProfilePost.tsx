@@ -1,29 +1,33 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 
-interface SharePostPropTypes {
+interface UserPostPropTypes {
   content: string;
   likes: number;
   createdAt: string;
   nickname: string;
   comments: number;
+  profileImg: string;
 }
 
-export default function SharePost({
+export default function ProfilePost({
   content,
   likes,
   createdAt,
   nickname,
   comments,
-}: SharePostPropTypes) {
+  profileImg,
+}: UserPostPropTypes) {
   return (
-    <SharePostArea>
+    <LikePostArea>
       <PostHead>
         <UserBox>
-          <ImageArea />
+          <ImageArea>
+            <img src={profileImg} alt="" />
+          </ImageArea>
           <span>{nickname}</span>
         </UserBox>
-        <DateBox>{createdAt}</DateBox>
+        <DateBox>{createdAt.split('T')[0]}</DateBox>
       </PostHead>
       <TextArea>{content}</TextArea>
       <DataArea>
@@ -34,11 +38,11 @@ export default function SharePost({
           <Icon type="community_comment" alt="댓글" size={24} /> {comments}
         </div>
       </DataArea>
-    </SharePostArea>
+    </LikePostArea>
   );
 }
 
-const SharePostArea = styled.div`
+const LikePostArea = styled.div`
   width: 328px;
   height: 243px;
   display: flex;
@@ -53,7 +57,13 @@ const ImageArea = styled.div`
   width: 43px;
   height: 43px;
   border-radius: 50%;
-  background-color: #d9d9d9;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 
 const PostHead = styled.div`
