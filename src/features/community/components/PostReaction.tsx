@@ -11,8 +11,17 @@ const PostReaction = ({
   return (
     <Wrapper>
       <EmpathyLayout>
-        <Icon type="community_filed_heart" alt="filledHeart" />
-        <p>{like_count}</p>
+        {like_count === 0 ? (
+          <>
+            <Icon type="community_empty_heart" alt="emptyHeart" />
+            <p>{like_count}</p>
+          </>
+        ) : (
+          <>
+            <Icon type="community_filed_heart" alt="filledHeart" />
+            <p>{like_count}</p>
+          </>
+        )}
       </EmpathyLayout>
       <CommentLayout>
         <Icon type="community_comment" alt="comment" />
