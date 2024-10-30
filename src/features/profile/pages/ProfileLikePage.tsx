@@ -20,7 +20,7 @@ const fetchLikedPosts = async ({
         ? 'likes'
         : 'comments';
   const response = await axios.get(
-    `https://calmiary-be.org/profile/posts/liked/1?sort_by=${sortBy}&page=${pageParam}&limit=3`
+    `/api/profile/posts/liked/1?sort_by=${sortBy}&page=${pageParam}&limit=3`
   );
   return {
     data: response.data,

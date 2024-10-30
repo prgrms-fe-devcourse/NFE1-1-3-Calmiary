@@ -2,6 +2,11 @@ import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 import { UserPostPropTypes } from '../types/profileTypes';
 
+const formatDate = (dateString: string) => {
+  const [year, month, day] = dateString.split('T')[0].split('-');
+  return `${year}/${month}/${day}`;
+};
+
 export default function ProfilePost({
   content,
   likes,
@@ -19,7 +24,7 @@ export default function ProfilePost({
           </ImageArea>
           <span>{nickname}</span>
         </UserBox>
-        <DateBox>{createdAt.split('T')[0]}</DateBox>
+        <DateBox>{formatDate(createdAt)}</DateBox>
       </PostHead>
       <TextArea>{content}</TextArea>
       <DataArea>
