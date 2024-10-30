@@ -11,6 +11,9 @@ import DetailCommunityPage from './features/detailCommunity/DetailCommunityPage.
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
 import ProfileLikePage from './features/profile/pages/ProfileLikePage.tsx';
+import LoginPage from './features/home/pages/LoginPage.tsx';
+import SignUpPage from './features/home/pages/SignUpPage.tsx';
+import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
 
 const router = createBrowserRouter([
@@ -39,6 +42,18 @@ const router = createBrowserRouter([
     path: '/detail/community/:id',
     element: <DetailCommunityPage />,
   },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignUpPage />,
+  },
+  {
+    path: '/growth',
+    element: <GrowthFactorPage />,
+  },
 ]);
 
 function App() {
@@ -60,7 +75,7 @@ const MobileWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 430px;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: auto;
   position: relative;
   -ms-overflow-style: none;

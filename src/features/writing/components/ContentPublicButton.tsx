@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 
-const ContentPublicButton = () => {
-  return <Button>내 고민 공유하기</Button>;
+interface ContentPublicButtonPropTypes {
+  onClick: () => void;
+}
+const ContentPublicButton = ({ onClick }: ContentPublicButtonPropTypes) => {
+  return <Button onClick={onClick}>내 고민 공유하기</Button>;
 };
 
 export default ContentPublicButton;
@@ -13,5 +16,5 @@ const Button = styled.button`
   border: none;
   padding: 1rem;
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 1.5rem 0 0.5rem 0;
 `;
