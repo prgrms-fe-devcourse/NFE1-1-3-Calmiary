@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const MoveToMainButton = () => {
-  return <Button>메인으로 돌아가기</Button>;
+  const navigate = useNavigate();
+  return <Button onClick={() => navigate('/growth')}>메인으로 돌아가기</Button>;
 };
 
 export default MoveToMainButton;

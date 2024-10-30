@@ -37,7 +37,7 @@ export default function Modal(props: ModalPropTypes) {
     mutation.mutate({
       user_id: 5,
     });
-    navigate('/growth');
+    navigate(`/detail/community/${contentId}`);
   };
 
   return (
