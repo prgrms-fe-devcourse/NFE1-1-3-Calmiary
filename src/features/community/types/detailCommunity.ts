@@ -8,6 +8,7 @@ export interface DetailPostTypes extends BasePostTypes {
 export interface CommentDataType {
   comment_id: number;
   user_id: number;
+  nickname: string;
   content: string;
   created_at: Date;
 }

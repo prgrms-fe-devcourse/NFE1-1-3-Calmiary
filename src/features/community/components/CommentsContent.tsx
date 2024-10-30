@@ -10,7 +10,7 @@ const CommentsContent = ({ comment }: CommentsContentPropTypes) => {
         comment.map((comment) => (
           <Comments
             key={comment.comment_id}
-            userId={comment.user_id}
+            nickname={comment.nickname}
             content={comment.content}
           />
         ))}

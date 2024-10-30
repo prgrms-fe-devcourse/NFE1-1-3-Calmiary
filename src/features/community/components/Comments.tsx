@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 
 const Comments = ({
-  userId,
+  nickname,
   content,
 }: {
-  userId?: number;
+  nickname?: string;
   content?: string;
 }) => {
   return (
     <Wrapper>
-      <p className="nickname">{userId}</p>
+      <p className="nickname">{nickname}</p>
       <p className="comment">{content}</p>
     </Wrapper>
   );
