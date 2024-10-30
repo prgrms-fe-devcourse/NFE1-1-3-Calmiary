@@ -14,7 +14,7 @@ const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
 
   const sortOptions: SortOptions = {
     latest: '최신순',
-    asc: '나중순',
+    oldest: '나중순',
     likes: '좋아요순',
   };
 

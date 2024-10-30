@@ -1,4 +1,4 @@
-export type SortKey = 'latest' | 'asc' | 'likes';
+export type SortKey = 'latest' | 'oldest' | 'likes';
 export type SortOptions = Record<SortKey, string>;
 
 export interface UserDataType {
