@@ -5,6 +5,7 @@ import useWritingResponseStore from '../../../stores/writingResponseStore';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../home/hooks/useUser';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -14,10 +15,13 @@ interface ModalPropTypes {
 }
 
 interface VisibilityData {
-  user_id: number;
+  user_id: string;
 }
 
 export default function Modal(props: ModalPropTypes) {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+
   const { contentId } = useWritingResponseStore((state) => state);
   const navigate = useNavigate();
 
@@ -35,7 +39,7 @@ export default function Modal(props: ModalPropTypes) {
 
   const handleConfirm = () => {
     mutation.mutate({
-      user_id: 5,
+      user_id: userId,
     });
     navigate(`/detail/community/${contentId}`);
   };
