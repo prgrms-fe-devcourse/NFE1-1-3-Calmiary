@@ -31,6 +31,7 @@ const Wrapper = styled.div`
   background-color: rgba(231, 225, 255, 0.4);
   margin-bottom: 36px;
   padding: 20px 26px;
+  cursor: pointer;
 `;
 
 export default Post;
