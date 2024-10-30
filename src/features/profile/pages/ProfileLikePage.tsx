@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import LikePost from '../components/LikePost';
 import Dropdown from '../components/Dropdown';
-import { useEffect, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
 interface PostPropTypes {
   id: number;
@@ -13,38 +14,65 @@ interface PostPropTypes {
   comment_count: number;
 }
 
+const fetchLikedPosts = async ({
+  pageParam = 1,
+  sortOption,
+}: {
+  pageParam?: number;
+  sortOption: '최신순' | '좋아요순' | '오래된순';
+}) => {
+  const sortBy =
+    sortOption === '최신순'
+      ? 'latest'
+      : sortOption === '좋아요순'
+        ? 'likes'
+        : 'comments';
+  const response = await axios.get(
+    `https://calmiary-be.org/profile/posts/liked/1?sort_by=${sortBy}&page=${pageParam}&limit=3`
+  );
+  return {
+    data: response.data,
+    nextPage: response.data.length === 3 ? pageParam + 1 : undefined,
+  };
+};
+
 export default function ProfileLikePage() {
   const [sortOption, setSortOption] = useState<
     '최신순' | '좋아요순' | '오래된순'
   >('최신순');
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const [likedPosts, setLikedPosts] = useState<PostPropTypes[]>([]);
+
+  const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['likedPosts', sortOption],
+      queryFn: ({ pageParam = 1 }) =>
+        fetchLikedPosts({ pageParam, sortOption }),
+      getNextPageParam: (lastPage) => lastPage?.nextPage,
+      initialPageParam: 1,
+    });
+
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const fetchLikedPosts = async () => {
-      try {
-        let sortBy = '';
-        if (sortOption === '최신순') {
-          sortBy = 'latest';
-        } else if (sortOption === '좋아요순') {
-          sortBy = 'likes';
-        } else if (sortOption === '오래된순') {
-          sortBy = 'comments';
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
         }
-        const response = await axios.get(
-          `https://calmiary-be.org/profile/posts/liked/1?sort_by=${sortBy}&page=1&limit=5`
-        );
+      },
+      { threshold: 1.0 }
+    );
 
-        setLikedPosts(response.data);
-      } catch (error) {
-        console.error('Failed to fetch liked posts:', error);
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (loadMoreRef.current) {
+        observer.unobserve(loadMoreRef.current);
       }
     };
-
-    fetchLikedPosts();
-  }, [sortOption]);
-
-  console.log(likedPosts);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -65,16 +93,22 @@ export default function ProfileLikePage() {
             setSelectedDropDown={toggleDropdown}
           />
         </DropdownArea>
-        {likedPosts.map((post) => (
-          <LikePost
-            key={post.id}
-            content={post.content}
-            likes={post.like_count}
-            createdAt={post.created_at}
-            nickname={post.nickname}
-            comments={post.comment_count}
-          />
-        ))}
+        {isLoading && <p>Loading...</p>}
+        {data?.pages.map((page) =>
+          page.data.map((post: PostPropTypes) => (
+            <LikePost
+              key={post.id}
+              content={post.content}
+              likes={post.like_count}
+              createdAt={post.created_at}
+              nickname={post.nickname}
+              comments={post.comment_count}
+            />
+          ))
+        )}
+        <div ref={loadMoreRef}>
+          {isFetchingNextPage && <p>Loading more...</p>}
+        </div>
       </ProfileContainer>
     </>
   );
