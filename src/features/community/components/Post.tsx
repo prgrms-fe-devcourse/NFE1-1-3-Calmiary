@@ -6,7 +6,7 @@ const Post = (postProps: PostProps) => {
   const { onClick, ...props } = postProps;
 
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       {props.user_info && props.created_at ? (
         <UserInfo user_info={props.user_info} created_at={props.created_at} />
       ) : (
