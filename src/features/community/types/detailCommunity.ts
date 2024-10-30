@@ -2,7 +2,7 @@ import { MouseEventHandler } from 'react';
 import { PostTypes, BasePostTypes } from './index';
 
 export interface DetailPostTypes extends BasePostTypes {
-  comments: CommentDataType;
+  comments: CommentDataType[];
 }
 
 export interface CommentDataType {
