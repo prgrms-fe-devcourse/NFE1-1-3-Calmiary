@@ -2,6 +2,13 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 
+class UserInfo(BaseModel):
+    nickname: str
+    profile_image: Optional[str]
+
+    class Config:
+        from_attributes = True
+
 
 class UserResponse(BaseModel):
     user_id: int
@@ -24,6 +31,7 @@ class PostResponse(BaseModel):
     is_solved: bool
     like_count: int = Field(default=0, description="게시글의 좋아요 수")
     comment_count: int = Field(default=0, description="게시글의 댓글 수")
+    user_info: UserInfo
 
     class Config:
         from_attributes = True

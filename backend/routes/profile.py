@@ -91,7 +91,9 @@ async def get_shared_posts(
         db.query(
             models.Post,
             func.coalesce(likes_count.c.like_count, 0).label('like_count'),
-            func.coalesce(comments_count.c.comment_count, 0).label('comment_count')
+            func.coalesce(comments_count.c.comment_count, 0).label('comment_count'),
+            models.User.nickname,
+            models.User.profile_image
         )
         .outerjoin(likes_count, models.Post.id == likes_count.c.post_id)
         .outerjoin(comments_count, models.Post.id == comments_count.c.post_id)
@@ -117,7 +119,7 @@ async def get_shared_posts(
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
-    for post, like_count, comment_count in results:
+    for post, like_count, comment_count, nickname, profile_image in results:
         post_dict = {
             "id": post.id,
             "user_id": post.user_id,
@@ -128,7 +130,11 @@ async def get_shared_posts(
             "is_shared": post.is_shared,
             "is_solved": post.is_solved,
             "like_count": like_count,
-            "comment_count": comment_count
+            "comment_count": comment_count,
+            "user_info": {
+                "nickname": nickname,
+                "profile_image": profile_image
+            }
         }
         posts.append(post_dict)
 
@@ -159,7 +165,7 @@ async def get_liked_posts(
         .subquery()
     )
 
-    # 댓글 수를 계산하는 서브쿼리
+    # 댓글 수를 계산하는 서브쿼리 
     comments_count = (
         db.query(models.Comment.post_id,
                 func.count(models.Comment.comment_id).label('comment_count'))
@@ -167,14 +173,17 @@ async def get_liked_posts(
         .subquery()
     )
 
-    # 메인 쿼리: 사용자가 좋아요한 게시글 조회
+    # 메인 쿼리
     query = (
         db.query(
             models.Post,
             func.coalesce(likes_count.c.like_count, 0).label('like_count'),
-            func.coalesce(comments_count.c.comment_count, 0).label('comment_count')
+            func.coalesce(comments_count.c.comment_count, 0).label('comment_count'),
+            models.User.nickname,
+            models.User.profile_image
         )
         .join(models.Like, models.Post.id == models.Like.post_id)
+        .join(models.User, models.Post.user_id == models.User.user_id)  # user_id로 수정
         .outerjoin(likes_count, models.Post.id == likes_count.c.post_id)
         .outerjoin(comments_count, models.Post.id == comments_count.c.post_id)
         .filter(
@@ -199,7 +208,7 @@ async def get_liked_posts(
     
     # 결과를 PostResponse 형식으로 변환
     posts = []
-    for post, like_count, comment_count in results:
+    for post, like_count, comment_count, nickname, profile_image in results:
         post_dict = {
             "id": post.id,
             "user_id": post.user_id,
@@ -210,7 +219,11 @@ async def get_liked_posts(
             "is_shared": post.is_shared,
             "is_solved": post.is_solved,
             "like_count": like_count,
-            "comment_count": comment_count
+            "comment_count": comment_count,
+            "user_info": {
+                "nickname": nickname,
+                "profile_image": profile_image
+            }
         }
         posts.append(post_dict)
 
