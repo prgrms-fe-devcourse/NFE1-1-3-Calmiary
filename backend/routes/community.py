@@ -20,6 +20,7 @@ class UserInfo(BaseModel):
 
 class SortOption(str, Enum):
     LATEST = "latest"
+    OLDEST = "oldest"
     COMMENTS = "comments"
     LIKES = "likes"
 
