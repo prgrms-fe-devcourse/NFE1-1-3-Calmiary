@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PostContent, PostReaction, UserInfo } from './index';
-import { PostTypes } from '../CommunityPage';
+import { PostTypes } from '../types';
 
 const Post = (props: Partial<PostTypes>) => {
   return (

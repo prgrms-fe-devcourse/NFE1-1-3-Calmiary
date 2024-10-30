@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { UserDataType } from '../CommunityPage';
+import { UserDataType } from '../types';
 
 const UserInfo = ({
   user_info,

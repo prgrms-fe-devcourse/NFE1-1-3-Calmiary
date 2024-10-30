@@ -4,26 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-
-type SortKey = 'latest' | 'asc' | 'likes';
-
-export interface UserDataType {
-  nickname: string;
-  profile_image: string;
-}
-export interface PostTypes {
-  id: string;
-  user_id: string;
-  emotion_type: string;
-  content: string;
-  ai_content: string;
-  created_at: Date;
-  is_shared: boolean;
-  is_solved: boolean;
-  like_count: number;
-  comment_count: number;
-  user_info: UserDataType;
-}
+import { SortKey, PostTypes } from './types';
 
 const CommunityPage = () => {
   const [isSorted, setIsSorted] = useState<SortKey>('latest');

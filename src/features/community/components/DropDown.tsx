@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import DropDownArrow from '../../../assets/comuunity-dropdown.svg';
-
-type SortKey = 'latest' | 'asc' | 'likes';
-type SortOptions = Record<SortKey, string>;
+import { SortKey, SortOptions } from '../types';
 
 interface DropDownPropTypes {
   isSorted: SortKey;
