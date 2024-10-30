@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { mockPosts } from './mockData';
+import { PostContentPropTypes } from '../types';
 
-const PostContent = () => {
+const PostContent = ({ content }: PostContentPropTypes) => {
   return (
     <Wrapper>
-      <Content>{mockPosts[0].content}</Content>
+      <Content>{content}</Content>
     </Wrapper>
   );
 };
