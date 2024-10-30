@@ -4,8 +4,22 @@ import BackRight from '../../../assets/home-back-right.svg';
 import BackLeft from '../../../assets/home-back-left.svg';
 import Growth from '../../../assets/growth.svg';
 import { Icon } from '../../../components/ui/Icon';
+import { useUser } from '../hooks/useUser';
+import { useStats } from '../hooks/useStats';
 
 const GrowthFactorPage = () => {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+  const { data: stats, isLoading, isError } = useStats(userId);
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (isError) {
+    return <div>데이터를 불러오는데 실패했습니다..</div>;
+  }
+
   return (
     <GrowthWrapper>
       <GrowthLayout>
@@ -18,19 +32,19 @@ const GrowthFactorPage = () => {
           <FactorContainer>
             <FactorBox>
               <Icon type="home_pen" alt="pen" />
-              <FactorCount>1개</FactorCount>
+              <FactorCount>{stats?.this_week_posts}개</FactorCount>
               <FactorLabel>이번주 걱정</FactorLabel>
             </FactorBox>
             <Divider />
             <FactorBox>
               <Icon type="home_calender" alt="calender" />
-              <FactorCount>1개</FactorCount>
+              <FactorCount>{stats?.total_posts}개</FactorCount>
               <FactorLabel>전체 걱정</FactorLabel>
             </FactorBox>
             <Divider />
             <FactorBox>
               <Icon type="home_history" alt="history" />
-              <FactorCount>1개</FactorCount>
+              <FactorCount>{stats?.resolved_posts}개</FactorCount>
               <FactorLabel>딜어낸 걱정</FactorLabel>
             </FactorBox>
           </FactorContainer>
@@ -106,11 +120,6 @@ const FactorBox = styled.div`
   align-items: center;
   flex: 1;
   gap: 16px;
-`;
-
-const FactorIcon = styled.span`
-  font-size: 24px;
-  margin-bottom: 8px;
 `;
 
 const FactorCount = styled.span`

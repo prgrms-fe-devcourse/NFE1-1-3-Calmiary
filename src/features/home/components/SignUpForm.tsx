@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { SignUpData, SignUpFormProps } from '../types/homeTypes';
+import { SignUpData, SignUpFormPropTypes } from '../types/homeTypes';
 
-const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
+const SignUpForm = ({ onSubmit, isLoading }: SignUpFormPropTypes) => {
   const {
     register,
     handleSubmit,
@@ -62,8 +62,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
           {...register('password', {
             required: '비밀번호를 입력해주세요',
             minLength: {
-              value: 8,
-              message: '비밀번호는 최소 8자 이상이어야 합니다',
+              value: 6,
+              message: '비밀번호는 최소 6자 이상이어야 합니다',
             },
             pattern: {
               value:
@@ -91,7 +91,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ onSubmit }) => {
           <ErrorMessage>{errors.password_check.message}</ErrorMessage>
         )}
 
-        <SignUpButton type="submit">회원가입</SignUpButton>
+        <SignUpButton type="submit" disabled={isLoading}>
+          {isLoading ? '처리중...' : '회원가입'}
+        </SignUpButton>
       </form>
     </SignUpLayout>
   );
@@ -136,20 +138,18 @@ const SignUpInput = styled.input`
   z-index: 1;
 `;
 
-const SignUpButton = styled.button`
+const SignUpButton = styled.button<{ disabled?: boolean }>`
   width: 100%;
   padding: 15px;
   border-radius: 10px;
-  background: ${({ theme }) => theme.colors.brand_main};
+  background: ${({ theme, disabled }) =>
+    disabled ? theme.colors.modal_purple100 : theme.colors.brand_main};
   color: white;
   border: none;
   margin-bottom: 10px;
   font-size: 16px;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   transition: all 0.2s ease-in-out;
 
-  &:hover {
-    opacity: 0.9;
-  }
   z-index: 1;
 `;

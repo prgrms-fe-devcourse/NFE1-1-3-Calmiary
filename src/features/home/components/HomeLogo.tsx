@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Logo from '../../../assets/home-logo.svg';
 import Butterfly from '../../../assets/imgs/home-butterfly.png';
 
-const HomeLogo: React.FC = () => {
+const HomeLogo = () => {
   return (
     <>
       <LogoContainer>
