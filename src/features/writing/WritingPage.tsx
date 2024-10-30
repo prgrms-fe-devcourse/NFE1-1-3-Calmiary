@@ -11,8 +11,9 @@ import {
 import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
 import useWritingResponseStore from '../../stores/writingResponseStore';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Modal from './components/Modal';
+import useScrollFollow from './hooks/useScrollFollow';
 
 const WritingPage = () => {
   const {
@@ -26,6 +27,18 @@ const WritingPage = () => {
   useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  useScrollFollow({
+    contentRef,
+    dependencies: [
+      isQuestionMode,
+      isUserResponseMode,
+      isAIResponseMode,
+      isEndMode,
+    ],
+  });
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -34,11 +47,11 @@ const WritingPage = () => {
   };
 
   return (
-    <WritingWrapper>
+    <WritingWrapper ref={contentRef}>
       <WritingLayout>
         {isQuestionMode && (
           <FadeIn>
-            <QuestionBox comment="요즘 어떤 고민이 있나요?" />
+            <QuestionBox comment="오늘 어떤 고민이 있나요?" />
           </FadeIn>
         )}
         {isUserResponseMode && (

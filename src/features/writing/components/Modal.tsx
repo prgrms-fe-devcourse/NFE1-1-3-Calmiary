@@ -30,10 +30,11 @@ export default function Modal(props: ModalPropTypes) {
       await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
     },
     onSuccess: () => {
-      console.log('success');
+      navigate(`/detail/community/${contentId}`);
+      window.scrollTo(0, 0);
     },
     onError: () => {
-      console.log('fail');
+      alert('공개 설정에 실패했습니다! 😢');
     },
   });
 
@@ -41,7 +42,6 @@ export default function Modal(props: ModalPropTypes) {
     mutation.mutate({
       user_id: userId,
     });
-    navigate(`/detail/community/${contentId}`);
   };
 
   return (
