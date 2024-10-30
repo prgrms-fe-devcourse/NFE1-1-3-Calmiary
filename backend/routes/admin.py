@@ -736,7 +736,7 @@ async def admin_dashboard():
           const response = await fetch(
             `/community/post/${post_id}/like?user_id=${user_id}`,
             {
-              method: 'POST',
+              method: 'PATCH',
               headers: {
                 'Content-Type': 'application/json',
               },

@@ -1,6 +1,8 @@
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Security
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
+from model.schemas import UserResponse
 from model import models
 from sqlalchemy.orm import Session
 from utils.security import SecurityUtils
@@ -17,13 +19,17 @@ class Token(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str
+    user_id: int
+    nickname: str
 
     class Config:
         json_schema_extra = {
             "example": {
                 "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
                 "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
-                "token_type": "bearer"
+                "token_type": "bearer",
+                "user_id": 1,
+                "nickname": 'calmiary'
             }
         }
 
@@ -38,6 +44,68 @@ class UserLogin(BaseModel):
                 "password": "password123"
             }
         }
+
+class UserCreate(BaseModel):
+    id: str
+    nickname: str
+    password: str
+    profile_image: Optional[str] = None
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "test123",
+                "nickname": "테스트유저",
+                "password": "test123!@#",
+                "profile_image": None
+            }
+        }
+
+@router.post("/signup", 
+    response_model=UserResponse,
+    summary="새로운 사용자 추가",
+    description="""
+    새로운 사용자를 생성합니다.
+    
+    - **id**: 고유한 사용자 아이디
+    - **nickname**: 사용자 닉네임
+    - **password**: 사용자 비밀번호
+    - **profile_image**: (선택) 프로필 이미지 URL
+    """,
+    response_description="생성된 사용자 정보",
+    tags=["Users"]
+)
+def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
+    # 기존 사용자 확인
+    existing_user = db.query(models.User).filter(models.User.id == user_data.id).first()
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="이미 등록된 아이디입니다."
+        )
+
+    # 비밀번호 해싱
+    hashed_password = SecurityUtils.get_password_hash(user_data.password)
+    
+    # 사용자 생성
+    db_user = models.User(
+        id=user_data.id,
+        nickname=user_data.nickname,
+        password=hashed_password,
+        profile_image=user_data.profile_image
+    )
+
+    try:
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        return db_user
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=500,
+            detail="사용자 생성 중 오류가 발생했습니다."
+        )
 
 @router.post(
     "/login", 
@@ -54,6 +122,7 @@ class UserLogin(BaseModel):
     - access_token: 60분 동안 유효한 액세스 토큰
     - refresh_token: 7일 동안 유효한 리프레시 토큰
     - token_type: 토큰 타입 (bearer)
+    - user_id: 유저의 ID (int)
     
     **주의사항:**
     1. 이전에 발급된 토큰은 자동으로 무효화됩니다.
@@ -75,7 +144,9 @@ class UserLogin(BaseModel):
                     "example": {
                         "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
                         "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6...",
-                        "token_type": "bearer"
+                        "token_type": "bearer",
+                        "user_id": 1,
+                        "nickname": "calmiary"
                     }
                 }
             }
@@ -135,7 +206,9 @@ async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "user_id": user.user_id,
+        "nickname": user.nickname
     }
 
 @router.post(
