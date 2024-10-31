@@ -1,17 +1,20 @@
 import styled from 'styled-components';
 import { UserInfo } from './index';
+import { UserDataType } from '../types';
 import { Icon } from '../../../components/ui/Icon';
 
 const DetailPostContent = ({
   content,
   likesCount,
+  userInfo,
 }: {
   content?: string;
   likesCount?: number;
+  userInfo?: UserDataType;
 }) => {
   return (
     <Wrapper>
-      <UserInfo />
+      <UserInfo user_info={userInfo} />
       <Content>{content}</Content>
       <EmpathyLayout>
         {likesCount === 0 ? (

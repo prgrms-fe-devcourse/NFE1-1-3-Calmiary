@@ -3,6 +3,8 @@ import { PostTypes, BasePostTypes } from './index';
 
 export interface DetailPostTypes extends BasePostTypes {
   comments: CommentDataType[];
+  nickname: string;
+  profile_image: string;
 }
 
 export interface CommentDataType {

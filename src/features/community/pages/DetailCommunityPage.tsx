@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CommentsContent, WorryContent } from '../components';
+import { CommentsContent, UserInfo, WorryContent } from '../components';
 import { Title } from '../components';
 import axios from 'axios';
 import { DetailPostTypes } from '../types';
@@ -19,11 +19,19 @@ const DetailCommunityPage = () => {
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
+  console.log(data);
 
   return (
     <Wrapper>
       <Title />
-      <WorryContent content={data?.content} likesCount={data?.like_count} />
+      <WorryContent
+        userInfo={{
+          nickname: data?.nickname || '',
+          profile_image: data?.profile_image || '',
+        }}
+        content={data?.content}
+        likesCount={data?.like_count}
+      />
       <CommentsContent
         comment={data?.comments}
         postId={data?.id}
