@@ -19,7 +19,7 @@ const DetailPostContent = ({
   userInfo?: UserDataType;
   user_id?: number;
 }) => {
-  const [nowEmpathy, setEmpathy] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [currentLikes, setCurrentLikes] = useState(
     likesCount === 0 ? 0 : likesCount
   );
@@ -43,10 +43,10 @@ const DetailPostContent = ({
     },
     onSuccess: (data) => {
       if (data.is_cancled) {
-        setEmpathy(false);
+        setIsLiked(false);
         setCurrentLikes((prev) => (prev ?? 0) - 1);
       } else {
-        setEmpathy(true);
+        setIsLiked(true);
         setCurrentLikes((prev) => (prev ?? 0) + 1);
       }
     },
@@ -59,7 +59,12 @@ const DetailPostContent = ({
   });
 
   const handleLikeToggle = () => {
-    empathyMutation.mutate();
+    if (!isLiked) {
+      empathyMutation.mutate();
+    } else {
+      setIsLiked(false);
+      setCurrentLikes((prev) => Math.max(0, prev - 1));
+    }
   };
 
   useEffect(() => {
@@ -72,8 +77,8 @@ const DetailPostContent = ({
       <Content>{content}</Content>
       <EmpathyLayout onClick={handleLikeToggle}>
         <Icon
-          type={nowEmpathy ? 'community_filed_heart' : 'community_empty_heart'}
-          alt={nowEmpathy ? 'filledHeart' : 'emptyHeart'}
+          type={isLiked ? 'community_filed_heart' : 'community_empty_heart'}
+          alt={isLiked ? 'filledHeart' : 'emptyHeart'}
         />
         <p>{currentLikes}</p>
       </EmpathyLayout>
