@@ -18,3 +18,9 @@ export interface UserPostPropTypes {
   comments: number;
   profileImg: string;
 }
+
+export interface FormValuesPropTypes {
+  nickname: string;
+  password: string;
+  passwordConfirm: string;
+}
