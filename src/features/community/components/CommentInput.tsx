@@ -3,7 +3,7 @@ import commentUpdate from '../../../assets/comment-update.svg';
 import axios from 'axios';
 import { useState } from 'react';
 
-interface CommentInputProps {
+interface CommentInputPropTypes {
   postId: number | undefined;
   userId: number | undefined;
   refetchComments: () => void;
@@ -13,7 +13,7 @@ const CommentInput = ({
   postId,
   userId,
   refetchComments,
-}: CommentInputProps) => {
+}: CommentInputPropTypes) => {
   const [commentData, setCommentData] = useState('');
 
   const PostComment = async () => {
