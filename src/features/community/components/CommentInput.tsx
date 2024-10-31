@@ -1,11 +1,38 @@
 import styled from 'styled-components';
 import commentUpdate from '../../../assets/comment-update.svg';
+import axios from 'axios';
+import { useState } from 'react';
 
-const CommentInput = () => {
+interface CommentInputProps {
+  postId: number | undefined;
+  userId: number | undefined;
+  refetchComments: () => void;
+}
+
+const CommentInput = ({
+  postId,
+  userId,
+  refetchComments,
+}: CommentInputProps) => {
+  const [commentData, setCommentData] = useState('');
+
+  const PostComment = async () => {
+    await axios.post(`/api/community/post/${postId}/comment`, {
+      content: commentData,
+      user_id: userId,
+    });
+    setCommentData('');
+    refetchComments();
+  };
+
   return (
     <Wrapper>
-      <InputLayout placeholder="댓글을 입력하세요" />
-      <img src={commentUpdate} alt="updateBtn" />
+      <InputLayout
+        placeholder="댓글을 입력하세요"
+        value={commentData}
+        onChange={(e) => setCommentData(e.target.value)}
+      />
+      <img src={commentUpdate} alt="updateBtn" onClick={PostComment} />
     </Wrapper>
   );
 };

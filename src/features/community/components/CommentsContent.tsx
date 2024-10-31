@@ -2,7 +2,12 @@ import styled from 'styled-components';
 import { Comments, CommentInput } from './index';
 import { CommentsContentPropTypes } from '../types';
 
-const CommentsContent = ({ comment }: CommentsContentPropTypes) => {
+const CommentsContent = ({
+  comment,
+  postId,
+  userId,
+  refetchComments,
+}: CommentsContentPropTypes) => {
   return (
     <Wrapper>
       <h2>댓글</h2>
@@ -14,7 +19,11 @@ const CommentsContent = ({ comment }: CommentsContentPropTypes) => {
             content={comment.content}
           />
         ))}
-      <CommentInput />
+      <CommentInput
+        postId={postId}
+        userId={userId}
+        refetchComments={refetchComments}
+      />
     </Wrapper>
   );
 };

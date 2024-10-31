@@ -15,6 +15,9 @@ export interface CommentDataType {
 
 export interface CommentsContentPropTypes {
   comment: CommentDataType[] | undefined;
+  postId: number | undefined;
+  userId: number | undefined;
+  refetchComments: () => void;
 }
 export interface PostProps extends Partial<PostTypes> {
   onClick?: MouseEventHandler<HTMLDivElement> | undefined;

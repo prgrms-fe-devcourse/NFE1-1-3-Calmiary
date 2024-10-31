@@ -15,7 +15,7 @@ const DetailCommunityPage = () => {
     return data;
   };
 
-  const { isPending, isError, data, error } = useQuery({
+  const { isPending, isError, data, error, refetch } = useQuery({
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
@@ -24,7 +24,12 @@ const DetailCommunityPage = () => {
     <Wrapper>
       <Title />
       <WorryContent content={data?.content} likesCount={data?.like_count} />
-      <CommentsContent comment={data?.comments} />
+      <CommentsContent
+        comment={data?.comments}
+        postId={data?.id}
+        userId={Number(data?.user_id)}
+        refetchComments={refetch}
+      />
     </Wrapper>
   );
 };
