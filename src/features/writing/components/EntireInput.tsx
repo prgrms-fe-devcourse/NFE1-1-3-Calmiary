@@ -7,14 +7,18 @@ import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useUser } from '../../home/hooks/useUser';
 
 interface WriteData {
-  user_id: number;
+  user_id: string;
   emotion_type: string;
   content: string;
 }
 
 const EntireInput = () => {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+
   const mutation = useMutation({
     mutationFn: async (newContent: WriteData) => {
       const response = await axios.post('/api/post/write', newContent);
@@ -30,10 +34,12 @@ const EntireInput = () => {
         setAiContent('고민 등록에 실패했습니다 😢');
         setContentId(0);
         setIsLoadingMode(false);
+        setIsErrorMode(true);
       }, 2500);
     },
   });
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
+
   const { setEmotion, setContent, setAiContent, setContentId } =
     useWritingResponseStore((state) => state.actions);
   const {
@@ -41,6 +47,7 @@ const EntireInput = () => {
     setIsUserResponseMode,
     setIsLoadingMode,
     setIsAIResponseMode,
+    setIsErrorMode,
   } = useWritingModeStore((state) => state.actions);
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
@@ -62,7 +69,7 @@ const EntireInput = () => {
         setIsAIResponseMode(true);
       }, 2000);
       mutation.mutate({
-        user_id: 5,
+        user_id: userId,
         emotion_type: data.emotion,
         content: data.content,
       });

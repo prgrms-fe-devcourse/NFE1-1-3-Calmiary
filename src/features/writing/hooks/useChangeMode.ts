@@ -3,7 +3,7 @@ import useWritingModeStore from '../../../stores/writingModeStore';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 
 const useChangeMode = () => {
-  const { isQuestionMode } = useWritingModeStore((state) => state);
+  const { isQuestionMode, isEndMode } = useWritingModeStore((state) => state);
   const { AiContent } = useWritingResponseStore((state) => state);
   const {
     setIsQuestionMode,
@@ -19,12 +19,12 @@ const useChangeMode = () => {
   }, [setIsQuestionMode]);
 
   useEffect(() => {
-    if (!isQuestionMode) return;
+    if (!isQuestionMode || isEndMode) return;
 
     setTimeout(() => {
       setIsInputMode(true);
     }, 1500);
-  }, [isQuestionMode, setIsUserResponseMode, setIsInputMode]);
+  }, [isQuestionMode, isEndMode, setIsUserResponseMode, setIsInputMode]);
 
   useEffect(() => {
     if (!AiContent) return;
@@ -33,6 +33,12 @@ const useChangeMode = () => {
       setIsEndMode(true);
     }, 1000);
   }, [AiContent, setIsEndMode]);
+
+  useEffect(() => {
+    if (isQuestionMode && isEndMode) {
+      setIsInputMode(false);
+    }
+  }, [isQuestionMode, isEndMode, setIsInputMode]);
 };
 
 export default useChangeMode;
