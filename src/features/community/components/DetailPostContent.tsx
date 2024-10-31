@@ -3,7 +3,7 @@ import { UserInfo } from './index';
 import { UserDataType } from '../types';
 import { Icon } from '../../../components/ui/Icon';
 import { useMutation } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { queryClient } from '../../../network/react-query/queryClient';
@@ -20,7 +20,9 @@ const DetailPostContent = ({
   user_id?: number;
 }) => {
   const [nowEmpathy, setEmpathy] = useState(false);
-  const [currentLikes, setCurrentLikes] = useState(likesCount || 0);
+  const [currentLikes, setCurrentLikes] = useState(
+    likesCount === 0 ? 0 : likesCount
+  );
   const { id } = useParams<{ id: string }>();
   const post_id = Number(id);
 
@@ -42,10 +44,10 @@ const DetailPostContent = ({
     onSuccess: (data) => {
       if (data.is_cancled) {
         setEmpathy(false);
-        setCurrentLikes((prev) => prev - 1);
+        setCurrentLikes((prev) => (prev ?? 0) - 1);
       } else {
         setEmpathy(true);
-        setCurrentLikes((prev) => prev + 1);
+        setCurrentLikes((prev) => (prev ?? 0) + 1);
       }
     },
     onError: () => {
@@ -59,6 +61,10 @@ const DetailPostContent = ({
   const handleLikeToggle = () => {
     empathyMutation.mutate();
   };
+
+  useEffect(() => {
+    setCurrentLikes(likesCount === 0 ? 0 : likesCount);
+  }, [likesCount]);
 
   return (
     <Wrapper>
