@@ -57,6 +57,8 @@ const InputLayout = styled.textarea`
   background-color: transparent;
   width: 100%;
   margin-right: 4px;
+  color: #ffffff;
+  resize: none;
 
   ::placeholder {
     font-size: 1rem;
