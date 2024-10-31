@@ -63,7 +63,7 @@ const DetailPostContent = ({
       empathyMutation.mutate();
     } else {
       setIsLiked(false);
-      setCurrentLikes((prev) => Math.max(0, prev - 1));
+      setCurrentLikes((prev) => Math.max(0, (prev ?? 0) - 1));
     }
   };
 
