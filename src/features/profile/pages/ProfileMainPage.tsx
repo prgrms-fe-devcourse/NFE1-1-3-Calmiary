@@ -14,14 +14,11 @@ export default function ProfileMainPage() {
     <>
       <ProfileContainer>
         <TextArea>
-          <span>안녕하세요, {userData ? userData.nickname : ''}님</span>
+          <span>안녕하세요, {userData?.nickname}님</span>
         </TextArea>
         <MainArea>
           <ImageArea>
-            <img
-              src={userData ? userData.profile_image : ''}
-              alt="프로필 이미지"
-            />
+            <img src={userData?.profile_image} alt="프로필 이미지" />
           </ImageArea>
 
           <ButtonArea>
