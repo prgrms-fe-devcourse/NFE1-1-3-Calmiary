@@ -17,12 +17,23 @@ const CommentInput = ({
   const [commentData, setCommentData] = useState('');
 
   const PostComment = async () => {
-    await axios.post(`/api/community/post/${postId}/comment`, {
-      content: commentData,
-      user_id: userId,
-    });
-    setCommentData('');
-    refetchComments();
+    const trimmedComment = commentData.trim();
+
+    if (trimmedComment.length < 1 || trimmedComment.length > 500) {
+      alert('댓글은 공백이 아닌 1자 이상 500자 이하로 작성해주세요');
+      return;
+    }
+
+    try {
+      await axios.post(`/api/community/post/${postId}/comment`, {
+        content: commentData,
+        user_id: userId,
+      });
+      setCommentData('');
+      refetchComments();
+    } catch (e) {
+      console.error('댓글 작성에 실패했습니다');
+    }
   };
 
   return (
