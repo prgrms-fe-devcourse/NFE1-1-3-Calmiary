@@ -4,7 +4,7 @@ const Comments = ({
   nickname,
   content,
 }: {
-  nickname?: string;
+  nickname: string;
   content?: string;
 }) => {
   return (

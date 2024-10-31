@@ -15,11 +15,10 @@ const DetailCommunityPage = () => {
     return data;
   };
 
-  const { isPending, isError, data, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
-  console.log(data);
 
   return (
     <Wrapper>
