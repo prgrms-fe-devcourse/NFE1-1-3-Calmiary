@@ -6,10 +6,12 @@ const WorryContent = ({
   userInfo,
   content,
   likesCount,
+  userId,
 }: {
   userInfo?: UserDataType;
   content?: string;
   likesCount?: number;
+  userId?: number;
 }) => {
   return (
     <Wrapper>
@@ -18,6 +20,7 @@ const WorryContent = ({
         userInfo={userInfo}
         content={content}
         likesCount={likesCount}
+        user_id={userId}
       />
     </Wrapper>
   );

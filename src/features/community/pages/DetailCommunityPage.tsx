@@ -10,7 +10,9 @@ const DetailCommunityPage = () => {
   const { id } = useParams();
 
   const getDetailPost = async (id: number): Promise<DetailPostTypes> => {
-    const { data } = await axios.get(`/api/community/post/${id}`);
+    const { data } = await axios.get<DetailPostTypes>(
+      `/api/community/post/${id}`
+    );
 
     return data;
   };
@@ -19,6 +21,7 @@ const DetailCommunityPage = () => {
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
+  console.log(data);
 
   return (
     <Wrapper>
@@ -30,6 +33,7 @@ const DetailCommunityPage = () => {
         }}
         content={data?.content}
         likesCount={data?.like_count}
+        userId={data?.user_id}
       />
       <CommentsContent
         comment={data?.comments}

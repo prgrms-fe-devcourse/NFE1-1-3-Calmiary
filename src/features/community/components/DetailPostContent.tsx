@@ -7,10 +7,12 @@ const DetailPostContent = ({
   content,
   likesCount,
   userInfo,
+  user_id,
 }: {
   content?: string;
   likesCount?: number;
   userInfo?: UserDataType;
+  user_id?: number;
 }) => {
   return (
     <Wrapper>
