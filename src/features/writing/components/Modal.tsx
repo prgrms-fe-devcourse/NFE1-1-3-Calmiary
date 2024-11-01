@@ -1,12 +1,6 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
-import useWritingResponseStore from '../../../stores/writingResponseStore';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { useUser } from '../../home/hooks/useUser';
-import showToast from '../utils/showToast';
-import { VisibilityDataTypes } from '../types/formTypes';
+import useMoveForm from '../hooks/useMoveForm';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -23,43 +17,7 @@ interface ButtonPropTypes {
 }
 
 export default function Modal(props: ModalPropTypes) {
-  // 화면 이동 로직
-  const navigate = useNavigate();
-
-  // 사용자 정보 불러오는 로직
-  const { getUserId } = useUser();
-  const userId = getUserId().user_id;
-
-  // 서버로 정보 전송 로직
-  const mutation = useMutation({
-    mutationFn: async (userId: VisibilityDataTypes) => {
-      await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
-    },
-    onSuccess: () => {
-      navigate(`/detail/community/${contentId}`);
-      window.scrollTo(0, 0);
-    },
-    onError: () => {
-      showToast({
-        type: 'fail',
-        message: '😢 공개 설정에 실패했습니다! ',
-      });
-    },
-  });
-
-  // 클라이언트 정보 불러오는 로직
-  const { contentId } = useWritingResponseStore((state) => state);
-
-  // 클라이언트 정보 관리하는 로직
-  const handleConfirm = () => {
-    mutation.mutate({
-      user_id: userId,
-    });
-    showToast({
-      type: 'success',
-      message: '🙌 고민에 대한 조언을 받아보세요!',
-    });
-  };
+  const handleConfirm = useMoveForm();
 
   return (
     <ModalOverlay onClick={props.onClose}>
