@@ -9,3 +9,9 @@ export type EmotionIconTypes =
   | 'write_emotion_smile'
   | 'write_emotion_scary'
   | 'write_emotion_angry';
+
+export interface WriteDataTypes {
+  user_id: string;
+  emotion_type: string;
+  content: string;
+}

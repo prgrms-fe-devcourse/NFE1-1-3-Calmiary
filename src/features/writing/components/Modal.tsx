@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../home/hooks/useUser';
+import showToast from '../utils/showToast';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -41,6 +42,10 @@ export default function Modal(props: ModalPropTypes) {
   const handleConfirm = () => {
     mutation.mutate({
       user_id: userId,
+    });
+    showToast({
+      type: 'success',
+      message: '🙌 고민에 대한 조언을 받아보세요!',
     });
   };
 

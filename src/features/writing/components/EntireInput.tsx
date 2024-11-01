@@ -2,25 +2,20 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import ContentInput from './ContentInput';
 import EmotionInput from './EmotionInput';
 import styled from 'styled-components';
-import { FormTypes } from '../types/formTypes';
+import { FormTypes, WriteDataTypes } from '../types/formTypes';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useUser } from '../../home/hooks/useUser';
-
-interface WriteData {
-  user_id: string;
-  emotion_type: string;
-  content: string;
-}
+import showToast from '../utils/showToast';
 
 const EntireInput = () => {
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
 
   const mutation = useMutation({
-    mutationFn: async (newContent: WriteData) => {
+    mutationFn: async (newContent: WriteDataTypes) => {
       const response = await axios.post('/api/post/write', newContent);
       return response.data;
     },
@@ -52,28 +47,35 @@ const EntireInput = () => {
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
     if (data.emotion === null) {
-      alert('⚠️ 감정을 선택해주세요!');
+      showToast({
+        type: 'fail',
+        message: '😮 감정을 선택해주세요!',
+      });
       return;
     }
     if (data.content.trim() === '') {
-      alert('⚠️ 고민을 입력해주세요!');
-    } else {
-      setEmotion(data.emotion);
-      setContent(data.content);
-      setIsInputMode(false);
-      setTimeout(() => {
-        setIsUserResponseMode(true);
-      }, 1000);
-      setTimeout(() => {
-        setIsLoadingMode(true);
-        setIsAIResponseMode(true);
-      }, 2000);
-      mutation.mutate({
-        user_id: userId,
-        emotion_type: data.emotion,
-        content: data.content,
+      showToast({
+        type: 'fail',
+        message: '✏️ 고민을 입력해주세요!',
       });
+      return;
     }
+
+    setEmotion(data.emotion);
+    setContent(data.content);
+    setIsInputMode(false);
+    setTimeout(() => {
+      setIsUserResponseMode(true);
+    }, 1000);
+    setTimeout(() => {
+      setIsLoadingMode(true);
+      setIsAIResponseMode(true);
+    }, 2000);
+    mutation.mutate({
+      user_id: userId,
+      emotion_type: data.emotion,
+      content: data.content,
+    });
 
     Promise.resolve()
       .then(() => reset())
