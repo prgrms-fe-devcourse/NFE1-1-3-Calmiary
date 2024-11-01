@@ -24,3 +24,14 @@ export interface FormValuesPropTypes {
   password: string;
   passwordConfirm: string;
 }
+
+export interface UpdateProfileDataPropTypes {
+  userId: string;
+  nickname: string;
+  password: string;
+}
+
+export interface UpdateProfileOptionsPropTypes {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}
