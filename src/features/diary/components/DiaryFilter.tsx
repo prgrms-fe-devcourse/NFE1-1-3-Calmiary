@@ -14,7 +14,7 @@ function DiaryFilter({ selectedFilter, onFilterChange }: DiaryFilterProps) {
       {filters.map((filter) => (
         <FilterButton
           key={filter}
-          isSelected={selectedFilter === filter}
+          $isSelected={selectedFilter === filter}
           onClick={() => onFilterChange(filter)}
         >
           {filter}
@@ -35,17 +35,13 @@ const DiaryFilterContainer = styled.div`
   color: ${({ theme }) => theme.colors.write_white200};
 `;
 
-const FilterButton = styled.button<{ isSelected: boolean }>`
+const FilterButton = styled.button<{ $isSelected: boolean }>`
   color: white;
   background: none;
   border: none;
-  font-size: ${({ isSelected }) => (isSelected ? '1.2rem' : '1rem')};
-  font-weight: ${({ isSelected }) => (isSelected ? '700' : '400')};
+  font-size: ${({ $isSelected }) => ($isSelected ? '1.2rem' : '1rem')};
+  font-weight: ${({ $isSelected }) => ($isSelected ? '700' : '400')};
   padding: 0 20px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    opacity: 0.8;
-  }
 `;

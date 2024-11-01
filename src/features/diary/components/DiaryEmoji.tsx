@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
+import { Post } from '../pages/DiaryMainPage';
 
 type EmojiUnionType =
   | 'emoji_soso'
@@ -8,46 +9,35 @@ type EmojiUnionType =
   | 'emoji_angry'
   | 'emoji_petulance';
 
-const EmojiArrMockData: EmojiUnionType[] = [
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-  'emoji_soso',
-  'emoji_sad',
-  'emoji_smail',
-  'emoji_angry',
-  'emoji_petulance',
-];
+interface DiaryEmojiProps {
+  posts?: Post[];
+}
 
-function DiaryEmoji() {
+const getEmojiType = (emotionType: string): EmojiUnionType => {
+  const emojiMap: Record<string, EmojiUnionType> = {
+    ANXIETY: 'emoji_sad',
+    HAPPY: 'emoji_smail',
+    ANGRY: 'emoji_angry',
+    SOSO: 'emoji_soso',
+    PETULANCE: 'emoji_petulance',
+    // 기본값 설정
+    DEFAULT: 'emoji_soso',
+  };
+
+  return emojiMap[emotionType] || emojiMap.DEFAULT;
+};
+
+function DiaryEmoji({ posts = [] }: DiaryEmojiProps) {
   return (
     <EmojiContainer>
       <EmojiGridWrapper>
-        {EmojiArrMockData.map((emojiType: EmojiUnionType) => (
-          <EmojiItem>
-            <Icon type={emojiType} alt={emojiType} size={55} />
+        {posts.map((post) => (
+          <EmojiItem key={post.id}>
+            <Icon
+              type={getEmojiType(post.emotion_type)}
+              alt={post.emotion_type}
+              size={55}
+            />
           </EmojiItem>
         ))}
       </EmojiGridWrapper>
