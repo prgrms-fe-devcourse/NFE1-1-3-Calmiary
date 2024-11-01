@@ -2,25 +2,36 @@ import styled from 'styled-components';
 import {
   DiaryCalminaryAnswer,
   DiaryDetailEmojiAndDate,
-  DiaryInfoToolTip,
   DiaryMyWorry,
 } from '../components';
+import { useParams } from 'react-router-dom';
+import DiaryTitle from '../components/DiaryTitle';
 
 function DiaryDetailPage() {
+  const { id } = useParams();
+
+  console.log(id);
+
   return (
-    <S_DiaryDetailPage>
-      <DiaryInfoToolTip />
+    <DiaryDetailWrapper>
+      <DiaryTitle showInfo={true} />
       <DiaryDetailEmojiAndDate />
       <DiaryMyWorry />
       <DiaryCalminaryAnswer />
-    </S_DiaryDetailPage>
+    </DiaryDetailWrapper>
   );
 }
 
 export default DiaryDetailPage;
 
-const S_DiaryDetailPage = styled.section`
-  width: 100%;
-  overflow: hidden;
-  min-height: 75dvh;
+const DiaryDetailWrapper = styled.section`
+  background-color: ${({ theme }) => theme.colors.brand_bg};
+  height: 100dvh;
+  padding: 60px 30px;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  gap: 30px;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;

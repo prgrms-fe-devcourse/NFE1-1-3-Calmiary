@@ -53,7 +53,6 @@ const S_AnswerContainer = styled.div`
 
 const S_MyWorryText = styled.div`
   width: 100%;
-  min-height: 100%;
   padding: 20px;
   border-radius: 15px;
   background-color: ${({ theme }) => theme.colors.brand_bg};

@@ -1,79 +1,57 @@
-import { useState } from 'react';
 import styled from 'styled-components';
+import Switch from './Switch';
+import { useState } from 'react';
 
-function DiaryMyWorry() {
-  // UI 체크하기 위해 만든 state
+const DiaryMyWorry = () => {
   const [isPublic, setIsPublic] = useState(false);
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsPublic(e.target.checked);
-  };
 
   return (
-    <S_DiaryMyWorryWrapper>
-      <S_AnswerContainer>
+    <WorryWrapper>
+      <WorryHeader>
         <p>나의 고민</p>
-        <div>
-          <label htmlFor="publicCheckbox">{isPublic ? '공개' : '비공개'}</label>{' '}
-          <input
-            type="checkbox"
-            id="publicCheckbox"
-            name="isPublic"
-            checked={isPublic}
-            onChange={handleCheckboxChange}
-          />
-        </div>
-      </S_AnswerContainer>
-
-      <S_MyWorryText>
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-      </S_MyWorryText>
-    </S_DiaryMyWorryWrapper>
+        <SwitchWrapper>
+          <span>{isPublic ? '공개' : '비공개'}</span>
+          <Switch checked={isPublic} onChange={() => setIsPublic(!isPublic)} />
+        </SwitchWrapper>
+      </WorryHeader>
+      <WorryContent>
+        요즘말야~ 참 고민이 많아~ 어떻게 해야 할지 모르겠나봐~~ 흠흠~
+      </WorryContent>
+    </WorryWrapper>
   );
-}
+};
 
-export default DiaryMyWorry;
-
-const S_DiaryMyWorryWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+const WorryWrapper = styled.div`
   width: 100%;
-  margin-bottom: 20px;
-  font-size: 14px;
 `;
 
-const S_AnswerContainer = styled.div`
+const WorryHeader = styled.div`
   display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  width: 100%;
-  font-size: 17px;
-  margin-bottom: 10px;
-
+  align-items: center;
+  margin-bottom: 16px;
   p {
     margin-left: 10px;
   }
+`;
 
-  div {
-    margin-right: 5px;
+const SwitchWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  span {
+    font-size: 14px;
+    color: ${({ theme }) => theme.colors.write_white200};
   }
 `;
 
-const S_MyWorryText = styled.div`
+const WorryContent = styled.div`
   width: 100%;
-  min-height: 100%;
   padding: 20px;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.colors.diary_100};
-  color: ${({ theme }) => theme.colors.write_white200};
+  background-color: ${({ theme }) => theme.colors.brand_bg};
+  border: 3px solid ${({ theme }) => theme.colors.diary_100};
 `;
+
+export default DiaryMyWorry;

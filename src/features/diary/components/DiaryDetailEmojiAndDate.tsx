@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
-import logo from '../../../assets/imgs/diary-speech.png';
-
-// Styled components
 
 const DiaryDetailEmojiAndDate = () => {
   return (
