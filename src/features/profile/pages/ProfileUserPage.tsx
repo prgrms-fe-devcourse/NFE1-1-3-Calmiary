@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
 import ProfileModal from '../components/ProfileModal';
@@ -7,12 +7,15 @@ import { useUser } from '../../home/hooks/useUser';
 import { FormValuesPropTypes } from '../types/profileTypes';
 import { useUserData } from '../hook/useUserData';
 import { useUpdateProfile } from '../hook/useUpdateUserMutation';
+import { useUpdateProfileImage } from '../hook/useUpdateImageMutation';
 
 export default function ProfileUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
-  const { data: userData } = useUserData(userId);
+  const { data: userData, refetch: refetchUserData } = useUserData(userId);
 
   const {
     register,
@@ -35,6 +38,19 @@ export default function ProfileUserPage() {
     },
   });
 
+  const updateProfileImageMutation = useUpdateProfileImage(userId, {
+    onSuccess: () => {
+      alert('프로필 이미지가 수정되었습니다.');
+      refetchUserData(); // 변경한 프로필 이미지로 데이터 갱신
+    },
+    onError: (error: Error) => {
+      alert(`이미지 업로드 실패: ${error.message}`);
+    },
+    onSettled: () => {
+      setIsUploading(false);
+    },
+  });
+
   const onSubmit = async (data: FormValuesPropTypes) => {
     if (userId) {
       updateProfileMutation.mutate({
@@ -42,6 +58,33 @@ export default function ProfileUserPage() {
         nickname: data.nickname,
         password: data.password,
       });
+    }
+  };
+
+  const handleImageClick = () => {
+    if (!isUploading) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // 파일 크기 검사 (10MB)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      alert('파일 크기는 10MB 이하여야 합니다.');
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      await updateProfileImageMutation.mutateAsync(file); // 파일 업로드
+    } catch (error) {
+      // 오류는 mutation의 onError에서 처리됩니다.
     }
   };
 
@@ -60,8 +103,23 @@ export default function ProfileUserPage() {
           <span>안녕하세요, {userData?.nickname}님</span>
         </TextArea>
         <MainArea>
-          <ImageArea>
-            <img src={userData?.profile_image} alt="프로필이미지" />
+          <ImageArea onClick={handleImageClick}>
+            <img
+              src={userData?.profile_image}
+              alt="프로필이미지"
+              style={{ opacity: 1 }}
+            />
+            <ImageOverlay>
+              <span>{isUploading ? '업로드 중...' : '이미지 변경'}</span>
+            </ImageOverlay>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg, image/png, image/gif"
+              onChange={handleImageChange}
+              style={{ display: 'none' }}
+              disabled={isUploading}
+            />
           </ImageArea>
 
           <InputArea onSubmit={handleSubmit(onSubmit)}>
@@ -167,16 +225,44 @@ const TextArea = styled.div`
   color: ${({ theme }) => theme.colors.write_white200};
 `;
 
+const ImageOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  span {
+    color: white;
+    font-size: 14px;
+  }
+`;
+
 const ImageArea = styled.div`
+  position: relative;
   width: 9.375rem;
   height: 9.375rem;
   margin-top: 1rem;
+  cursor: pointer;
 
   img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  &:hover {
+    ${ImageOverlay} {
+      opacity: 1;
+    }
   }
 `;
 
