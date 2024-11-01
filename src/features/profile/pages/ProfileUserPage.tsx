@@ -4,15 +4,14 @@ import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
 import ProfileModal from '../components/ProfileModal';
 import { useUser } from '../../home/hooks/useUser';
-import axios from 'axios';
 import { FormValuesPropTypes } from '../types/profileTypes';
 import { useUserData } from '../hook/useUserData';
+import { useUpdateProfile } from '../hook/useUpdateUserMutation';
 
 export default function ProfileUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
-
   const { data: userData } = useUserData(userId);
 
   const {
@@ -22,21 +21,27 @@ export default function ProfileUserPage() {
     reset,
     watch,
   } = useForm<FormValuesPropTypes>({
-    mode: 'onTouched', // 필드가 포커스를 잃을 때 유효성 검사를 실행합니다.
+    mode: 'onTouched',
+  });
+
+  const updateProfileMutation = useUpdateProfile({
+    onSuccess: () => {
+      alert('회원 정보가 수정되었습니다.');
+      reset();
+    },
+    onError: (error) => {
+      alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+      console.error('프로필 업데이트 오류:', error);
+    },
   });
 
   const onSubmit = async (data: FormValuesPropTypes) => {
     if (userId) {
-      try {
-        await axios.patch(`/api/profile/update/${userId}`, {
-          nickname: data.nickname,
-          password: data.password,
-        });
-        alert('회원 정보가 수정되었습니다.');
-        reset();
-      } catch (error) {
-        alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
-      }
+      updateProfileMutation.mutate({
+        userId,
+        nickname: data.nickname,
+        password: data.password,
+      });
     }
   };
 
@@ -101,8 +106,15 @@ export default function ProfileUserPage() {
               <span>{errors.passwordConfirm.message}</span>
             )}
 
-            <ProfileButton type="submit" width="308px" color="#A594F9">
-              회원 정보 수정
+            <ProfileButton
+              type="submit"
+              width="308px"
+              color="#A594F9"
+              disabled={updateProfileMutation.isPending}
+            >
+              {updateProfileMutation.isPending
+                ? '수정 중...'
+                : '회원 정보 수정'}
             </ProfileButton>
           </InputArea>
           <button className="resignBtn" onClick={openModal}>
