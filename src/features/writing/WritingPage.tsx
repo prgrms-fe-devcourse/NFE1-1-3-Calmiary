@@ -16,6 +16,7 @@ import Modal from './components/Modal';
 import useScrollFollow from './hooks/useScrollFollow';
 import Toast from '../../components/Toast';
 import useToastStore from '../../stores/toastStore';
+import Navbar from '../../components/Navbar';
 
 const WritingPage = () => {
   const {
@@ -52,6 +53,7 @@ const WritingPage = () => {
   return (
     <WritingWrapper ref={contentRef}>
       <WritingLayout>
+        <Navbar />
         {isQuestionMode && (
           <FadeIn>
             <QuestionBox comment="오늘 어떤 고민이 있나요?" />

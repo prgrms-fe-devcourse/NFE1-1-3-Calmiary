@@ -8,6 +8,7 @@ import showToast from '../utils/showToast';
 const useMoveMutation = () => {
   // 화면 이동 로직
   const navigate = useNavigate();
+
   // 클라이언트 정보 불러오는 로직
   const { contentId } = useWritingResponseStore((state) => state);
 

@@ -8,9 +8,11 @@ const useWriteMutation = () => {
   const { setAiContent, setContentId } = useWritingResponseStore(
     (state) => state.actions
   );
+
   const { setIsLoadingMode, setIsErrorMode } = useWritingModeStore(
     (state) => state.actions
   );
+
   return useMutation({
     mutationFn: async (newContent: WriteDataTypes) => {
       const response = await axios.post('/api/post/write', newContent);

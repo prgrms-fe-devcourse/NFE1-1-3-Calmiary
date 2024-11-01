@@ -18,6 +18,7 @@ const useWriteForm = () => {
   const { setEmotion, setContent } = useWritingResponseStore(
     (state) => state.actions
   );
+
   const {
     setIsInputMode,
     setIsUserResponseMode,
