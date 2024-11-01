@@ -22,7 +22,7 @@ const slideDown = keyframes`
 `;
 
 const Div = styled.div<{ type?: 'success' | 'fail' | null }>`
-  z-index: 999;
+  z-index: 1001;
   position: fixed;
   top: 1rem;
   right: 50%;

@@ -35,7 +35,10 @@ export default function Modal(props: ModalPropTypes) {
       window.scrollTo(0, 0);
     },
     onError: () => {
-      alert('공개 설정에 실패했습니다! 😢');
+      showToast({
+        type: 'fail',
+        message: '😢 공개 설정에 실패했습니다! ',
+      });
     },
   });
 

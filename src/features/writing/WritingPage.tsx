@@ -114,6 +114,7 @@ const WritingWrapper = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   min-height: 100vh;
+  font-size: 15px;
 `;
 
 const WritingLayout = styled.div`
