@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { Icon } from './ui/Icon';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <NavWrapper>
       <Link to="/growth">
@@ -11,7 +12,11 @@ const Navbar = () => {
       <Link to="/growth">
         <Icon type="nav_log" size={20} />
       </Link>
-      <WriteLayout to="/writing">
+      <WriteLayout
+        onClick={() => {
+          navigate('/writing', { replace: true });
+        }}
+      >
         <Icon type="nav_write" size={24} />
       </WriteLayout>
       <Link to="/community">
@@ -41,7 +46,7 @@ const NavWrapper = styled.nav`
   background: ${({ theme }) => theme.colors.brand_bg};
 `;
 
-const WriteLayout = styled(Link)`
+const WriteLayout = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;

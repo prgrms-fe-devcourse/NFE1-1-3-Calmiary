@@ -52,8 +52,8 @@ const WritingPage = () => {
 
   return (
     <WritingWrapper ref={contentRef}>
+      <Navbar />
       <WritingLayout>
-        <Navbar />
         {isQuestionMode && (
           <FadeIn>
             <QuestionBox comment="오늘 어떤 고민이 있나요?" />

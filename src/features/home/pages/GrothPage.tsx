@@ -6,6 +6,7 @@ import Growth from '../../../assets/growth.svg';
 import { Icon } from '../../../components/ui/Icon';
 import { useUser } from '../hooks/useUser';
 import { useStats } from '../hooks/useStats';
+import Navbar from '../../../components/Navbar';
 
 const GrowthFactorPage = () => {
   const { getUserId } = useUser();
@@ -22,6 +23,7 @@ const GrowthFactorPage = () => {
 
   return (
     <GrowthWrapper>
+      <Navbar />
       <GrowthLayout>
         <GrowthContainer>
           <StepBox>

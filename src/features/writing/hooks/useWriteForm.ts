@@ -58,6 +58,8 @@ const useWriteForm = () => {
       setIsAIResponseMode(true);
     }, 2000);
 
+    console.log(data.emotion);
+
     mutation.mutate({
       user_id: userId,
       emotion_type: data.emotion,
