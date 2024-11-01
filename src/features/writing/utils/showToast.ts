@@ -1,7 +1,8 @@
 import { toastStore } from '../../../stores/toastStore';
+import ToastType from '../types/toastTypes';
 
 interface useToastPropTypes {
-  type: 'success' | 'fail';
+  type: ToastType;
   message: string;
 }
 

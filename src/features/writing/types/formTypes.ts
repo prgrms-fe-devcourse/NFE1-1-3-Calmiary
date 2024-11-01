@@ -10,8 +10,20 @@ export type EmotionIconTypes =
   | 'write_emotion_scary'
   | 'write_emotion_angry';
 
+export const EMOTION_ICON_TYPE: EmotionIconTypes[] = [
+  'write_emotion_soso',
+  'write_emotion_cry',
+  'write_emotion_smile',
+  'write_emotion_scary',
+  'write_emotion_angry',
+];
+
 export interface WriteDataTypes {
   user_id: string;
   emotion_type: string;
   content: string;
+}
+
+export interface VisibilityDataTypes {
+  user_id: string;
 }
