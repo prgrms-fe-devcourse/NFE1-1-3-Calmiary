@@ -21,7 +21,6 @@ REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto",
-    bcrypt__rounds=12,
     bcrypt__default_rounds=12
 )
 
@@ -31,12 +30,31 @@ class SecurityUtils:
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """비밀번호 검증"""
-        return pwd_context.verify(plain_password, hashed_password)
+        try:
+            return pwd_context.verify(plain_password, hashed_password)
+        except Exception as e:
+            print(f"Password verification error: {e}")
+            # 직접 bcrypt를 사용하는 대체 방법
+            import bcrypt
+            return bcrypt.checkpw(
+                plain_password.encode('utf-8'), 
+                hashed_password.encode('utf-8')
+            )
 
     @staticmethod
     def get_password_hash(password: str) -> str:
         """비밀번호 해싱"""
-        return pwd_context.hash(password)
+        try:
+            return pwd_context.hash(password)
+        except Exception as e:
+            print(f"Password hashing error: {e}")
+            # 직접 bcrypt를 사용하는 대체 방법
+            import bcrypt
+            salt = bcrypt.gensalt()
+            return bcrypt.hashpw(
+                password.encode('utf-8'), 
+                salt
+            ).decode('utf-8')
 
     @staticmethod
     def create_access_token(data: Dict, expires_delta: Optional[timedelta] = None) -> str:

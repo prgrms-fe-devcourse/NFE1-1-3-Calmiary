@@ -43,7 +43,6 @@ app.add_middleware(
 #     response.headers["Timezone"] = "Asia/Seoul"
 #     return response
 
-
 """
 API 엔드포인트 구조
 
@@ -72,67 +71,6 @@ load_dotenv()
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-class UserCreate(BaseModel):
-    id: str
-    nickname: str
-    password: str
-    profile_image: Optional[str] = None
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "id": "test123",
-                "nickname": "테스트유저",
-                "password": "test123!@#",
-                "profile_image": None
-            }
-        }
-
-@app.post("/user/add/", 
-    response_model=UserResponse,
-    summary="새로운 사용자 추가",
-    description="""
-    새로운 사용자를 생성합니다.
-    
-    - **id**: 고유한 사용자 아이디
-    - **nickname**: 사용자 닉네임
-    - **password**: 사용자 비밀번호
-    - **profile_image**: (선택) 프로필 이미지 URL
-    """,
-    response_description="생성된 사용자 정보",
-    tags=["Users"]
-)
-def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
-    # 기존 사용자 확인
-    existing_user = db.query(models.User).filter(models.User.id == user_data.id).first()
-    if existing_user:
-        raise HTTPException(
-            status_code=400,
-            detail="이미 등록된 아이디입니다."
-        )
-
-    # 비밀번호 해싱
-    hashed_password = SecurityUtils.get_password_hash(user_data.password)
-    
-    # 사용자 생성
-    db_user = models.User(
-        id=user_data.id,
-        nickname=user_data.nickname,
-        password=hashed_password,
-        profile_image=user_data.profile_image
-    )
-
-    try:
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
-        return db_user
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(
-            status_code=500,
-            detail="사용자 생성 중 오류가 발생했습니다."
-        )
 
 class PostCreate(BaseModel):
     user_id: int
@@ -219,36 +157,6 @@ def delete_post(post_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"message": "Post deleted"}
 
-@app.post("/comment/add/",
-    response_model=CommentResponse,
-    summary="새로운 댓글 작성",
-    description="""
-    포스트에 새로운 댓글을 작성합니다.
-    
-    - **user_id**: 댓글 작성자 ID
-    - **post_id**: 댓글을 달 포스트 ID
-    - **content**: 댓글 내용
-    
-    작성된 댓글은 즉시 포스트에 표시됩니다.
-    """,
-    response_description="작성된 댓글 정보",
-    tags=["Comments"]
-)
-def create_comment(
-    user_id: int,
-    post_id: int,
-    content: str,
-    db: Session = Depends(get_db)
-):
-    db_comment = models.Comment(
-        user_id=user_id,
-        post_id=post_id,
-        content=content
-    )
-    db.add(db_comment)
-    db.commit()
-    db.refresh(db_comment)
-    return db_comment
 
 @app.get("/comment/get/{comment_id}",
     response_model=CommentResponse,
@@ -265,46 +173,6 @@ def get_comment(
     if not comment:
         raise HTTPException(status_code=404, detail="Comment not found")
     return comment
-
-@app.delete("/comment/remove/{comment_id}",
-    response_model=dict,
-    summary="댓글 삭제",
-    description="""
-    지정된 ID의 댓글을 삭제합니다.
-    
-    삭제된 댓글은 복구할 수 없으며, 해당 댓글과 관련된 모든 데이터가 함께 삭제됩니다.
-    """,
-    response_description="삭제 완료 메시지",
-    tags=["Comments"],
-    responses={
-        200: {
-            "description": "댓글이 성공적으로 삭제됨",
-            "content": {
-                "application/json": {
-                    "example": {"message": "댓글이 삭제되었습니다."}
-                }
-            }
-        },
-        404: {
-            "description": "댓글을 찾을 수 없음",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "댓글을 찾을 수 없습니다."}
-                }
-            }
-        }
-    }
-)
-def delete_comment(
-    comment_id: int = Path(..., description="삭제할 댓글의 ID", example=1),
-    db: Session = Depends(get_db)
-):
-    comment = db.query(models.Comment).filter(models.Comment.comment_id == comment_id).first()
-    if not comment:
-        raise HTTPException(status_code=404, detail="댓글을 찾을 수 없습니다.")
-    db.delete(comment)
-    db.commit()
-    return {"message": "댓글이 삭제되었습니다."}
 
 def remove_markdown(text):
     text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
