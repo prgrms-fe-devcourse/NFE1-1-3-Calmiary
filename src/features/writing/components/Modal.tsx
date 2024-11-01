@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 import Button from './Button';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
-import { useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../home/hooks/useUser';
 
 interface ModalPropTypes {
   onClose: () => void;
@@ -14,30 +15,32 @@ interface ModalPropTypes {
 }
 
 interface VisibilityData {
-  user_id: number;
+  user_id: string;
 }
 
 export default function Modal(props: ModalPropTypes) {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+
   const { contentId } = useWritingResponseStore((state) => state);
-  useEffect(() => {
-    console.log(contentId);
-  }, [contentId]);
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: async (userId: VisibilityData) => {
       await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
     },
     onSuccess: () => {
-      console.log('success');
+      navigate(`/detail/community/${contentId}`);
+      window.scrollTo(0, 0);
     },
     onError: () => {
-      console.log('fail');
+      alert('공개 설정에 실패했습니다! 😢');
     },
   });
 
   const handleConfirm = () => {
     mutation.mutate({
-      user_id: 5,
+      user_id: userId,
     });
   };
 

@@ -4,3 +4,4 @@ export { default as ContentPublicButton } from './ContentPublicButton';
 export { default as MoveToMainButton } from './MoveToMainButton';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export { default as EntireInput } from './EntireInput';
+export { default as RetryButton } from './RetryButton';

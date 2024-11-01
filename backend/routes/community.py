@@ -1,7 +1,7 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Path
 from sqlalchemy.orm import Session
-from sqlalchemy import desc, func, select
+from sqlalchemy import asc, desc, func, select
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from database import get_db
@@ -20,6 +20,7 @@ class UserInfo(BaseModel):
 
 class SortOption(str, Enum):
     LATEST = "latest"
+    OLDEST = "oldest"
     COMMENTS = "comments"
     LIKES = "likes"
 
@@ -136,6 +137,7 @@ class LikeResponse(BaseModel):
     **필터링 옵션:**
     - sort_by: 정렬 기준
       - latest: 최신순 (기본값)
+      - oldest: 오래된순
       - comments: 댓글 많은 순
       - likes: 공감 많은 순
     - page: 페이지 번호 (기본값: 1)
@@ -164,6 +166,9 @@ class LikeResponse(BaseModel):
     ```bash
     # 최신순으로 첫 페이지 조회
     curl "http://api.example.com/community/posts?sort_by=latest&page=1&limit=10"
+
+    # 오래된순으로 첫 페이지 조회
+    curl "http://api.example.com/community/posts?sort_by=oldest&page=1&limit=10"
     
     # 공감 많은 순으로 조회
     curl "http://api.example.com/community/posts?sort_by=likes&page=1&limit=20"
@@ -235,6 +240,8 @@ async def get_shared_posts(
     # 정렬 적용
     if sort_by == SortOption.LATEST:
         query = query.order_by(desc(models.Post.created_at))
+    elif sort_by == SortOption.OLDEST:
+        query = query.order_by(asc(models.Post.created_at))
     elif sort_by == SortOption.COMMENTS:
         query = query.order_by(desc(func.coalesce(comments_count.c.comment_count, 0)))
     elif sort_by == SortOption.LIKES:
@@ -654,3 +661,42 @@ def get_comments_for_post(db: Session, post_id: int):
         .order_by(models.Comment.created_at.desc())
         .all()
     )
+
+@router.delete("/comment/remove/{comment_id}",
+    response_model=dict,
+    summary="댓글 삭제",
+    description="""
+    지정된 ID의 댓글을 삭제합니다.
+    
+    삭제된 댓글은 복구할 수 없으며, 해당 댓글과 관련된 모든 데이터가 함께 삭제됩니다.
+    """,
+    response_description="삭제 완료 메시지",
+    responses={
+        200: {
+            "description": "댓글이 성공적으로 삭제됨",
+            "content": {
+                "application/json": {
+                    "example": {"message": "댓글이 삭제되었습니다."}
+                }
+            }
+        },
+        404: {
+            "description": "댓글을 찾을 수 없음",
+            "content": {
+                "application/json": {
+                    "example": {"detail": "댓글을 찾을 수 없습니다."}
+                }
+            }
+        }
+    }
+)
+def delete_comment(
+    comment_id: int = Path(..., description="삭제할 댓글의 ID", example=1),
+    db: Session = Depends(get_db)
+):
+    comment = db.query(models.Comment).filter(models.Comment.comment_id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="댓글을 찾을 수 없습니다.")
+    db.delete(comment)
+    db.commit()
+    return {"message": "댓글이 삭제되었습니다."}
