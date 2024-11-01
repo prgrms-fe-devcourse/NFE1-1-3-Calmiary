@@ -1,44 +1,56 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 
-function DiaryMonth() {
+interface DiaryMonthPropTypes {
+  currentMonth: number;
+  onMonthChange: (month: number) => void;
+}
+
+function DiaryMonth({ currentMonth, onMonthChange }: DiaryMonthPropTypes) {
+  const handlePrevMonth = () => {
+    onMonthChange(currentMonth === 1 ? 12 : currentMonth - 1);
+  };
+
+  const handleNextMonth = () => {
+    onMonthChange(currentMonth === 12 ? 1 : currentMonth + 1);
+  };
+
   return (
-    <S_DiaryMonth>
-      <S_Button>
-        <S_IconLeft type="diary_left" />
-      </S_Button>
-      <p>10월</p>
-      <S_Button>
-        <S_IconRight type="diary_right" />
-      </S_Button>
-    </S_DiaryMonth>
+    <MonthWrapper>
+      <MonthButton onClick={handlePrevMonth}>
+        <Icon type="diary_left" size={24} />
+      </MonthButton>
+      <MonthText>{currentMonth}월</MonthText>
+      <MonthButton onClick={handleNextMonth}>
+        <Icon type="diary_right" size={24} />
+      </MonthButton>
+    </MonthWrapper>
   );
 }
 
 export default DiaryMonth;
 
-const S_DiaryMonth = styled.div`
-  width: 100%;
-  height: 8.33dvh;
+const MonthWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
-  p {
-    font-size: 20px;
-  }
+  gap: 20px;
+  margin: 20px 0;
 `;
 
-const S_Button = styled.button`
+const MonthButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;
 
-const S_IconLeft = styled(Icon)`
-  margin-right: 20px;
-`;
-
-const S_IconRight = styled(Icon)`
-  margin-left: 20px;
+const MonthText = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  min-width: 50px;
+  text-align: center;
 `;

@@ -47,10 +47,11 @@ function DiaryMainPage() {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('전체');
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
+  const [currentMonth, setCurrentMonth] = useState(
+    () => new Date().getMonth() + 1
+  );
 
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = new Date().getFullYear();
 
   const {
     data: posts,
@@ -75,6 +76,10 @@ function DiaryMainPage() {
     setSelectedFilter(newFilter);
   };
 
+  const handleMonthChange = (newMonth: number) => {
+    setCurrentMonth(newMonth);
+  };
+
   return (
     <DiaryWrapper>
       <DiaryLayout>
@@ -83,7 +88,10 @@ function DiaryMainPage() {
           selectedFilter={selectedFilter}
           onFilterChange={handleFilterChange}
         />
-        <DiaryMonth />
+        <DiaryMonth
+          currentMonth={currentMonth}
+          onMonthChange={handleMonthChange}
+        />
         {isLoading ? (
           <LoadingSpinner />
         ) : error ? (
