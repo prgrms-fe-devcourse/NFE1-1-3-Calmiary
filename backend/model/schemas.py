@@ -36,6 +36,21 @@ class PostResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class S_PostResponse(BaseModel):
+    id: int
+    user_id: int
+    emotion_type: str
+    content: str
+    ai_content: str
+    created_at: datetime
+    is_shared: bool
+    is_solved: bool
+    like_count: int = Field(default=0, description="게시글의 좋아요 수")
+    comment_count: int = Field(default=0, description="게시글의 댓글 수")
+
+    class Config:
+        from_attributes = True
+
 class CommentResponse(BaseModel):
     comment_id: int
     user_id: int
