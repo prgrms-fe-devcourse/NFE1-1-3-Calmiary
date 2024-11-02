@@ -15,6 +15,7 @@ interface Actions {
     setIsInputMode: (inputMode: boolean) => void;
     setAiContent: (newContent: string) => void;
     setContentId: (newId: number) => void;
+    resetResponse: () => void;
   };
 }
 
@@ -30,6 +31,14 @@ const useWritingResponseStore = create<State & Actions>((set) => ({
     setIsInputMode: (inputMode) => set(() => ({ isInputMode: inputMode })),
     setAiContent: (newContent) => set(() => ({ AiContent: newContent })),
     setContentId: (newId) => set(() => ({ contentId: newId })),
+    resetResponse: () =>
+      set(() => ({
+        emotion: '',
+        content: '',
+        isInputMode: true,
+        AiContent: '',
+        contentId: 0,
+      })),
   },
 }));
 

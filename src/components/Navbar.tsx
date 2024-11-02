@@ -2,10 +2,29 @@ import styled from 'styled-components';
 import { Icon } from './ui/Icon';
 import { Link, useNavigate } from 'react-router-dom';
 import useWritingModeStore from '../stores/writingModeStore';
+import useWritingResponseStore from '../stores/writingResponseStore';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { resetMode } = useWritingModeStore((state) => state.actions);
+  const { resetResponse } = useWritingResponseStore((state) => state.actions);
+
+  const handleWritingClick = () => {
+    // 현재 writing 페이지에 있을 때
+    if (location.pathname === '/writing') {
+      // state와 함께 같은 페이지로 이동
+      console.log('same');
+      navigate('', {
+        replace: true,
+        state: { reload: Date.now() },
+      });
+    } else {
+      // 다른 페이지에서 writing으로 이동
+      resetResponse();
+      resetMode();
+      navigate('/writing');
+    }
+  };
 
   return (
     <NavWrapper>
@@ -15,12 +34,7 @@ const Navbar = () => {
       <Link to="/growth">
         <Icon type="nav_log" size={20} />
       </Link>
-      <WriteLayout
-        onClick={() => {
-          resetMode();
-          navigate('/writing', { replace: true });
-        }}
-      >
+      <WriteLayout onClick={handleWritingClick}>
         <Icon type="nav_write" size={24} />
       </WriteLayout>
       <Link to="/community">

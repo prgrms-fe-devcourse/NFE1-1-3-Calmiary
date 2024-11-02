@@ -17,8 +17,8 @@ import useScrollFollow from './hooks/useScrollFollow';
 import Toast from '../../components/Toast';
 import useToastStore from '../../stores/toastStore';
 import Navbar from '../../components/Navbar';
-
 const WritingPage = () => {
+  // 클라이언트 정보 가져오기
   const {
     isQuestionMode,
     isInputMode,
@@ -27,11 +27,14 @@ const WritingPage = () => {
     isErrorMode,
     isEndMode,
   } = useWritingModeStore((state) => state);
-  useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isToastOpen } = useToastStore((state) => state);
 
+  // custom hook: mode 실시간 변경
+  useChangeMode();
+
+  // custom hook: 스크롤 이동
   const contentRef = useRef<HTMLDivElement>(null);
   useScrollFollow({
     contentRef,
