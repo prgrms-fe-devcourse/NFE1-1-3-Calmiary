@@ -10,10 +10,8 @@ const Navbar = () => {
   const { resetResponse } = useWritingResponseStore((state) => state.actions);
 
   const handleWritingClick = () => {
-    // 현재 writing 페이지에 있을 때
     if (location.pathname === '/writing') {
-      // state와 함께 같은 페이지로 이동
-      console.log('same');
+      // 현재 writing 페이지에 있을 때
       navigate('', {
         replace: true,
         state: { reload: Date.now() },
@@ -72,4 +70,5 @@ const WriteLayout = styled.button`
   border-radius: 50%;
   width: 42px;
   height: 42px;
+  border: none;
 `;
