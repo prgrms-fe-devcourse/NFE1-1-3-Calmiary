@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { Icon } from './ui/Icon';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useWritingModeStore from '../stores/writingModeStore';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { resetMode } = useWritingModeStore((state) => state.actions);
+
   return (
     <NavWrapper>
       <Link to="/growth">
@@ -14,6 +17,7 @@ const Navbar = () => {
       </Link>
       <WriteLayout
         onClick={() => {
+          resetMode();
           navigate('/writing', { replace: true });
         }}
       >
