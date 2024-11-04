@@ -30,6 +30,8 @@ function DiaryDetailPage() {
         <DiaryTitle showInfo={true} />
         {!isLoading && post && (
           <DiaryDetailEmojiAndDate
+            id={post.id}
+            isSolved={post.is_solved}
             emotionType={post.emotion_type}
             createdAt={post.created_at}
           />
@@ -62,10 +64,16 @@ const DiaryDetailWrapper = styled.section`
   display: flex;
   flex-direction: column;
   color: ${({ theme }) => theme.colors.write_white200};
+  position: relative;
 `;
 
 const FixedHeader = styled.div`
-  flex-shrink: 0; // 헤더 영역 고정
+  flex-shrink: 0;
+  position: sticky;
+  top: 60px;
+  z-index: 10;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
+  padding-bottom: 20px;
 `;
 
 const ScrollContent = styled.div`
@@ -74,7 +82,8 @@ const ScrollContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  padding-right: 8px; // 스크롤바 공간 확보
+  padding-right: 8px;
+  margin-top: 20px;
 
   // 스크롤바 스타일링
   &::-webkit-scrollbar {
