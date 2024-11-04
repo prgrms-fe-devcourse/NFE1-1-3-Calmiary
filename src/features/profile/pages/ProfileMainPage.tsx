@@ -1,23 +1,36 @@
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
 import { Link } from 'react-router-dom';
+import { useUser } from '../../home/hooks/useUser';
+import { useUserData } from '../hook/useUserData';
 
 export default function ProfileMainPage() {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+
+  const { data: userData } = useUserData(userId);
+
   return (
     <>
       <ProfileContainer>
         <TextArea>
-          <span>안녕하세요, XXX님</span>
+          <span>안녕하세요, {userData?.nickname}님</span>
         </TextArea>
         <MainArea>
-          <ImageArea></ImageArea>
+          <ImageArea>
+            <img src={userData?.profile_image} alt="프로필 이미지" />
+          </ImageArea>
 
           <ButtonArea>
             <Link to="/userProfile">
               <ProfileButton>회원 정보 관리</ProfileButton>
             </Link>
-            <ProfileButton>공유한 고민</ProfileButton>
-            <ProfileButton>좋아요 한 고민</ProfileButton>
+            <Link to="/sharePost">
+              <ProfileButton>공유한 고민</ProfileButton>
+            </Link>
+            <Link to="/likePost">
+              <ProfileButton>좋아요 한 고민</ProfileButton>
+            </Link>
           </ButtonArea>
 
           <ProfileButton color="#A594F9">로그아웃</ProfileButton>
@@ -32,11 +45,11 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 390px;
+  max-width: 430px;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   margin: 0 auto;
-  background-color: #181625;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
   gap: 3rem;
 `;
 
@@ -52,15 +65,20 @@ const MainArea = styled.div`
 `;
 
 const TextArea = styled.div`
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;
 
 const ImageArea = styled.div`
   width: 9.375rem;
   height: 9.375rem;
-  border-radius: 50%;
-  background-color: #d9d9d9;
   margin-top: 1rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 
 const ButtonArea = styled.div`

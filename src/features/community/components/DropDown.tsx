@@ -1,31 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import DropDownArrow from '../../../assets/comuunity-dropdown.svg';
-
-type SortKey = 'asc' | 'desc' | 'likes';
-type SortOptions = Record<SortKey, string>;
+import { SortKey, SortOptions } from '../types';
 
 interface DropDownPropTypes {
   isSorted: SortKey;
-  setIsSorted: React.Dispatch<React.SetStateAction<SortKey>>;
+  setIsSorted: (option: SortKey) => void;
 }
 
 const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const SelectContainerRef = useRef<HTMLDivElement | null>(null);
+
   const sortOptions: SortOptions = {
-    desc: '최신순',
-    asc: '나중순',
+    latest: '최신순',
+    oldest: '나중순',
     likes: '좋아요순',
   };
 
   const handleOpen = () => {
     setIsOpen((prev) => !prev);
-  };
-
-  const handleSorted = (option: SortKey) => {
-    setIsSorted(option);
-    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -64,7 +58,13 @@ const DropDown = ({ setIsSorted, isSorted }: DropDownPropTypes) => {
       {isOpen && (
         <SelectOptions>
           {availableOptions.map(([key, value]) => (
-            <Option key={key} onClick={() => handleSorted(key as SortKey)}>
+            <Option
+              key={key}
+              onClick={() => {
+                setIsSorted(key as SortKey);
+                setIsOpen(false);
+              }}
+            >
               {value}
             </Option>
           ))}

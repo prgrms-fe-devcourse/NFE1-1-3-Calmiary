@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   ContentPublicButton,
   EntireInput,
@@ -6,9 +6,14 @@ import {
   MoveToMainButton,
   QuestionBox,
   ResponseBox,
+  RetryButton,
 } from './components';
 import useWritingModeStore from '../../stores/writingModeStore';
 import useChangeMode from './hooks/useChangeMode';
+import useWritingResponseStore from '../../stores/writingResponseStore';
+import { useRef, useState } from 'react';
+import Modal from './components/Modal';
+import useScrollFollow from './hooks/useScrollFollow';
 
 const WritingPage = () => {
   const {
@@ -16,20 +21,53 @@ const WritingPage = () => {
     isInputMode,
     isUserResponseMode,
     isAIResponseMode,
+    isErrorMode,
     isEndMode,
   } = useWritingModeStore((state) => state);
   useChangeMode();
+  const { AiContent } = useWritingResponseStore((state) => state);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  useScrollFollow({
+    contentRef,
+    dependencies: [
+      isQuestionMode,
+      isUserResponseMode,
+      isAIResponseMode,
+      isEndMode,
+    ],
+  });
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <WritingWrapper>
+    <WritingWrapper ref={contentRef}>
       <WritingLayout>
-        {isQuestionMode && <QuestionBox comment="오늘 어떤 고민이 있나요?" />}
+        {isQuestionMode && (
+          <FadeIn>
+            <QuestionBox comment="오늘 어떤 고민이 있나요?" />
+          </FadeIn>
+        )}
         {isUserResponseMode && (
-          <ResponseBoxContainer>
-            <ResponseBox />
-          </ResponseBoxContainer>
+          <FadeIn>
+            <ResponseBoxContainer>
+              <ResponseBox />
+            </ResponseBoxContainer>
+          </FadeIn>
         )}
         {isAIResponseMode && (
-          <QuestionBox comment="" loadingSpinner={<LoadingSpinner />} />
+          <FadeIn>
+            <QuestionBox
+              comment={AiContent}
+              loadingSpinner={<LoadingSpinner />}
+            />
+          </FadeIn>
         )}
         {isInputMode && (
           <InputContainer>
@@ -37,10 +75,25 @@ const WritingPage = () => {
           </InputContainer>
         )}
         {isEndMode && (
-          <ButtonContainer>
-            <ContentPublicButton />
-            <MoveToMainButton />
-          </ButtonContainer>
+          <FadeIn>
+            <ButtonContainer>
+              {isErrorMode ? (
+                <RetryButton />
+              ) : (
+                <ContentPublicButton onClick={openModal} />
+              )}
+              <MoveToMainButton />
+            </ButtonContainer>
+          </FadeIn>
+        )}
+
+        {isModalOpen && (
+          <Modal
+            onClose={closeModal}
+            header="내 고민 공유하기"
+            contentFirst="고민을 공유한 후에는"
+            contentSecond="비공개로 전환할 수 없습니다!"
+          />
         )}
       </WritingLayout>
     </WritingWrapper>
@@ -55,7 +108,7 @@ const WritingWrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  height: 100vh;
+  min-height: 100vh;
 `;
 
 const WritingLayout = styled.div`
@@ -68,11 +121,20 @@ const ResponseBoxContainer = styled.div`
   justify-content: flex-end;
 `;
 
+const fadeIn = keyframes`
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+`;
+
 const InputContainer = styled.div`
   position: fixed;
   left: 50%;
   bottom: 5rem;
-  transform: translateX(-50%);
+  transform: translate(-50%, 20px);
+  animation: ${fadeIn} 0.5s forwards;
+  opacity: 0;
 `;
 
 const ButtonContainer = styled.div`
@@ -82,4 +144,17 @@ const ButtonContainer = styled.div`
   align-items: center;
   max-width: 270px;
   margin: auto;
+`;
+
+const FadeIn = styled.div`
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.5s forwards;
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import DetailPostContent from './DetailPostContent';
+import { DetailPostContent } from './index';
 
 const WorryContent = () => {
   return (

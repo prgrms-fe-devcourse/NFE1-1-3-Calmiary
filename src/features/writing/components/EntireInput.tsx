@@ -7,33 +7,48 @@ import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useUser } from '../../home/hooks/useUser';
 
 interface WriteData {
-  user_id: number;
+  user_id: string;
   emotion_type: string;
   content: string;
 }
 
 const EntireInput = () => {
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+
   const mutation = useMutation({
     mutationFn: async (newContent: WriteData) => {
       const response = await axios.post('/api/post/write', newContent);
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data);
-      console.log('success');
+      setAiContent(data.ai_content);
+      setContentId(data.id);
+      setIsLoadingMode(false);
     },
     onError: async () => {
-      console.log('fail');
+      setTimeout(() => {
+        setAiContent('고민 등록에 실패했습니다 😢');
+        setContentId(0);
+        setIsLoadingMode(false);
+        setIsErrorMode(true);
+      }, 2500);
     },
   });
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
-  const { setEmotion, setContent } = useWritingResponseStore(
-    (state) => state.actions
-  );
-  const { setIsInputMode, setIsUserResponseMode, setIsAIResponseMode } =
-    useWritingModeStore((state) => state.actions);
+
+  const { setEmotion, setContent, setAiContent, setContentId } =
+    useWritingResponseStore((state) => state.actions);
+  const {
+    setIsInputMode,
+    setIsUserResponseMode,
+    setIsLoadingMode,
+    setIsAIResponseMode,
+    setIsErrorMode,
+  } = useWritingModeStore((state) => state.actions);
 
   const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
     if (data.emotion === null) {
@@ -45,18 +60,19 @@ const EntireInput = () => {
     } else {
       setEmotion(data.emotion);
       setContent(data.content);
-      mutation.mutate({
-        user_id: 5,
-        emotion_type: data.emotion,
-        content: data.content,
-      });
       setIsInputMode(false);
       setTimeout(() => {
         setIsUserResponseMode(true);
       }, 1000);
       setTimeout(() => {
+        setIsLoadingMode(true);
         setIsAIResponseMode(true);
-      }, 2500);
+      }, 2000);
+      mutation.mutate({
+        user_id: userId,
+        emotion_type: data.emotion,
+        content: data.content,
+      });
     }
 
     Promise.resolve()
