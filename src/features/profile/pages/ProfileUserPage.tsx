@@ -104,11 +104,7 @@ export default function ProfileUserPage() {
         </TextArea>
         <MainArea>
           <ImageArea onClick={handleImageClick}>
-            <img
-              src={userData?.profile_image}
-              alt="프로필이미지"
-              style={{ opacity: 1 }}
-            />
+            <img src={userData?.profile_image} alt="프로필이미지" />
             <ImageOverlay>
               <span>{isUploading ? '업로드 중...' : '이미지 변경'}</span>
             </ImageOverlay>
@@ -117,7 +113,6 @@ export default function ProfileUserPage() {
               type="file"
               accept="image/jpeg, image/png, image/gif"
               onChange={handleImageChange}
-              style={{ display: 'none' }}
               disabled={isUploading}
             />
           </ImageArea>
@@ -263,6 +258,9 @@ const ImageArea = styled.div`
     ${ImageOverlay} {
       opacity: 1;
     }
+  }
+  input {
+    display: none;
   }
 `;
 
