@@ -33,9 +33,9 @@ const TooltipContent = styled.img`
   border-radius: 8px;
   font-size: 12px;
   color: black;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 40%;
+  left: 20%;
+  transform: translate(-40%, -20%);
   white-space: nowrap;
   z-index: 1;
 `;

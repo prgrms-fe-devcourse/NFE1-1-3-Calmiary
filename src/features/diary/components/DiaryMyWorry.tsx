@@ -1,21 +1,93 @@
 import styled from 'styled-components';
 import Switch from './Switch';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { axiosInstance } from '../../../network/axiosInstance';
+import { Post } from '../pages/DiaryMainPage';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useUser } from '../../home/hooks/useUser';
 
-const DiaryMyWorry = () => {
-  const [isPublic, setIsPublic] = useState(false);
+interface DiaryMyWorryPropTypes {
+  id: number;
+  content: string;
+  isShared: boolean;
+  isSolved: boolean;
+}
+
+export const togglePostVisibility = async (postId: number, userId: number) => {
+  const { data } = await axiosInstance.patch<Post>(
+    `/diary/post/${postId}/visibility`,
+    { user_id: userId }
+  );
+  return data;
+};
+
+const switchVariants = {
+  public: { x: 2 },
+  private: { x: 0 },
+};
+
+const DiaryMyWorry = ({
+  id,
+  content,
+  isShared,
+  isSolved,
+}: DiaryMyWorryPropTypes) => {
+  const [isPublic, setIsPublic] = useState(isShared);
+  const { getUserId } = useUser();
+  const userId = getUserId().user_id;
+  const queryClient = useQueryClient();
+
+  const { mutate: toggleVisibility } = useMutation({
+    mutationFn: () => togglePostVisibility(id, Number(userId)),
+    onSuccess: (updatedPost) => {
+      setIsPublic(updatedPost.is_shared);
+      // 캐시 업데이트
+      queryClient.setQueryData(['diary', 'detail', id.toString()], updatedPost);
+      // 목록 데이터도 업데이트
+      queryClient.invalidateQueries({ queryKey: ['diary'] });
+    },
+    onError: (error) => {
+      // 실패시 상태 롤백
+      setIsPublic(isShared);
+      console.error('Failed to toggle visibility:', error);
+      // 에러 처리 (예: 토스트 메시지)
+    },
+  });
+
+  const handleSwitchChange = () => {
+    toggleVisibility();
+  };
 
   return (
     <WorryWrapper>
       <WorryHeader>
         <p>나의 고민</p>
         <SwitchWrapper>
-          <span>{isPublic ? '공개' : '비공개'}</span>
-          <Switch checked={isPublic} onChange={() => setIsPublic(!isPublic)} />
+          <motion.span
+            initial={false}
+            animate={{ opacity: [0.5, 1] }}
+            transition={{ duration: 0.2 }}
+          >
+            {isPublic ? '공개' : '비공개'}
+          </motion.span>
+          <motion.div
+            variants={switchVariants}
+            animate={isPublic ? 'public' : 'private'}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            <Switch checked={isPublic} onChange={handleSwitchChange} />
+          </motion.div>
         </SwitchWrapper>
       </WorryHeader>
-      <WorryContent>
-        요즘말야~ 참 고민이 많아~ 어떻게 해야 할지 모르겠나봐~~ 흠흠~
+      <WorryContent
+        as={motion.div}
+        $isSolved={isSolved}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isSolved ? 0.7 : 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {content}
       </WorryContent>
     </WorryWrapper>
   );
@@ -46,12 +118,16 @@ const SwitchWrapper = styled.div`
   }
 `;
 
-const WorryContent = styled.div`
+const WorryContent = styled.div<{ $isSolved: boolean }>`
   width: 100%;
   padding: 20px;
   border-radius: 15px;
   background-color: ${({ theme }) => theme.colors.brand_bg};
   border: 3px solid ${({ theme }) => theme.colors.diary_100};
+  opacity: ${({ $isSolved }) => ($isSolved ? 0.7 : 1)};
+  word-break: break-all;
+  line-height: 1.6;
+  white-space: pre-wrap;
 `;
 
 export default DiaryMyWorry;

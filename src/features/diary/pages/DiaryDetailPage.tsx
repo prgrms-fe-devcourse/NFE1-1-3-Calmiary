@@ -4,20 +4,51 @@ import {
   DiaryDetailEmojiAndDate,
   DiaryMyWorry,
 } from '../components';
-import { useParams } from 'react-router-dom';
 import DiaryTitle from '../components/DiaryTitle';
+import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '../../../network/axiosInstance';
+import { Post } from './DiaryMainPage';
+import { useParams } from 'react-router-dom';
+
+export const getPostDetail = async (postId: number) => {
+  const { data } = await axiosInstance.get<Post>(`/diary/post/${postId}`);
+  return data;
+};
 
 function DiaryDetailPage() {
   const { id } = useParams();
 
-  console.log(id);
+  const { data: post, isLoading } = useQuery({
+    queryKey: ['diary', 'detail', id],
+    queryFn: () => getPostDetail(Number(id)),
+    enabled: !!id,
+  });
 
   return (
     <DiaryDetailWrapper>
-      <DiaryTitle showInfo={true} />
-      <DiaryDetailEmojiAndDate />
-      <DiaryMyWorry />
-      <DiaryCalminaryAnswer />
+      <FixedHeader>
+        <DiaryTitle showInfo={true} />
+        {!isLoading && post && (
+          <DiaryDetailEmojiAndDate
+            emotionType={post.emotion_type}
+            createdAt={post.created_at}
+          />
+        )}
+      </FixedHeader>
+
+      <ScrollContent>
+        {!isLoading && post && (
+          <>
+            <DiaryMyWorry
+              id={post.id}
+              content={post.content}
+              isShared={post.is_shared}
+              isSolved={post.is_solved}
+            />
+            <DiaryCalminaryAnswer aiContent={post.ai_content} />
+          </>
+        )}
+      </ScrollContent>
     </DiaryDetailWrapper>
   );
 }
@@ -30,8 +61,32 @@ const DiaryDetailWrapper = styled.section`
   padding: 60px 30px;
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
-  gap: 30px;
-  align-items: center;
   color: ${({ theme }) => theme.colors.write_white200};
+`;
+
+const FixedHeader = styled.div`
+  flex-shrink: 0; // 헤더 영역 고정
+`;
+
+const ScrollContent = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding-right: 8px; // 스크롤바 공간 확보
+
+  // 스크롤바 스타일링
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.diary_100};
+    border-radius: 4px;
+  }
 `;

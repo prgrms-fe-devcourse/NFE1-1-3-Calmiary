@@ -1,20 +1,35 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
+import { getEmojiType } from './DiaryEmoji';
 
-const DiaryDetailEmojiAndDate = () => {
+interface DiaryDetailEmojiAndDatePropTypes {
+  emotionType: string;
+  createdAt: string;
+}
+
+const DiaryDetailEmojiAndDate = ({
+  emotionType,
+  createdAt,
+}: DiaryDetailEmojiAndDatePropTypes) => {
+  const formattedDate = new Date(createdAt).toLocaleDateString('ko-KR', {
+    year: '2-digit',
+    month: 'long',
+    day: 'numeric',
+  });
+
   return (
-    <S_DiaryDetailEmojiAndDateWrapper>
+    <DiaryDetailEmojiAndDateWrapper>
       <div>
-        <Icon type="emoji_smail" size={55} />
+        <Icon type={getEmojiType(emotionType)} size={55} />
       </div>
-      <p>24년 10월 22일의 고민</p>
-    </S_DiaryDetailEmojiAndDateWrapper>
+      <p>{formattedDate}의 고민</p>
+    </DiaryDetailEmojiAndDateWrapper>
   );
 };
 
 export default DiaryDetailEmojiAndDate;
 
-const S_DiaryDetailEmojiAndDateWrapper = styled.div`
+const DiaryDetailEmojiAndDateWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
