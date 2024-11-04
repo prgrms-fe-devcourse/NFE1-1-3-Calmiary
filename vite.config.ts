@@ -14,5 +14,3 @@ export default defineConfig({
     },
   },
 });
-
-//'https://calmiary-be.org',

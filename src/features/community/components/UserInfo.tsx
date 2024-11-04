@@ -1,14 +1,26 @@
 import styled from 'styled-components';
-import { mockPosts } from './mockData';
+import { UserDataType } from '../types';
 
-const UserInfo = () => {
+const UserInfo = ({
+  user_info,
+  created_at,
+}: {
+  user_info?: UserDataType;
+  created_at?: Date;
+}) => {
   return (
     <Wrapper>
       <UserLayout>
-        <img src={mockPosts[0].author.profileUrl} alt="userImg" />
-        <p>{mockPosts[0].author.nickname}</p>
+        {user_info && (
+          <>
+            <img src={user_info.profile_image} alt="userImg" />
+            <p>{user_info.nickname}</p>
+          </>
+        )}
       </UserLayout>
-      <p>{mockPosts[0].date}</p>
+      {created_at && (
+        <p>{created_at.toString().split('T')[0].replace(/-/g, '/')}</p>
+      )}
     </Wrapper>
   );
 };

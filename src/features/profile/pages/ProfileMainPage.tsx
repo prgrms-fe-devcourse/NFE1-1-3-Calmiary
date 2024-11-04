@@ -16,8 +16,12 @@ export default function ProfileMainPage() {
             <Link to="/userProfile">
               <ProfileButton>회원 정보 관리</ProfileButton>
             </Link>
-            <ProfileButton>공유한 고민</ProfileButton>
-            <ProfileButton>좋아요 한 고민</ProfileButton>
+            <Link to="/sharePost">
+              <ProfileButton>공유한 고민</ProfileButton>
+            </Link>
+            <Link to="/likePost">
+              <ProfileButton>좋아요 한 고민</ProfileButton>
+            </Link>
           </ButtonArea>
 
           <ProfileButton color="#A594F9">로그아웃</ProfileButton>
@@ -32,11 +36,11 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 390px;
+  max-width: 430px;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   margin: 0 auto;
-  background-color: #181625;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
   gap: 3rem;
 `;
 
@@ -52,7 +56,7 @@ const MainArea = styled.div`
 `;
 
 const TextArea = styled.div`
-  color: #ffffff;
+  color: ${({ theme }) => theme.colors.write_white200};
 `;
 
 const ImageArea = styled.div`

@@ -6,7 +6,7 @@ import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import CommunityPage from './features/community/CommunityPage.tsx';
 import WritingPage from './features/writing/WritingPage.tsx';
-import DetailCommunityPage from './features/detailCommunity/DetailCommunityPage.tsx';
+import DetailCommunityPage from './features/community/pages/DetailCommunityPage.tsx';
 
 import ProfileMainPage from './features/profile/pages/ProfileMainPage.tsx';
 import ProfileUserPage from './features/profile/pages/ProfileUserPage.tsx';
@@ -16,6 +16,7 @@ import SignUpPage from './features/home/pages/SignUpPage.tsx';
 import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import DiaryMainPage from './features/diary/pages/DiaryMainPage.tsx';
 import DiaryDetailPage from './features/diary/pages/DiaryDetailPage.tsx';
+import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
   {
     path: '/likePost',
     element: <ProfileLikePage />,
+  },
+  {
+    path: '/sharePost',
+    element: <ProfileSharePage />,
   },
   { path: '/writing', element: <WritingPage /> },
   {
@@ -80,7 +85,7 @@ const MobileWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 430px;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
   margin: auto;
   position: relative;
   -ms-overflow-style: none;

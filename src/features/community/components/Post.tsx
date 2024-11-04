@@ -1,12 +1,20 @@
 import styled from 'styled-components';
-import { Content, PostReaction, UserInfo } from '../components';
+import { PostContent, PostReaction, UserInfo } from './index';
+import { PostTypes } from '../types';
 
-const Post = () => {
+const Post = (props: Partial<PostTypes>) => {
   return (
     <Wrapper>
-      <UserInfo />
-      <Content />
-      <PostReaction />
+      {props.user_info && props.created_at ? (
+        <UserInfo user_info={props.user_info} created_at={props.created_at} />
+      ) : (
+        <p>Loading...</p>
+      )}
+      {props.content && <PostContent content={props.content} />}
+      <PostReaction
+        like_count={props.like_count}
+        comment_count={props.comment_count}
+      />
     </Wrapper>
   );
 };

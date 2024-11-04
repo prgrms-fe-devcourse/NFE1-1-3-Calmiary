@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { CommentsContent, WorryContent } from '../detailCommunity/components';
-import { Title } from '../../features/community/components';
+import { CommentsContent, WorryContent } from '../components';
+import { Title } from '../components';
 
 const DetailCommunityPage = () => {
   return (
