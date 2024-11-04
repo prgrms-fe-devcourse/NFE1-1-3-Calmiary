@@ -60,6 +60,7 @@ const NavWrapper = styled.nav`
   width: ${({ theme }) => theme.layout.max_width};
   padding: 0.4rem 3rem;
   background: ${({ theme }) => theme.colors.brand_bg};
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const WriteLayout = styled.button`
