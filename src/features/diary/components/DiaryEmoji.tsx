@@ -1,20 +1,9 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
-import { Post } from '../pages/DiaryMainPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Solve from '../../../assets/solve.svg';
-
-type EmojiUnionType =
-  | 'write_emotion_soso'
-  | 'write_emotion_cry'
-  | 'write_emotion_smile'
-  | 'write_emotion_scary'
-  | 'write_emotion_angry';
-
-interface DiaryEmojiProps {
-  posts?: Post[];
-}
+import { EmojiUnionType, DiaryEmojiPropTypes } from '../types/diaryTypes';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -55,7 +44,7 @@ export const getEmojiType = (emotionType: string): EmojiUnionType => {
   return emojiMap[lowerEmotionType] || emojiMap.DEFAULT;
 };
 
-function DiaryEmoji({ posts = [] }: DiaryEmojiProps) {
+function DiaryEmoji({ posts = [] }: DiaryEmojiPropTypes) {
   const navigate = useNavigate();
 
   const handleEmojiClick = (postId: number) => {

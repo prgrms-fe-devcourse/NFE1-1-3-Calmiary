@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
 import styled from 'styled-components';
-
-interface DiaryCalminaryAnswerPropTypes {
-  aiContent: string;
-}
+import { DiaryCalminaryAnswerPropTypes } from '../types/diaryTypes';
 
 function DiaryCalmiaryAnswer({ aiContent }: DiaryCalminaryAnswerPropTypes) {
   return (

@@ -5,31 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '../../home/hooks/useUser';
-import { axiosInstance } from '../../../network/axiosInstance';
-import { Post } from '../pages/DiaryMainPage';
 import { useState } from 'react';
+import { togglePostSolution } from '../api/diary';
+import {
+  ConfirmModalPropTypes,
+  DiaryDetailEmojiAndDatePropTypes,
+} from '../types/diaryTypes';
 
-interface DiaryDetailEmojiAndDatePropTypes {
-  id: number;
-  emotionType: string;
-  createdAt: string;
-  isSolved: boolean;
-}
-
-export const togglePostSolution = async (postId: number, userId: number) => {
-  const { data } = await axiosInstance.patch<Post>(
-    `/diary/post/${postId}/solve`,
-    { user_id: userId }
-  );
-  return data;
-};
-
-interface ConfirmModalProps {
-  onConfirm: () => void;
-  onCancel: () => void;
-}
-
-const ConfirmModal = ({ onConfirm, onCancel }: ConfirmModalProps) => {
+const ConfirmModal = ({ onConfirm, onCancel }: ConfirmModalPropTypes) => {
   return (
     <ModalOverlay
       initial={{ opacity: 0 }}

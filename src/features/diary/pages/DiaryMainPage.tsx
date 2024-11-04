@@ -3,45 +3,9 @@ import { DiaryEmoji, DiaryFilter, DiaryMonth } from '../components';
 import DiaryTitle from '../components/DiaryTitle';
 import { useState } from 'react';
 import { useUser } from '../../home/hooks/useUser';
-import { axiosInstance } from '../../../network/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-
-export type FilterType = '전체' | '공개' | '비공개';
-
-export interface Post {
-  id: number;
-  user_id: number;
-  emotion_type: string;
-  content: string;
-  ai_content: string;
-  created_at: string;
-  is_shared: boolean;
-  is_solved: boolean;
-}
-
-interface GetPostsParams {
-  user_id: number;
-  year?: number;
-  month?: number;
-  is_shared?: boolean;
-}
-
-export const getPosts = async ({
-  user_id,
-  year,
-  month,
-  is_shared,
-}: GetPostsParams) => {
-  const { data } = await axiosInstance.get<Post[]>('/diary/posts', {
-    params: {
-      user_id,
-      year,
-      month,
-      is_shared,
-    },
-  });
-  return data;
-};
+import { getPosts } from '../api/diary';
+import { FilterType } from '../types/diaryTypes';
 
 function DiaryMainPage() {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('전체');

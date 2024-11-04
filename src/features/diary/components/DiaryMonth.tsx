@@ -1,10 +1,6 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
-
-interface DiaryMonthPropTypes {
-  currentMonth: number;
-  onMonthChange: (month: number) => void;
-}
+import { DiaryMonthPropTypes } from '../types/diaryTypes';
 
 function DiaryMonth({ currentMonth, onMonthChange }: DiaryMonthPropTypes) {
   const handlePrevMonth = () => {

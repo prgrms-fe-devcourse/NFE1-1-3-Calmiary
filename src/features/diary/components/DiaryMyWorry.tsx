@@ -2,25 +2,10 @@ import styled from 'styled-components';
 import Switch from './Switch';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { axiosInstance } from '../../../network/axiosInstance';
-import { Post } from '../pages/DiaryMainPage';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useUser } from '../../home/hooks/useUser';
-
-interface DiaryMyWorryPropTypes {
-  id: number;
-  content: string;
-  isShared: boolean;
-  isSolved: boolean;
-}
-
-export const togglePostVisibility = async (postId: number, userId: number) => {
-  const { data } = await axiosInstance.patch<Post>(
-    `/diary/post/${postId}/visibility`,
-    { user_id: userId }
-  );
-  return data;
-};
+import { togglePostVisibility } from '../api/diary';
+import { DiaryMyWorryPropTypes } from '../types/diaryTypes';
 
 const switchVariants = {
   public: { x: 2 },
@@ -42,16 +27,12 @@ const DiaryMyWorry = ({
     mutationFn: () => togglePostVisibility(id, Number(userId)),
     onSuccess: (updatedPost) => {
       setIsPublic(updatedPost.is_shared);
-      // 캐시 업데이트
       queryClient.setQueryData(['diary', 'detail', id.toString()], updatedPost);
-      // 목록 데이터도 업데이트
       queryClient.invalidateQueries({ queryKey: ['diary'] });
     },
     onError: (error) => {
-      // 실패시 상태 롤백
       setIsPublic(isShared);
       console.error('Failed to toggle visibility:', error);
-      // 에러 처리 (예: 토스트 메시지)
     },
   });
 

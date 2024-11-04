@@ -1,11 +1,7 @@
 import styled from 'styled-components';
+import { SwitchPropTypes } from '../types/diaryTypes';
 
-interface SwitchProps {
-  checked: boolean;
-  onChange: () => void;
-}
-
-const Switch = ({ checked, onChange }: SwitchProps) => {
+const Switch = ({ checked, onChange }: SwitchPropTypes) => {
   return (
     <SwitchWrapper checked={checked} onClick={onChange}>
       <SwitchButton checked={checked} />

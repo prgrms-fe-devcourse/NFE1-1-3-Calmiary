@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import DiaryInfoToolTip from './DiaryInfoToolTip';
-
-interface DiaryTitlePropTypes {
-  showInfo?: boolean;
-}
+import { DiaryTitlePropTypes } from '../types/diaryTypes';
 
 const DiaryTitle = ({ showInfo = false }: DiaryTitlePropTypes) => {
   return (

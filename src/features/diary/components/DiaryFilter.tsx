@@ -1,12 +1,7 @@
 import styled from 'styled-components';
-import { FilterType } from '../pages/DiaryMainPage';
+import { DiaryFilterPropTypes, FilterType } from '../types/diaryTypes';
 
-interface DiaryFilterProps {
-  selectedFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
-}
-
-function DiaryFilter({ selectedFilter, onFilterChange }: DiaryFilterProps) {
+function DiaryFilter({ selectedFilter, onFilterChange }: DiaryFilterPropTypes) {
   const filters: FilterType[] = ['전체', '공개', '비공개'];
 
   return (

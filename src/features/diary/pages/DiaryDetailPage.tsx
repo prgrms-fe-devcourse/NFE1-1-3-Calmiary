@@ -6,14 +6,8 @@ import {
 } from '../components';
 import DiaryTitle from '../components/DiaryTitle';
 import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '../../../network/axiosInstance';
-import { Post } from './DiaryMainPage';
 import { useParams } from 'react-router-dom';
-
-export const getPostDetail = async (postId: number) => {
-  const { data } = await axiosInstance.get<Post>(`/diary/post/${postId}`);
-  return data;
-};
+import { getPostDetail } from '../api/diary';
 
 function DiaryDetailPage() {
   const { id } = useParams();
