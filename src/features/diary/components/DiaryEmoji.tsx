@@ -3,6 +3,7 @@ import { Icon } from '../../../components/ui/Icon';
 import { Post } from '../pages/DiaryMainPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import Solve from '../../../assets/solve.svg';
 
 type EmojiUnionType =
   | 'write_emotion_soso'
@@ -91,6 +92,7 @@ function DiaryEmoji({ posts = [] }: DiaryEmojiProps) {
               onClick={() => handleEmojiClick(post.id)}
             >
               <Icon type={getEmojiType(post.emotion_type)} size={55} />
+              {post.is_solved && <SolvedIcon src={Solve} />}
             </EmojiItem>
           ))}
         </EmojiGridWrapper>
@@ -129,6 +131,7 @@ const EmojiItem = styled(motion.div)`
   align-items: center;
   width: 70px;
   height: 70px;
+  position: relative;
 `;
 
 const EmptyState = styled(motion.div)`
@@ -144,4 +147,10 @@ const EmptyText = styled.p`
   color: ${({ theme }) => theme.colors.write_white200};
   font-size: 16px;
   opacity: 0.8;
+`;
+
+const SolvedIcon = styled.img`
+  position: absolute;
+  top: 5px;
+  right: 5px;
 `;
