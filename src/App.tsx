@@ -16,6 +16,7 @@ import SignUpPage from './features/home/pages/SignUpPage.tsx';
 import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import DiaryMainPage from './features/diary/pages/DiaryMainPage.tsx';
 import DiaryDetailPage from './features/diary/pages/DiaryDetailPage.tsx';
+import LandingPage from './features/landing/pages/LandingPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: '/diary/:id',
     element: <DiaryDetailPage />,
+  },
+  {
+    path: '/',
+    element: <LandingPage />,
   },
 ]);
 
