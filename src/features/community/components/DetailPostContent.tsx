@@ -47,8 +47,11 @@ const DetailPostContent = ({
 
       return { previousLikes: currentLikes };
     },
-    onError: () => {
-      queryClient.invalidateQueries({ queryKey: ['empathy'] });
+    onError: (error, variables, context) => {
+      if (context?.previousLikes !== undefined) {
+        setCurrentLikes(context.previousLikes);
+        setIsLiked(!isLiked);
+      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['empathy'] });
