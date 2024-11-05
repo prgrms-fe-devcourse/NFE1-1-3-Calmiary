@@ -17,6 +17,7 @@ export interface UserPostPropTypes {
   nickname: string;
   comments: number;
   profileImg: string;
+  id: number;
 }
 
 export interface FormValuesPropTypes {
