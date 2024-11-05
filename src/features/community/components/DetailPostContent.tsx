@@ -47,7 +47,7 @@ const DetailPostContent = ({
 
       return { previousLikes: currentLikes };
     },
-    onError: (error, variables, context) => {
+    onError: (_error, _variables, context) => {
       if (context?.previousLikes !== undefined) {
         setCurrentLikes(context.previousLikes);
         setIsLiked(!isLiked);
