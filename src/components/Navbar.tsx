@@ -29,7 +29,7 @@ const Navbar = () => {
       <Link to="/growth">
         <Icon type="nav_home" size={20} />
       </Link>
-      <Link to="/growth">
+      <Link to="/diary">
         <Icon type="nav_log" size={20} />
       </Link>
       <WriteLayout onClick={handleWritingClick}>

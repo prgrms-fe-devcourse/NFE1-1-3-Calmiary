@@ -23,10 +23,30 @@ export const useAuth = () => {
       // 토큰 저장 로직 유지
       Cookies.set('access_token', data.access_token, {
         expires: 1,
+        // secure: true,
         sameSite: 'strict',
         path: '/',
       });
-      // ... 다른 쿠키 설정들
+
+      Cookies.set('refresh_token', data.refresh_token, {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+
+      Cookies.set('user_id', data.user_id.toString(), {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
+      Cookies.set('nickname', data.nickname, {
+        expires: 7,
+        // secure: true,
+        sameSite: 'strict',
+        path: '/',
+      });
 
       navigate('/growth');
     },
