@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CommentsContent, UserInfo, WorryContent } from '../components';
+import { CommentsContent, WorryContent } from '../components';
 import { Title } from '../components';
 import axios from 'axios';
 import { DetailPostTypes } from '../types';
@@ -29,7 +29,7 @@ const DetailCommunityPage = () => {
       <WorryContent
         userInfo={{
           nickname: data?.nickname || '',
-          profile_image: data?.profile_image || '',
+          profileImage: data?.profileImage || '',
         }}
         content={data?.content}
         likesCount={data?.like_count}
