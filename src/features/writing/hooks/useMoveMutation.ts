@@ -17,7 +17,7 @@ const useMoveMutation = () => {
       await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
     },
     onSuccess: () => {
-      navigate(`/detail/community/${contentId}`);
+      navigate(`/community/post/${contentId}`);
       window.scrollTo(0, 0);
     },
     onError: () => {
