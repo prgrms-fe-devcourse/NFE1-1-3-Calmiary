@@ -48,7 +48,6 @@ const Navbar = () => {
 export default Navbar;
 
 const NavWrapper = styled.nav`
-  z-index: 1002;
   position: fixed;
   bottom: 0;
   left: 50%;
