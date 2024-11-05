@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import Navbar from './Navbar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const Layout = () => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
   return (
     <MobileWrapper>
       <Outlet />
-      <Navbar />
+      {!isLandingPage && <Navbar />}
     </MobileWrapper>
   );
 };

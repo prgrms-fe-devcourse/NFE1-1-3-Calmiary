@@ -17,11 +17,17 @@ import DiaryMainPage from './features/diary/pages/DiaryMainPage.tsx';
 import DiaryDetailPage from './features/diary/pages/DiaryDetailPage.tsx';
 import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
 import LandingPage from './features/landing/pages/LandingPage.tsx';
+import Layout from './components/Layout.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />,
+    element: (
+      <>
+        <LandingPage />
+        <Layout />
+      </>
+    ),
     children: [
       {
         path: '/profile',
