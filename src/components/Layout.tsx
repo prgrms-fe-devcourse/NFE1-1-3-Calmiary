@@ -5,9 +5,7 @@ import { Outlet } from 'react-router-dom';
 const Layout = () => {
   return (
     <MobileWrapper>
-      <main>
-        <Outlet />
-      </main>
+      <Outlet />
       <Navbar />
     </MobileWrapper>
   );
