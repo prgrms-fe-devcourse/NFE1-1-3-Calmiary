@@ -1,12 +1,22 @@
 import styled from 'styled-components';
-import { Content, PostReaction, UserInfo } from '../components';
+import { PostContent, PostReaction, UserInfo } from './index';
+import { PostProps } from '../types';
 
-const Post = () => {
+const Post = (postProps: PostProps) => {
+  const { onClick, ...props } = postProps;
+
   return (
-    <Wrapper>
-      <UserInfo />
-      <Content />
-      <PostReaction />
+    <Wrapper onClick={onClick}>
+      {props.user_info && props.created_at ? (
+        <UserInfo user_info={props.user_info} created_at={props.created_at} />
+      ) : (
+        <p>Loading...</p>
+      )}
+      {props.content && <PostContent content={props.content} />}
+      <PostReaction
+        like_count={props.like_count}
+        comment_count={props.comment_count}
+      />
     </Wrapper>
   );
 };
@@ -21,6 +31,7 @@ const Wrapper = styled.div`
   background-color: rgba(231, 225, 255, 0.4);
   margin-bottom: 36px;
   padding: 20px 26px;
+  cursor: pointer;
 `;
 
 export default Post;

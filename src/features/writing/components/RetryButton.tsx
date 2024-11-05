@@ -1,13 +1,10 @@
 import styled from 'styled-components';
 
-interface ContentPublicButtonPropTypes {
-  onClick: () => void;
-}
-const ContentPublicButton = ({ onClick }: ContentPublicButtonPropTypes) => {
-  return <Button onClick={onClick}>내 고민 공유하기</Button>;
+const RetryButton = () => {
+  return <Button onClick={() => location.reload()}>고민 다시 등록하기</Button>;
 };
 
-export default ContentPublicButton;
+export default RetryButton;
 
 const Button = styled.button`
   background: ${({ theme }) => theme.colors.write_purple100};
@@ -17,6 +14,7 @@ const Button = styled.button`
   padding: 1rem;
   width: 100%;
   margin: 1.5rem 0 0.5rem 0;
+
   font-size: 16px;
   font-weight: bold;
 `;

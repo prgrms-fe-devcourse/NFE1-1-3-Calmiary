@@ -48,6 +48,7 @@ const Input = styled.textarea`
   padding: 0 4rem 0 1rem;
   resize: none;
   overflow: visible;
+  font-size: 15px;
   &::-webkit-scrollbar {
     display: none;
   }

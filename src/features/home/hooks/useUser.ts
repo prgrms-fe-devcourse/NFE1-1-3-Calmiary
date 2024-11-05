@@ -24,5 +24,12 @@ export const useUser = () => {
     return token;
   };
 
-  return { getUserId, getAccessToken };
+  const logout = () => {
+    Cookies.remove('user_id');
+    Cookies.remove('nickname');
+    Cookies.remove('access_token');
+    Cookies.remove('refresh_token');
+  };
+
+  return { getUserId, getAccessToken, logout };
 };
