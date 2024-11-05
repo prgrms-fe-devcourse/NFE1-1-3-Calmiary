@@ -18,3 +18,20 @@ export interface UserPostPropTypes {
   comments: number;
   profileImg: string;
 }
+
+export interface FormValuesPropTypes {
+  nickname: string;
+  password: string;
+  passwordConfirm: string;
+}
+
+export interface UpdateProfileDataPropTypes {
+  userId: string;
+  nickname: string;
+  password: string;
+}
+
+export interface UpdateProfileOptionsPropTypes {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}

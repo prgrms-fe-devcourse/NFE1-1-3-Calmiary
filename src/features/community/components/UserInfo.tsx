@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { UserDataType } from '../types';
+import default_profile_image from '../../../assets/default_profile_image.svg';
 
 const UserInfo = ({
   user_info,
@@ -13,7 +14,10 @@ const UserInfo = ({
       <UserLayout>
         {user_info && (
           <>
-            <img src={user_info.profile_image} alt="userImg" />
+            <img
+              src={user_info.profile_image || default_profile_image}
+              alt="userImg"
+            />
             <p>{user_info.nickname}</p>
           </>
         )}

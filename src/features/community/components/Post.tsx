@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { PostContent, PostReaction, UserInfo } from './index';
-import { PostTypes } from '../types';
+import { PostProps } from '../types';
 
-const Post = (props: Partial<PostTypes>) => {
+const Post = (postProps: PostProps) => {
+  const { onClick, ...props } = postProps;
+
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       {props.user_info && props.created_at ? (
         <UserInfo user_info={props.user_info} created_at={props.created_at} />
       ) : (
@@ -29,6 +31,7 @@ const Wrapper = styled.div`
   background-color: rgba(231, 225, 255, 0.4);
   margin-bottom: 36px;
   padding: 20px 26px;
+  cursor: pointer;
 `;
 
 export default Post;
