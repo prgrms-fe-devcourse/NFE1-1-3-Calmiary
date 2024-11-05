@@ -47,18 +47,18 @@ const router = createBrowserRouter([
         element: <DetailCommunityPage />,
       },
       {
-        path: '/login',
-        element: <LoginPage />,
-      },
-      {
-        path: '/signup',
-        element: <SignUpPage />,
-      },
-      {
         path: '/growth',
         element: <GrowthFactorPage />,
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignUpPage />,
   },
 ]);
 
