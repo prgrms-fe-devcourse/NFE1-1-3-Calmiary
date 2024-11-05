@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { LoginFormPropTypes, LoginData } from '../types/homeTypes';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = ({ onSubmit }: LoginFormPropTypes) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -51,7 +53,7 @@ const LoginForm = ({ onSubmit }: LoginFormPropTypes) => {
 
         <LoginButton type="submit">로그인</LoginButton>
         <div style={{ textAlign: 'right' }}>
-          <SignUpText>회원가입</SignUpText>
+          <SignUpText onClick={() => navigate('/signup')}>회원가입</SignUpText>
         </div>
       </form>
     </LoginLayout>

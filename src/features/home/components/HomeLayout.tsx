@@ -19,7 +19,6 @@ const HomeLayout = ({ children }: HomePropTypes) => {
 export default HomeLayout;
 
 const HomeContainer = styled.div`
-  width: 100%;
   height: 100vh;
   position: relative;
 `;

@@ -4,9 +4,10 @@ import HomeLogo from '../components/HomeLogo';
 import SignUpForm from '../components/SignUpForm';
 import { SignUpData } from '../types/homeTypes';
 import { useAuth } from '../hooks/useAuth';
+import ErrorModal from '../../../components/ErrorModal';
 
 const SignUpPage = () => {
-  const { signUpMutation } = useAuth();
+  const { signUpMutation, errorModal, handleCloseModal } = useAuth();
 
   const handleSubmit = (signUpData: SignUpData) => {
     if (
@@ -28,6 +29,12 @@ const SignUpPage = () => {
           isLoading={signUpMutation.isPending}
         />
       </HomeLayout>
+      <ErrorModal
+        isOpen={errorModal.isOpen}
+        message={errorModal.message}
+        onClose={handleCloseModal}
+        buttonText={signUpMutation.isSuccess ? '로그인하러 가기' : '확인'}
+      />
     </SignUpWrapper>
   );
 };
@@ -36,7 +43,7 @@ const SignUpWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 390px;
+  max-width: 430px;
   width: 100%;
   height: 100%;
   margin: 0 auto;
