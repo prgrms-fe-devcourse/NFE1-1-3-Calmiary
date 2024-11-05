@@ -1,12 +1,36 @@
 import styled from 'styled-components';
 import ProfileButton from './ProfileButton';
 import { Icon } from '../../../components/ui/Icon';
+import { useWithdrawMutation } from '../hook/useWithdrawMutation';
+import { useUser } from '../../home/hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 interface ProfileModalPropTypes {
   onClose: () => void;
 }
 
 export default function ProfileModal({ onClose }: ProfileModalPropTypes) {
+  const { getUserId } = useUser();
+  const navigate = useNavigate();
+  const userId = getUserId().user_id;
+
+  const {
+    mutate: withdraw,
+    isPending,
+    error,
+  } = useWithdrawMutation({
+    onSuccess: () => {
+      navigate('/login');
+    },
+    onError: (error) => {
+      alert(`오류 발생: ${error.message}`); // 또는 toast 사용
+    },
+  });
+
+  const handleWithdraw = () => {
+    withdraw(userId);
+  };
+
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
@@ -22,8 +46,22 @@ export default function ProfileModal({ onClose }: ProfileModalPropTypes) {
         </div>
         <ModalContent>내용을 확인하셨다면 버튼을 누르세요</ModalContent>
 
-        <ProfileButton width="180px" height="52px" color="#65558F">
-          확인하기
+        {error && (
+          <ErrorMessage>
+            {error instanceof Error
+              ? error.message
+              : '처리 중 문제가 발생했습니다.'}
+          </ErrorMessage>
+        )}
+
+        <ProfileButton
+          width="180px"
+          height="52px"
+          color="#65558F"
+          onClick={handleWithdraw}
+          disabled={isPending}
+        >
+          {isPending ? '처리 중...' : '확인하기'}
         </ProfileButton>
       </ModalContainer>
     </ModalOverlay>
@@ -72,5 +110,15 @@ const ModalHeader = styled.div`
 const ModalContent = styled.p`
   font-size: 1rem;
   color: #181a20;
+  text-align: center;
+
+  span {
+    color: red;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 10px;
   text-align: center;
 `;

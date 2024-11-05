@@ -1,14 +1,38 @@
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../home/hooks/useUser';
 import { useUserData } from '../hook/useUserData';
+import axios from 'axios';
 
 export default function ProfileMainPage() {
-  const { getUserId } = useUser();
+  const { getUserId, logout, getAccessToken } = useUser();
+  const navigate = useNavigate();
   const userId = getUserId().user_id;
 
   const { data: userData } = useUserData(userId);
+
+  const handleLogout = async () => {
+    try {
+      const token = getAccessToken();
+
+      await axios.post(
+        '/api/auth/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      logout(); // 쿠키 제거
+      navigate('/login');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
 
   return (
     <>
@@ -33,7 +57,9 @@ export default function ProfileMainPage() {
             </Link>
           </ButtonArea>
 
-          <ProfileButton color="#A594F9">로그아웃</ProfileButton>
+          <ProfileButton color="#A594F9" onClick={handleLogout}>
+            로그아웃
+          </ProfileButton>
         </MainArea>
       </ProfileContainer>
     </>
