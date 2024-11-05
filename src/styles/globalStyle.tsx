@@ -5,6 +5,7 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
   *, *::before, *::after {
     box-sizing: border-box;
+    font-family: "Pretendard Variable", Pretendard, sans-serif;
   }
   
   body, header {
