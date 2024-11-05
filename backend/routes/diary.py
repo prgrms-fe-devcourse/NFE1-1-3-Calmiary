@@ -6,7 +6,7 @@ from datetime import datetime
 from pydantic import BaseModel
 from database import get_db
 from model import models
-from model.schemas import PostResponse
+from model.schemas import PostResponse, S_PostResponse
 
 router = APIRouter(prefix="/diary", tags=["Diary"])
 
@@ -28,7 +28,7 @@ class PostFilter(BaseModel):
 
 @router.get(
     "/posts",
-    response_model=List[PostResponse],
+    response_model=List[S_PostResponse],
     summary="사용자의 월별 걱정거리 조회",
     description="""
     특정 사용자의 월별 걱정거리를 필터링하여 조회합니다.
@@ -124,7 +124,7 @@ def get_monthly_posts(
     return posts
 
 @router.get("/post/{post_id}",
-    response_model=PostResponse,
+    response_model=S_PostResponse,
     summary="특정 걱정거리 상세 조회",
     description="특정 게시글의 상세 내용과 AI 답변을 조회합니다.",
     response_description="걱정거리 상세 정보"
@@ -153,7 +153,7 @@ class VisibilityUpdate(BaseModel):
 
 @router.patch(
     "/post/{post_id}/visibility",
-    response_model=PostResponse,
+    response_model=S_PostResponse,
     summary="게시글 공개 상태 변경",
     description="""
         게시글의 공개/비공개 상태를 토글합니다.
@@ -258,7 +258,7 @@ class SolutionUpdate(BaseModel):
 
 @router.patch(
     "/post/{post_id}/solve",
-    response_model=PostResponse,
+    response_model=S_PostResponse,
     summary="걱정거리 해결 상태 변경",
     description="""
     걱정거리의 해결/미해결 상태를 토글합니다.

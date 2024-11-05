@@ -1,40 +1,44 @@
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
+import { DiaryCalminaryAnswerPropTypes } from '../types/diaryTypes';
 
-function DiaryCalminaryAnswer() {
+function DiaryCalmiaryAnswer({ aiContent }: DiaryCalminaryAnswerPropTypes) {
   return (
-    <S_DiaryMyWorryWrapper>
-      <S_AnswerContainer>
-        <p>Calminary의 답변</p>
-      </S_AnswerContainer>
-      <S_MyWorryText>
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-        고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용 고민 내용
-      </S_MyWorryText>
-    </S_DiaryMyWorryWrapper>
+    <DiaryMyWorryWrapper>
+      <AnswerContainer>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          Calmiary의 답변
+        </motion.p>
+      </AnswerContainer>
+      <MyWorryText
+        as={motion.div}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {aiContent}
+      </MyWorryText>
+    </DiaryMyWorryWrapper>
   );
 }
 
-export default DiaryCalminaryAnswer;
+export default DiaryCalmiaryAnswer;
 
-const S_DiaryMyWorryWrapper = styled.div`
+const DiaryMyWorryWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 100%;
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 16px;
 `;
 
-const S_AnswerContainer = styled.div`
+const AnswerContainer = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -51,11 +55,12 @@ const S_AnswerContainer = styled.div`
   }
 `;
 
-const S_MyWorryText = styled.div`
+const MyWorryText = styled.div`
   width: 100%;
-  min-height: 100%;
   padding: 20px;
   border-radius: 15px;
   background-color: ${({ theme }) => theme.colors.brand_bg};
   border: 3px solid ${({ theme }) => theme.colors.diary_100};
+  line-height: 1.6;
+  white-space: pre-wrap;
 `;

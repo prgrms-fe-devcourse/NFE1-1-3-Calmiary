@@ -41,6 +41,20 @@ class SharedPostsFilter(BaseModel):
 class CommentResponse(BaseModel):
     comment_id: int
     user_id: int
+    nickname: str
+    content: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+        arbitrary_types_allowed = True
+        json_encoders = {
+            datetime: lambda v: v.isoformat()
+        }
+
+class S_CommentResponse(BaseModel):
+    comment_id: int
+    user_id: int
     content: str
     created_at: datetime
 
@@ -54,6 +68,8 @@ class CommentResponse(BaseModel):
 class PostDetailResponse(BaseModel):
     id: int
     user_id: int
+    nickname: str
+    profile_image: str
     emotion_type: str
     content: str
     ai_content: str
@@ -330,6 +346,7 @@ async def get_shared_posts(
                             {
                                 "comment_id": 1,
                                 "user_id": 2,
+                                "nickname": "calmiary",
                                 "content": "힘내세요!",
                                 "created_at": "2024-03-21T12:30:00"
                             }
@@ -379,6 +396,11 @@ def get_post_detail(
             status_code=404,
             detail="비공개 게시글입니다."
         )
+    
+    post_author = db.query(models.User).filter(models.User.user_id == post.user_id).first()
+
+    author_nickname = post_author.nickname if post_author and post_author.nickname else ""
+    author_profile_image = post_author.profile_image if post_author and post_author.profile_image else ""
 
     # 댓글 목록 조회
     comments = (
@@ -388,10 +410,28 @@ def get_post_detail(
         .all()
     )
 
+
+    formatted_comments = []
+    for comment in comments:
+        # 각 댓글 작성자의 정보를 개별적으로 조회
+        user = db.query(models.User).filter(models.User.user_id == comment.user_id).first()
+        nickname = user.nickname if user else ""
+        
+        formatted_comments.append({
+            "comment_id": comment.comment_id,
+            "user_id": comment.user_id,
+            "nickname": nickname,
+            "content": comment.content,
+            "created_at": comment.created_at
+        })
+
+
     # 응답 데이터 구성
     return {
         "id": post.id,
         "user_id": post.user_id,
+        "nickname": author_nickname,
+        "profile_image": author_profile_image,
         "emotion_type": post.emotion_type,
         "content": post.content,
         "ai_content": post.ai_content,
@@ -400,7 +440,7 @@ def get_post_detail(
         "is_solved": post.is_solved,
         "like_count": like_count,
         "comment_count": comment_count,
-        "comments": comments
+        "comments": formatted_comments
     }
 
 @router.patch(
@@ -541,7 +581,7 @@ def toggle_like(
 
 @router.post(
     "/post/{post_id}/comment",
-    response_model=CommentResponse,
+    response_model=S_CommentResponse,
     summary="댓글 작성",
     description="""
     게시글에 새로운 댓글을 작성합니다.

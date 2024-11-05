@@ -4,7 +4,7 @@ from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from utils.security import SecurityUtils
-from model.schemas import CommentResponse, LikeCreate, LikeResponse, PostResponse, UserResponse
+from model.schemas import CommentResponse, LikeCreate, LikeResponse, PostResponse, S_PostResponse, UserResponse
 from model import models
 from database import engine, get_db
 from typing import Optional, Dict, Any
@@ -71,15 +71,13 @@ load_dotenv()
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
-
 class PostCreate(BaseModel):
     user_id: int
     emotion_type: str
     content: str
 
-
 @app.post("/post/write/",
-    response_model=PostResponse,
+    response_model=S_PostResponse,
     summary="새로운 포스트 작성",
     description="""
     사용자의 걱정거리를 포스트로 작성하고 AI의 응답을 받습니다.
