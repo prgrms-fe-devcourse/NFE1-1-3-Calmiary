@@ -7,18 +7,24 @@ const CommentsContent = ({
   postId,
   userId,
   refetchComments,
+  isLoading,
 }: CommentsContentPropTypes) => {
   return (
     <Wrapper>
       <h2>댓글</h2>
-      {comment &&
+      {isLoading ? (
+        <Comments isLoading={true} nickname="" />
+      ) : (
+        comment &&
         comment.map((comment) => (
           <Comments
             key={comment.comment_id}
             nickname={comment.nickname}
             content={comment.content}
+            isLoading={false}
           />
-        ))}
+        ))
+      )}
       <CommentInput
         postId={postId}
         userId={userId}
