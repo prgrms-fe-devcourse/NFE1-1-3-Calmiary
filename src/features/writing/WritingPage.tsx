@@ -16,7 +16,7 @@ import Modal from './components/Modal';
 import useScrollFollow from './hooks/useScrollFollow';
 import Toast from '../../components/Toast';
 import useToastStore from '../../stores/toastStore';
-import Navbar from '../../components/Navbar';
+
 const WritingPage = () => {
   // 클라이언트 정보 가져오기
   const {

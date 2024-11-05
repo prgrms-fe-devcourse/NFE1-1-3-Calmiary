@@ -18,6 +18,7 @@ const MobileWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  min-width: 340px;
   max-width: 430px;
   min-height: calc(var(--vh, 1vh) * 100);
   margin: auto;

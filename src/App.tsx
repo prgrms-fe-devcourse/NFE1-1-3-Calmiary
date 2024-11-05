@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import useScreenSize from './hook/useScreenSize.ts';
-import styled from 'styled-components';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
