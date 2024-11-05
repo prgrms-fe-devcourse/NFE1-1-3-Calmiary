@@ -4,7 +4,7 @@ import { BeatLoader } from 'react-spinners';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SortKey, PostTypes } from './types';
 
 const CommunityPage = () => {
@@ -42,7 +42,7 @@ const CommunityPage = () => {
     },
     initialPageParam: 1,
   });
-
+  const navigate = useNavigate();
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
   const handleObserver = useCallback(
@@ -79,7 +79,13 @@ const CommunityPage = () => {
         <DropDown isSorted={isSorted} setIsSorted={handleSortChange} />
       </DropDownLayout>
       {data?.pages.flatMap((page) =>
-        page.map((post: PostTypes) => <Post key={post.id} {...post} />)
+        page.map((post: PostTypes) => (
+          <Post
+            key={post.id}
+            {...post}
+            onClick={() => navigate(`/community/post/${post.id}`)}
+          />
+        ))
       )}
       {isFetchingNextPage && (
         <LoaderWrapper>
