@@ -16,18 +16,13 @@ import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import DiaryMainPage from './features/diary/pages/DiaryMainPage.tsx';
 import DiaryDetailPage from './features/diary/pages/DiaryDetailPage.tsx';
 import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
-import LandingPage from './features/landing/pages/LandingPage.tsx';
 import Layout from './components/Layout.tsx';
+import styled from 'styled-components';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <LandingPage />
-        <Layout />
-      </>
-    ),
+    element: <Layout />,
     children: [
       {
         path: '/profile',
@@ -83,10 +78,30 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <MobileWrapper>
+        <RouterProvider router={router} />
+      </MobileWrapper>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
 
 export default App;
+
+const MobileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 340px;
+  max-width: 430px;
+  min-height: calc(var(--vh, 1vh) * 100);
+  margin: auto;
+  position: relative;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
