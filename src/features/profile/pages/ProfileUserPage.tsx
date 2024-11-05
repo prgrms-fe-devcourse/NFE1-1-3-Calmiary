@@ -287,7 +287,7 @@ const InputArea = styled.form`
   }
 
   span {
-    color: ${({ theme }) => theme.colors.write_white200};
+    color: red;
     font-size: 12px;
   }
 `;
