@@ -29,96 +29,25 @@ class PostFilter(BaseModel):
 @router.get(
     "/posts",
     response_model=List[S_PostResponse],
-    summary="사용자의 월별 걱정거리 조회",
-    description="""
-    특정 사용자의 월별 걱정거리를 필터링하여 조회합니다.
-    
-    **필터링 옵션:**
-    1. 기간 필터
-       - year: 연도 (예: 2024)
-       - month: 월 (1-12)
-    
-    2. 공개 여부 필터
-       - is_shared: 공개/비공개 여부
-         - true: 공개된 게시글만 조회
-         - false: 비공개 게시글만 조회
-         - null: 모든 게시글 조회
-    
-    **응답 데이터 정렬:**
-    - 작성일시 기준 내림차순 (최신순)
-    
-    **권한:**
-    - 본인의 게시글만 조회 가능
-    - 다른 사용자의 게시글 조회 시 403 에러 발생
-    
-    **사용 예시:**
-    ```bash
-    # 2024년 3월의 모든 게시글 조회
-    curl "http://api.example.com/diary/posts" \\
-         -H "Content-Type: application/json" \\
-         -d '{"user_id": 1, "year": 2024, "month": 3}'
-    
-    # 공개된 게시글만 조회
-    curl "http://api.example.com/diary/posts" \\
-         -H "Content-Type: application/json" \\
-         -d '{"user_id": 1, "is_shared": true}'
-    ```
-    
-    **주의사항:**
-    1. year와 month는 세트로 제공해야 합니다.
-    2. 날짜 필터 미지정 시 전체 기간 조회
-    3. 검색 결과는 최신순으로 정렬됩니다.
-    """,
-    responses={
-        200: {
-            "description": "조회 성공",
-            "content": {
-                "application/json": {
-                    "example": [{
-                        "id": 1,
-                        "user_id": 1,
-                        "emotion_type": "ANXIETY",
-                        "content": "발표가 걱정됩니다.",
-                        "ai_content": "발표에 대한 걱정...",
-                        "created_at": "2024-03-21T12:00:00",
-                        "is_shared": True,
-                        "is_solved": False
-                    }]
-                }
-            }
-        },
-        403: {
-            "description": "권한 없음",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "다른 사용자의 게시글을 조회할 수 없습니다."}
-                }
-            }
-        },
-        422: {
-            "description": "유효하지 않은 필터 조건",
-            "content": {
-                "application/json": {
-                    "example": {"detail": "year와 month는 함께 제공되어야 합니다."}
-                }
-            }
-        }
-    }
+    summary="사용자의 월별 걱정거리 조회"
 )
 def get_monthly_posts(
-    filter_data: PostFilter,
+    user_id: int,
+    year: Optional[int] = None,
+    month: Optional[int] = None,
+    is_shared: Optional[bool] = None,
     db: Session = Depends(get_db)
 ):
-    query = db.query(models.Post).filter(models.Post.user_id == filter_data.user_id)
+    query = db.query(models.Post).filter(models.Post.user_id == user_id)
     
-    if filter_data.year is not None and filter_data.month is not None:
+    if year is not None and month is not None:
         query = query.filter(
-            extract('year', models.Post.created_at) == filter_data.year,
-            extract('month', models.Post.created_at) == filter_data.month
+            extract('year', models.Post.created_at) == year,
+            extract('month', models.Post.created_at) == month
         )
     
-    if filter_data.is_shared is not None:
-        query = query.filter(models.Post.is_shared == filter_data.is_shared)
+    if is_shared is not None:
+        query = query.filter(models.Post.is_shared == is_shared)
     
     posts = query.order_by(models.Post.created_at.desc()).all()
     return posts

@@ -114,7 +114,7 @@ function LandingPage() {
             onDrag={handleSwipe}
             onDragEnd={handleDragEnd}
           >
-            <InfoTitle>Calmiary와 함께하는 마음 기록</InfoTitle>
+            <InfoTitle>Calmiary와 함께하는 고민 기록</InfoTitle>
             <InfoList>
               {infoItems.map((item, index) => (
                 <InfoItem
