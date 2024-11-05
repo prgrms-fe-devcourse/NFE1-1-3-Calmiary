@@ -52,6 +52,7 @@ const Wrapper = styled.div<{ $isLoading?: boolean }>`
   .comment {
     font-size: 16px;
     font-weight: 600;
+    line-height: 1.2;
   }
 `;
 
