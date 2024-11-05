@@ -1,13 +1,29 @@
 import styled from 'styled-components';
-import { mockPosts } from '../../../features/community/components/mockData';
 import { Comments, CommentInput } from './index';
+import { CommentsContentPropTypes } from '../types';
 
-const CommentsContent = () => {
+const CommentsContent = ({
+  comment,
+  postId,
+  userId,
+  refetchComments,
+}: CommentsContentPropTypes) => {
   return (
     <Wrapper>
       <h2>댓글</h2>
-      {mockPosts[0].comment && <Comments />}
-      <CommentInput />
+      {comment &&
+        comment.map((comment) => (
+          <Comments
+            key={comment.comment_id}
+            nickname={comment.nickname}
+            content={comment.content}
+          />
+        ))}
+      <CommentInput
+        postId={postId}
+        userId={userId}
+        refetchComments={refetchComments}
+      />
     </Wrapper>
   );
 };

@@ -1,16 +1,49 @@
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../../home/hooks/useUser';
+import { useUserData } from '../hook/useUserData';
+import axios from 'axios';
 
 export default function ProfileMainPage() {
+  const { getUserId, logout, getAccessToken } = useUser();
+  const navigate = useNavigate();
+  const userId = getUserId().user_id;
+
+  const { data: userData } = useUserData(userId);
+
+  const handleLogout = async () => {
+    try {
+      const token = getAccessToken();
+
+      await axios.post(
+        '/api/auth/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      logout(); // 쿠키 제거
+      navigate('/login');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
+
   return (
     <>
       <ProfileContainer>
         <TextArea>
-          <span>안녕하세요, XXX님</span>
+          <span>안녕하세요, {userData?.nickname}님</span>
         </TextArea>
         <MainArea>
-          <ImageArea></ImageArea>
+          <ImageArea>
+            <img src={userData?.profile_image} alt="프로필 이미지" />
+          </ImageArea>
 
           <ButtonArea>
             <Link to="/userProfile">
@@ -24,7 +57,9 @@ export default function ProfileMainPage() {
             </Link>
           </ButtonArea>
 
-          <ProfileButton color="#A594F9">로그아웃</ProfileButton>
+          <ProfileButton color="#A594F9" onClick={handleLogout}>
+            로그아웃
+          </ProfileButton>
         </MainArea>
       </ProfileContainer>
     </>
@@ -62,9 +97,14 @@ const TextArea = styled.div`
 const ImageArea = styled.div`
   width: 9.375rem;
   height: 9.375rem;
-  border-radius: 50%;
-  background-color: #d9d9d9;
   margin-top: 1rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 `;
 
 const ButtonArea = styled.div`
