@@ -5,13 +5,16 @@ import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PostPropTypes, SortOption } from '../types/profileTypes';
 import ProfilePost from '../components/ProfilePost';
+import { useUser } from '../../home/hooks/useUser';
 
 const fetchSharedPosts = async ({
   pageParam = 1,
   sortOption,
+  userId,
 }: {
   pageParam?: number;
   sortOption: SortOption;
+  userId: string;
 }) => {
   const sortBy =
     sortOption === '최신순'
@@ -20,7 +23,7 @@ const fetchSharedPosts = async ({
         ? 'likes'
         : 'comments';
   const response = await axios.get(
-    `/api/profile/posts/shared/1?sort_by=${sortBy}&page=${pageParam}&limit=3`
+    `/api/profile/posts/shared/${userId}?sort_by=${sortBy}&page=${pageParam}&limit=3`
   );
   return {
     data: response.data,
@@ -29,6 +32,9 @@ const fetchSharedPosts = async ({
 };
 
 export default function ProfileSharePage() {
+  const { getUserId } = useUser();
+  const { user_id } = getUserId();
+
   const [sortOption, setSortOption] = useState<
     '최신순' | '좋아요순' | '오래된순'
   >('최신순');
@@ -36,9 +42,9 @@ export default function ProfileSharePage() {
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['sharedPosts', sortOption],
+      queryKey: ['sharedPosts', sortOption, user_id],
       queryFn: ({ pageParam = 1 }) =>
-        fetchSharedPosts({ pageParam, sortOption }),
+        fetchSharedPosts({ pageParam, sortOption, userId: user_id }),
       getNextPageParam: (lastPage) => lastPage?.nextPage,
       initialPageParam: 1,
     });
@@ -70,6 +76,10 @@ export default function ProfileSharePage() {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const hasNoPosts =
+    !isLoading && (!data?.pages[0]?.data || data.pages[0].data.length === 0);
+
   return (
     <>
       <ProfileContainer>
@@ -86,6 +96,11 @@ export default function ProfileSharePage() {
           />
         </DropdownArea>
         {isLoading && <p>Loading...</p>}
+        {hasNoPosts && (
+          <NoPostArea>
+            <p>공유한 포스터가 없습니다.</p>
+          </NoPostArea>
+        )}
         {data?.pages.map((page) =>
           page.data.map((post: PostPropTypes) => (
             <ProfilePost
@@ -131,4 +146,10 @@ const DropdownArea = styled.div`
 const TextArea = styled.div`
   padding-top: 3rem;
   color: ${({ theme }) => theme.colors.write_white200};
+`;
+
+const NoPostArea = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

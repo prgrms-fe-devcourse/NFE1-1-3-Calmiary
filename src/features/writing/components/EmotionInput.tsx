@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import EmotionIcon from './EmotionIcon';
-import { EmotionIconTypes, FormTypes } from '../types/formTypes';
+import { EMOTION_ICON_TYPE, FormTypes } from '../types/formTypes';
 import { UseFormRegister } from 'react-hook-form';
 
 interface EmotionInputPropTypes {
@@ -8,17 +8,9 @@ interface EmotionInputPropTypes {
 }
 
 const EmotionInput = ({ register }: EmotionInputPropTypes) => {
-  const ICON_TYPE: EmotionIconTypes[] = [
-    'write_emotion_soso',
-    'write_emotion_cry',
-    'write_emotion_smile',
-    'write_emotion_scary',
-    'write_emotion_angry',
-  ];
-
   return (
     <DivWrapper>
-      {ICON_TYPE.map((elem) => (
+      {EMOTION_ICON_TYPE.map((elem) => (
         <EmotionIcon key={elem} type={elem} register={register} />
       ))}
     </DivWrapper>

@@ -14,8 +14,11 @@ import useWritingResponseStore from '../../stores/writingResponseStore';
 import { useRef, useState } from 'react';
 import Modal from './components/Modal';
 import useScrollFollow from './hooks/useScrollFollow';
+import Toast from '../../components/Toast';
+import useToastStore from '../../stores/toastStore';
 
 const WritingPage = () => {
+  // 클라이언트 정보 가져오기
   const {
     isQuestionMode,
     isInputMode,
@@ -24,10 +27,14 @@ const WritingPage = () => {
     isErrorMode,
     isEndMode,
   } = useWritingModeStore((state) => state);
-  useChangeMode();
   const { AiContent } = useWritingResponseStore((state) => state);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isToastOpen } = useToastStore((state) => state);
 
+  // custom hook: mode 실시간 변경
+  useChangeMode();
+
+  // custom hook: 스크롤 이동
   const contentRef = useRef<HTMLDivElement>(null);
   useScrollFollow({
     contentRef,
@@ -95,6 +102,8 @@ const WritingPage = () => {
             contentSecond="비공개로 전환할 수 없습니다!"
           />
         )}
+
+        {isToastOpen && <Toast />}
       </WritingLayout>
     </WritingWrapper>
   );
@@ -109,6 +118,7 @@ const WritingWrapper = styled.div`
   background-repeat: no-repeat;
   background-size: contain;
   min-height: 100vh;
+  font-size: 15px;
 `;
 
 const WritingLayout = styled.div`
@@ -133,7 +143,7 @@ const InputContainer = styled.div`
   left: 50%;
   bottom: 5rem;
   transform: translate(-50%, 20px);
-  animation: ${fadeIn} 0.5s forwards;
+  animation: ${fadeIn} 0.5s ease forwards;
   opacity: 0;
 `;
 
@@ -149,7 +159,7 @@ const ButtonContainer = styled.div`
 const FadeIn = styled.div`
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeIn 0.5s forwards;
+  animation: fadeIn 0.5s ease forwards;
 
   @keyframes fadeIn {
     to {

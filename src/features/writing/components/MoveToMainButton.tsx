@@ -14,6 +14,8 @@ const Button = styled(Link)`
   border: none;
   padding: 1rem;
   width: 100%;
+  font-size: 16px;
+  font-weight: bold;
 
   text-decoration: none;
   display: block;
