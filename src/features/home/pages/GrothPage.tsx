@@ -23,7 +23,6 @@ const GrowthFactorPage = () => {
 
   return (
     <GrowthWrapper>
-      <Navbar />
       <GrowthLayout>
         <GrowthContainer>
           <StepBox>

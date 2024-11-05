@@ -15,44 +15,51 @@ import LoginPage from './features/home/pages/LoginPage.tsx';
 import SignUpPage from './features/home/pages/SignUpPage.tsx';
 import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
+import Layout from './components/Layout.tsx';
 
 const router = createBrowserRouter([
   {
-    path: '/profile',
-    element: <ProfileMainPage />,
-  },
-  {
-    path: '/userProfile',
-    element: <ProfileUserPage />,
-  },
-  {
-    path: '/likePost',
-    element: <ProfileLikePage />,
-  },
-  {
-    path: '/sharePost',
-    element: <ProfileSharePage />,
-  },
-  { path: '/writing', element: <WritingPage /> },
-  {
-    path: '/community',
-    element: <CommunityPage />,
-  },
-  {
-    path: '/detail/community/:id',
-    element: <DetailCommunityPage />,
-  },
-  {
-    path: '/login',
-    element: <LoginPage />,
-  },
-  {
-    path: '/signup',
-    element: <SignUpPage />,
-  },
-  {
-    path: '/growth',
-    element: <GrowthFactorPage />,
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/profile',
+        element: <ProfileMainPage />,
+      },
+      {
+        path: '/userProfile',
+        element: <ProfileUserPage />,
+      },
+      {
+        path: '/likePost',
+        element: <ProfileLikePage />,
+      },
+      {
+        path: '/sharePost',
+        element: <ProfileSharePage />,
+      },
+      { path: '/writing', element: <WritingPage /> },
+      {
+        path: '/community',
+        element: <CommunityPage />,
+      },
+      {
+        path: '/detail/community/:id',
+        element: <DetailCommunityPage />,
+      },
+      {
+        path: '/login',
+        element: <LoginPage />,
+      },
+      {
+        path: '/signup',
+        element: <SignUpPage />,
+      },
+      {
+        path: '/growth',
+        element: <GrowthFactorPage />,
+      },
+    ],
   },
 ]);
 
@@ -61,29 +68,10 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileWrapper>
-        <RouterProvider router={router} />
-      </MobileWrapper>
+      <RouterProvider router={router} />
       <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
-
-const MobileWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 430px;
-  min-height: calc(var(--vh, 1vh) * 100);
-  margin: auto;
-  position: relative;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 export default App;

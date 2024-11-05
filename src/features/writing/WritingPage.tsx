@@ -55,7 +55,6 @@ const WritingPage = () => {
 
   return (
     <WritingWrapper ref={contentRef}>
-      <Navbar />
       <WritingLayout>
         {isQuestionMode && (
           <FadeIn>
