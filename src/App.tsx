@@ -54,12 +54,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/diary',
-       element: <DiaryMainPage />,
-     },
-     {
+        element: <DiaryMainPage />,
+      },
+      {
         path: '/diary/:id',
         element: <DiaryDetailPage />,
-     },
+      },
     ],
   },
   {
