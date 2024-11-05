@@ -111,6 +111,10 @@ const ModalContent = styled.p`
   font-size: 1rem;
   color: #181a20;
   text-align: center;
+
+  span {
+    color: red;
+  }
 `;
 
 const ErrorMessage = styled.div`
