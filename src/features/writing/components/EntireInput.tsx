@@ -1,85 +1,10 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import ContentInput from './ContentInput';
 import EmotionInput from './EmotionInput';
-import styled from 'styled-components';
-import { FormTypes } from '../types/formTypes';
-import useWritingResponseStore from '../../../stores/writingResponseStore';
-import useWritingModeStore from '../../../stores/writingModeStore';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { useUser } from '../../home/hooks/useUser';
-
-interface WriteData {
-  user_id: string;
-  emotion_type: string;
-  content: string;
-}
+import useWriteForm from '../hooks/useWriteForm';
 
 const EntireInput = () => {
-  const { getUserId } = useUser();
-  const userId = getUserId().user_id;
-
-  const mutation = useMutation({
-    mutationFn: async (newContent: WriteData) => {
-      const response = await axios.post('/api/post/write', newContent);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      setAiContent(data.ai_content);
-      setContentId(data.id);
-      setIsLoadingMode(false);
-    },
-    onError: async () => {
-      setTimeout(() => {
-        setAiContent('고민 등록에 실패했습니다 😢');
-        setContentId(0);
-        setIsLoadingMode(false);
-        setIsErrorMode(true);
-      }, 2500);
-    },
-  });
-  const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
-
-  const { setEmotion, setContent, setAiContent, setContentId } =
-    useWritingResponseStore((state) => state.actions);
-  const {
-    setIsInputMode,
-    setIsUserResponseMode,
-    setIsLoadingMode,
-    setIsAIResponseMode,
-    setIsErrorMode,
-  } = useWritingModeStore((state) => state.actions);
-
-  const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
-    if (data.emotion === null) {
-      alert('⚠️ 감정을 선택해주세요!');
-      return;
-    }
-    if (data.content.trim() === '') {
-      alert('⚠️ 고민을 입력해주세요!');
-    } else {
-      setEmotion(data.emotion);
-      setContent(data.content);
-      setIsInputMode(false);
-      setTimeout(() => {
-        setIsUserResponseMode(true);
-      }, 1000);
-      setTimeout(() => {
-        setIsLoadingMode(true);
-        setIsAIResponseMode(true);
-      }, 2000);
-      mutation.mutate({
-        user_id: userId,
-        emotion_type: data.emotion,
-        content: data.content,
-      });
-    }
-
-    Promise.resolve()
-      .then(() => reset())
-      .then(() => setFocus('content'));
-  };
-
+  const { register, handleSubmit, handleSubmitContent } = useWriteForm();
   return (
     <Form onSubmit={handleSubmit(handleSubmitContent)}>
       <EmotionInput register={register} />

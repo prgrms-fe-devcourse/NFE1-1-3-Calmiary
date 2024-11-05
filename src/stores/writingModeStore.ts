@@ -19,6 +19,7 @@ interface Actions {
     setIsAIResponseMode: (mode: boolean) => void;
     setIsErrorMode: (mode: boolean) => void;
     setIsEndMode: (mode: boolean) => void;
+    resetMode: () => void;
   };
 }
 
@@ -38,6 +39,16 @@ const useWritingModeStore = create<State & Actions>((set) => ({
     setIsAIResponseMode: (mode) => set(() => ({ isAIResponseMode: mode })),
     setIsErrorMode: (mode) => set(() => ({ isErrorMode: mode })),
     setIsEndMode: (mode) => set(() => ({ isEndMode: mode })),
+    resetMode: () =>
+      set(() => ({
+        isQuestionMode: false,
+        isInputMode: false,
+        isUserResponseMode: false,
+        isLoadingMode: false,
+        isAIResponseMode: false,
+        isErrorMode: false,
+        isEndMode: false,
+      })),
   },
 }));
 
