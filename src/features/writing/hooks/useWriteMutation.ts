@@ -4,6 +4,14 @@ import { WriteDataTypes } from '../types/formTypes';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
 
+// 베이스 URL 설정
+const api = axios.create({
+  baseURL: 'http://calmiary-be.org',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 const useWriteMutation = () => {
   const { setAiContent, setContentId } = useWritingResponseStore(
     (state) => state.actions
@@ -15,7 +23,7 @@ const useWriteMutation = () => {
 
   return useMutation({
     mutationFn: async (newContent: WriteDataTypes) => {
-      const response = await axios.post('/api/post/write', newContent);
+      const response = await api.post('/post/write', newContent);
       return response.data;
     },
     onSuccess: (data) => {
