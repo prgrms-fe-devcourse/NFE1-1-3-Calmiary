@@ -17,7 +17,7 @@ const DetailCommunityPage = () => {
     return data;
   };
 
-  const { data, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
@@ -33,6 +33,7 @@ const DetailCommunityPage = () => {
         content={data?.content}
         likesCount={data?.like_count}
         userId={data?.user_id}
+        isLoading={isLoading}
       />
       <CommentsContent
         comment={data?.comments}

@@ -7,17 +7,20 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { queryClient } from '../../../network/react-query/queryClient';
+import Skeleton from '../../../components/Skeleton';
 
 const DetailPostContent = ({
   content,
   likesCount,
   userInfo,
   user_id,
+  isLoading,
 }: {
   content?: string;
   likesCount?: number;
   userInfo?: UserDataType;
   user_id?: number;
+  isLoading?: boolean;
 }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [currentLikes, setCurrentLikes] = useState(
@@ -73,15 +76,35 @@ const DetailPostContent = ({
 
   return (
     <Wrapper>
-      <UserInfo user_info={userInfo} />
-      <Content>{content}</Content>
-      <EmpathyLayout onClick={handleLikeToggle}>
-        <Icon
-          type={isLiked ? 'community_filed_heart' : 'community_empty_heart'}
-          alt={isLiked ? 'filledHeart' : 'emptyHeart'}
-        />
-        <p>{currentLikes}</p>
-      </EmpathyLayout>
+      {isLoading ? (
+        <>
+          <Skeleton
+            width="80%"
+            height="2rem"
+            margin="0 0 0.5rem 0"
+            $borderRadius="0.5rem"
+          />
+          <Skeleton
+            width="100%"
+            height="2rem"
+            margin="0 0 0.5rem 0"
+            $borderRadius="0.5rem"
+          />
+          <Skeleton width="30%" height="24px" $borderRadius="0.5rem" />
+        </>
+      ) : (
+        <>
+          <UserInfo user_info={userInfo} />
+          <Content>{content}</Content>
+          <EmpathyLayout onClick={handleLikeToggle}>
+            <Icon
+              type={isLiked ? 'community_filed_heart' : 'community_empty_heart'}
+              alt={isLiked ? 'filledHeart' : 'emptyHeart'}
+            />
+            <p>{currentLikes}</p>
+          </EmpathyLayout>
+        </>
+      )}
     </Wrapper>
   );
 };

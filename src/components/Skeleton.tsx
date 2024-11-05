@@ -4,7 +4,7 @@ interface SkeletonPropTypes {
   width?: string;
   height?: string;
   margin?: string;
-  borderRadius?: string;
+  $borderRadius?: string;
 }
 
 export default function Skeleton(props: SkeletonPropTypes) {
@@ -13,7 +13,7 @@ export default function Skeleton(props: SkeletonPropTypes) {
       width={props.width}
       height={props.height}
       margin={props.margin}
-      borderRadius={props.borderRadius}
+      $borderRadius={props.$borderRadius}
     />
   );
 }
