@@ -21,7 +21,6 @@ const DetailCommunityPage = () => {
     queryKey: ['post', id],
     queryFn: () => getDetailPost(Number(id)),
   });
-  console.log(data);
 
   return (
     <Wrapper>
