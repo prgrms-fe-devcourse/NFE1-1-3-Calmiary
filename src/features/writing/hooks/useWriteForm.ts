@@ -3,8 +3,9 @@ import useWritingModeStore from '../../../stores/writingModeStore';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import { useUser } from '../../home/hooks/useUser';
 import useWriteMutation from './useWriteMutation';
-import { FormTypes } from '../types/formTypes';
+import { FormTypes, WriteDataTypes } from '../types/formTypes';
 import showToast from '../utils/showToast';
+import axios from 'axios';
 
 const useWriteForm = () => {
   // 사용자 정보 불러오는 로직
@@ -12,17 +13,17 @@ const useWriteForm = () => {
   const userId = getUserId().user_id;
 
   // 서버로 정보 전송 로직
-  const mutation = useWriteMutation();
+  // const mutation = useWriteMutation();
 
   // 클라이언트 정보 불러오는 로직
-  const { setEmotion, setContent } = useWritingResponseStore(
-    (state) => state.actions
-  );
+  const { setEmotion, setContent, setAiContent, setContentId } =
+    useWritingResponseStore((state) => state.actions);
 
   const {
     setIsInputMode,
     setIsUserResponseMode,
     setIsLoadingMode,
+    setIsErrorMode,
     setIsAIResponseMode,
   } = useWritingModeStore((state) => state.actions);
 
@@ -58,7 +59,13 @@ const useWriteForm = () => {
       setIsAIResponseMode(true);
     }, 2000);
 
-    mutation.mutate({
+    // mutation.mutate({
+    //   user_id: userId,
+    //   emotion_type: data.emotion,
+    //   content: data.content,
+    // });
+
+    postData({
       user_id: userId,
       emotion_type: data.emotion,
       content: data.content,
@@ -69,6 +76,31 @@ const useWriteForm = () => {
       .then(() => setFocus('content'));
   };
 
+  const api = axios.create({
+    baseURL: 'http://calmiary-be.org',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  const postData = async (wrietData: WriteDataTypes) => {
+    console.log(wrietData);
+    try {
+      const response = await axios.post('/api/post/write', wrietData);
+      console.log('ok');
+      const data = await response.data;
+      setAiContent(data.ai_content);
+      setContentId(data.id);
+      setIsLoadingMode(false);
+    } catch (error) {
+      console.error(error);
+      setTimeout(() => {
+        setAiContent('고민 등록에 실패했습니다 😢');
+        setContentId(0);
+        setIsLoadingMode(false);
+        setIsErrorMode(true);
+      }, 2500);
+    }
+  };
   return { register, handleSubmit, handleSubmitContent };
 };
 
