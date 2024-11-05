@@ -41,14 +41,11 @@ const DetailPostContent = ({
       const previousEmpathy = queryClient.getQueryData(['empathy']);
       return { ...response.data, previousEmpathy };
     },
-    onSuccess: (data) => {
-      if (data.is_cancled) {
-        setIsLiked(false);
-        setCurrentLikes((prev) => (prev ?? 0) - 1);
-      } else {
-        setIsLiked(true);
-        setCurrentLikes((prev) => (prev ?? 0) + 1);
-      }
+    onMutate: async () => {
+      setIsLiked((prev) => !prev);
+      setCurrentLikes((prev) => (isLiked ? (prev ?? 0) - 1 : (prev ?? 0) + 1));
+
+      return { previousLikes: currentLikes };
     },
     onError: () => {
       queryClient.invalidateQueries({ queryKey: ['empathy'] });
