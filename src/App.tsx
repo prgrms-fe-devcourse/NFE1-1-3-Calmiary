@@ -16,12 +16,12 @@ import GrowthFactorPage from './features/home/pages/GrothPage.tsx';
 import DiaryMainPage from './features/diary/pages/DiaryMainPage.tsx';
 import DiaryDetailPage from './features/diary/pages/DiaryDetailPage.tsx';
 import ProfileSharePage from './features/profile/pages/ProfileSharePage.tsx';
-import Layout from './components/Layout.tsx';
+import LandingPage from './features/landing/pages/LandingPage.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <LandingPage />,
     children: [
       {
         path: '/profile',
