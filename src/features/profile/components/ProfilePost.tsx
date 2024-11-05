@@ -84,6 +84,12 @@ const DateBox = styled.div`
 const TextArea = styled.div`
   height: 200px;
   padding: 0 1rem;
+  line-height: 22px;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
 `;
 
 const DataArea = styled.div`
