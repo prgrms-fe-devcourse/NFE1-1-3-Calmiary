@@ -26,7 +26,7 @@ export default function ProfileMainPage() {
         }
       );
 
-      logout(); // 로그아웃 함수 호출 (access_token, refresh_token 제거)
+      logout(); // 쿠키 제거
       navigate('/login');
     } catch (error) {
       console.error('로그아웃 실패:', error);
