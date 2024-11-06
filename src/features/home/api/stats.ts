@@ -4,6 +4,8 @@ interface PostStats {
   this_week_posts: number;
   total_posts: number;
   resolved_posts: number;
+  growth_stage: number;
+  growth_message: string;
 }
 
 export const fetchUserStats = async (userId: string): Promise<PostStats> => {
