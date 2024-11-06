@@ -133,7 +133,7 @@ const ProfileImage = styled.img<{ $isLoaded: boolean }>`
   object-fit: cover;
   border-radius: 50%;
   opacity: ${(props) => (props.$isLoaded ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  transition: opacity 1s ease;
 `;
 
 const ButtonArea = styled.div`

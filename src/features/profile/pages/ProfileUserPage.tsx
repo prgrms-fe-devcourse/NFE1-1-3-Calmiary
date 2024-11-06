@@ -8,8 +8,11 @@ import { FormValuesPropTypes } from '../types/profileTypes';
 import { useUserData } from '../hook/useUserData';
 import { useUpdateProfile } from '../hook/useUpdateUserMutation';
 import { useUpdateProfileImage } from '../hook/useUpdateImageMutation';
+import { Icon } from '../../../components/ui/Icon';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileUserPage() {
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -95,6 +98,10 @@ export default function ProfileUserPage() {
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handlePrevClick = () => {
+    navigate('/profile');
   };
 
   return (
@@ -184,6 +191,9 @@ export default function ProfileUserPage() {
           <button className="resignBtn" onClick={openModal}>
             회원탈퇴
           </button>
+          <PrevBtn onClick={handlePrevClick}>
+            <Icon type="diary_left" size={24} />
+          </PrevBtn>
         </MainArea>
       </ProfileContainer>
 
@@ -296,7 +306,7 @@ const ProfileImage = styled.img<{ $isLoaded: boolean }>`
   object-fit: cover;
   border-radius: 50%;
   opacity: ${(props) => (props.$isLoaded ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  transition: opacity 1s ease;
 `;
 
 const InputArea = styled.form`
@@ -325,4 +335,19 @@ const InputArea = styled.form`
     color: red;
     font-size: 12px;
   }
+`;
+
+const PrevBtn = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  left: 1rem;
+  top: 1rem;
+  width: 24px;
+  height: 24px;
+  background-color: ${({ theme }) => theme.colors.brand_bg};
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
 `;
