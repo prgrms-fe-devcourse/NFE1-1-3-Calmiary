@@ -36,3 +36,10 @@ export interface SignUpData {
   password: string;
   password_check: string;
 }
+interface StageVariant {
+  scale: number;
+  rotate: number;
+}
+export interface StageVariants {
+  [key: string]: StageVariant;
+}

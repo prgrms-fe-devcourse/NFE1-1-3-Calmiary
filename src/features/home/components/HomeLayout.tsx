@@ -27,10 +27,12 @@ export const HomeBackRight = styled.img`
   position: absolute;
   top: 72px;
   right: 0px;
+  pointer-events: none;
 `;
 
 export const HomeBackLeft = styled.img`
   position: absolute;
   left: 0px;
   bottom: 15px;
+  pointer-events: none;
 `;

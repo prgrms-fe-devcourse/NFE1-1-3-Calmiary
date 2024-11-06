@@ -80,7 +80,7 @@ def create_user(user_data: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(models.User).filter(models.User.id == user_data.id).first()
     if existing_user:
         raise HTTPException(
-            status_code=400,
+            status_code=409,
             detail="이미 등록된 아이디입니다."
         )
 

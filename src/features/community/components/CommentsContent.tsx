@@ -5,25 +5,27 @@ import { CommentsContentPropTypes } from '../types';
 const CommentsContent = ({
   comment,
   postId,
-  userId,
   refetchComments,
+  isLoading,
 }: CommentsContentPropTypes) => {
+  console.log('comment data:', comment);
   return (
     <Wrapper>
       <h2>댓글</h2>
-      {comment &&
+      {isLoading ? (
+        <Comments isLoading={true} nickname="" />
+      ) : (
+        comment &&
         comment.map((comment) => (
           <Comments
             key={comment.comment_id}
             nickname={comment.nickname}
             content={comment.content}
+            isLoading={false}
           />
-        ))}
-      <CommentInput
-        postId={postId}
-        userId={userId}
-        refetchComments={refetchComments}
-      />
+        ))
+      )}
+      <CommentInput postId={postId} refetchComments={refetchComments} />
     </Wrapper>
   );
 };

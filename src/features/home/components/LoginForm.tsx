@@ -70,6 +70,7 @@ const LoginLayout = styled.div`
   gap: 20px;
   display: flex;
   flex-direction: column;
+  min-width: 430px;
 `;
 
 const LoginInput = styled.input`
@@ -91,6 +92,8 @@ const LoginInput = styled.input`
     background-color: #5a5a5a;
   }
   z-index: 1;
+
+  flex-shrink: 0;
 `;
 
 const LoginButton = styled.button`
@@ -122,5 +125,5 @@ const SignUpText = styled.span`
 const ErrorMessage = styled.p`
   color: #ff6b6b;
   font-size: 12px;
-  margin: -5px 0 10px 5px;
+  margin: 5px 0 10px 0;
 `;
