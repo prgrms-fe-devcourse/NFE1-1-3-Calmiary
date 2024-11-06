@@ -6,63 +6,132 @@ import Growth from '../../../assets/growth.svg';
 import { Icon } from '../../../components/ui/Icon';
 import { useUser } from '../hooks/useUser';
 import { useStats } from '../hooks/useStats';
+import { motion } from 'framer-motion';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
+};
 
 const GrowthFactorPage = () => {
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
-  const { data: stats, isLoading, isError } = useStats(userId);
-
-  if (isLoading) {
-    return <div>로딩 중...</div>;
-  }
-
-  if (isError) {
-    return <div>데이터를 불러오는데 실패했습니다..</div>;
-  }
+  const { data: stats, isLoading } = useStats(userId);
 
   return (
     <GrowthWrapper>
       <GrowthLayout>
-        <GrowthContainer>
-          <StepBox>
-            <GrowthTitle>지금까지의 나는 어떤가요?</GrowthTitle>
-            <TempImage src={Growth} alt="home temp" />
-            <StepText>1단계</StepText>
-          </StepBox>
-          <FactorContainer>
-            <FactorBox>
-              <Icon type="home_pen" alt="pen" />
-              <FactorCount>{stats?.this_week_posts}개</FactorCount>
-              <FactorLabel>이번주 걱정</FactorLabel>
-            </FactorBox>
-            <Divider />
-            <FactorBox>
-              <Icon type="home_calender" alt="calender" />
-              <FactorCount>{stats?.total_posts}개</FactorCount>
-              <FactorLabel>전체 걱정</FactorLabel>
-            </FactorBox>
-            <Divider />
-            <FactorBox>
-              <Icon type="home_history" alt="history" />
-              <FactorCount>{stats?.resolved_posts}개</FactorCount>
-              <FactorLabel>딜어낸 걱정</FactorLabel>
-            </FactorBox>
-          </FactorContainer>
+        <GrowthContainer
+          as={motion.div}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {!isLoading && stats && (
+            <>
+              <StepBox as={motion.div} variants={itemVariants}>
+                <GrowthTitle>지금까지의 나는 어떤가요?</GrowthTitle>
+                <motion.img
+                  src={Growth}
+                  alt="home temp"
+                  initial={{ rotate: -180, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                  whileHover={{ scale: 1.1 }}
+                  style={{ width: '88px', height: '88px' }}
+                />
+                <StepText>1단계</StepText>
+              </StepBox>
+              <FactorContainer
+                as={motion.div}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              >
+                <FactorBox as={motion.div}>
+                  <motion.div whileHover={{ scale: 1.1 }}>
+                    <Icon type="home_pen" alt="pen" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <FactorCount>{stats?.this_week_posts}개</FactorCount>
+                  </motion.div>
+                  <FactorLabel>이번주 걱정</FactorLabel>
+                </FactorBox>
+                <Divider />
+                <FactorBox as={motion.div}>
+                  <motion.div whileHover={{ scale: 1.1 }}>
+                    <Icon type="home_calender" alt="calender" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    <FactorCount>{stats?.total_posts}개</FactorCount>
+                  </motion.div>
+                  <FactorLabel>전체 걱정</FactorLabel>
+                </FactorBox>
+                <Divider />
+                <FactorBox as={motion.div}>
+                  <motion.div whileHover={{ scale: 1.1 }}>
+                    <Icon type="home_history" alt="history" />
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.9 }}
+                  >
+                    <FactorCount>{stats?.resolved_posts}개</FactorCount>
+                  </motion.div>
+                  <FactorLabel>딜어낸 걱정</FactorLabel>
+                </FactorBox>
+              </FactorContainer>
+            </>
+          )}
         </GrowthContainer>
       </GrowthLayout>
 
-      <HomeBackRight src={BackRight} alt="home backright" />
-      <HomeBackLeft src={BackLeft} alt="home backleft" />
+      <HomeBackRight
+        as={motion.img}
+        initial={{ x: 100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        src={BackRight}
+        alt="home backright"
+      />
+      <HomeBackLeft
+        as={motion.img}
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        src={BackLeft}
+        alt="home backleft"
+      />
     </GrowthWrapper>
   );
 };
 
 export default GrowthFactorPage;
-
-const TempImage = styled.img`
-  width: 88px;
-  height: 88px;
-`;
 
 const StepBox = styled.div`
   width: 100%;
