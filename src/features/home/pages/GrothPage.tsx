@@ -8,6 +8,7 @@ import { useUser } from '../hooks/useUser';
 import { useStats } from '../hooks/useStats';
 import { motion } from 'framer-motion';
 import { StageVariants } from '../types/homeTypes';
+import { useEffect } from 'react';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,7 +42,11 @@ const stageVariants: StageVariants = {
 const GrowthFactorPage = () => {
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
-  const { data: stats, isLoading } = useStats(userId);
+  const { data: stats, isLoading, refetch } = useStats(userId);
+
+  useEffect(() => {
+    refetch(); //
+  }, [userId, refetch]);
 
   return (
     <GrowthWrapper>
