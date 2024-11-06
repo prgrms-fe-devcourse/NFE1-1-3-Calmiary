@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,8 +10,8 @@ export default function ProfileMainPage() {
   const { getUserId, logout, getAccessToken } = useUser();
   const navigate = useNavigate();
   const userId = getUserId().user_id;
-
   const { data: userData } = useUserData(userId);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -42,7 +43,17 @@ export default function ProfileMainPage() {
         </TextArea>
         <MainArea>
           <ImageArea>
-            <img src={userData?.profile_image} alt="프로필 이미지" />
+            {!imageLoaded && (
+              <PlaceholderWrapper>
+                <LoadImage />
+              </PlaceholderWrapper>
+            )}
+            <ProfileImage
+              src={userData?.profile_image}
+              alt="프로필 이미지"
+              onLoad={() => setImageLoaded(true)}
+              $isLoaded={imageLoaded}
+            />
           </ImageArea>
 
           <ButtonArea>
@@ -98,13 +109,31 @@ const ImageArea = styled.div`
   width: 9.375rem;
   height: 9.375rem;
   margin-top: 1rem;
+  position: relative;
+`;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
+const PlaceholderWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+`;
+
+const LoadImage = styled.div`
+  border-radius: 50%;
+`;
+
+const ProfileImage = styled.img<{ $isLoaded: boolean }>`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: ${(props) => (props.$isLoaded ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
 
 const ButtonArea = styled.div`
