@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../home/hooks/useUser';
 import { useUserData } from '../hook/useUserData';
 import axios from 'axios';
+import Modal from '../components/Modal';
 
 export default function ProfileMainPage() {
   const { getUserId, logout, getAccessToken } = useUser();
@@ -12,6 +13,8 @@ export default function ProfileMainPage() {
   const userId = getUserId().user_id;
   const { data: userData } = useUserData(userId);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleLogout = async () => {
     try {
@@ -31,7 +34,8 @@ export default function ProfileMainPage() {
       navigate('/login');
     } catch (error) {
       console.error('로그아웃 실패:', error);
-      alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+      setModalMessage('로그아웃에 실패했습니다. 다시 시도해주세요.');
+      setIsSuccessModalOpen(true);
     }
   };
 
@@ -73,6 +77,13 @@ export default function ProfileMainPage() {
           </ProfileButton>
         </MainArea>
       </ProfileContainer>
+      <Modal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        isSuccess={true}
+      >
+        {modalMessage}
+      </Modal>
     </>
   );
 }

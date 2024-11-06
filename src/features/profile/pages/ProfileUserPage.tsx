@@ -10,12 +10,15 @@ import { useUpdateProfile } from '../hook/useUpdateUserMutation';
 import { useUpdateProfileImage } from '../hook/useUpdateImageMutation';
 import { Icon } from '../../../components/ui/Icon';
 import { useNavigate } from 'react-router-dom';
+import Modal from '../components/Modal';
 
 export default function ProfileUserPage() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
@@ -33,22 +36,26 @@ export default function ProfileUserPage() {
 
   const updateProfileMutation = useUpdateProfile({
     onSuccess: () => {
-      alert('회원 정보가 수정되었습니다.');
+      setModalMessage('회원 정보가 수정되었습니다.');
+      setIsSuccessModalOpen(true);
       reset();
     },
     onError: (error) => {
-      alert('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+      setModalMessage('회원 정보 수정에 실패했습니다. 다시 시도해주세요.');
+      setIsSuccessModalOpen(true);
       console.error('프로필 업데이트 오류:', error);
     },
   });
 
   const updateProfileImageMutation = useUpdateProfileImage(userId, {
     onSuccess: () => {
-      alert('프로필 이미지가 수정되었습니다.');
+      setModalMessage('프로필 이미지가 수정되었습니다.');
+      setIsSuccessModalOpen(true);
       refetchUserData(); // 변경한 프로필 이미지로 데이터 갱신
     },
     onError: (error: Error) => {
-      alert(`이미지 업로드 실패: ${error.message}`);
+      setModalMessage(`이미지 업로드 실패: ${error.message}`);
+      setIsSuccessModalOpen(true);
     },
     onSettled: () => {
       setIsUploading(false);
@@ -80,7 +87,8 @@ export default function ProfileUserPage() {
     // 파일 크기 검사 (10MB)
     const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      alert('파일 크기는 10MB 이하여야 합니다.');
+      setModalMessage(`파일 크기는 10MB이하여야 합니다.`);
+      setIsSuccessModalOpen(true);
       return;
     }
 
@@ -198,6 +206,13 @@ export default function ProfileUserPage() {
       </ProfileContainer>
 
       {isModalOpen && <ProfileModal onClose={closeModal} />}
+      <Modal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        isSuccess={true}
+      >
+        {modalMessage}
+      </Modal>
     </>
   );
 }
