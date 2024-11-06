@@ -90,6 +90,7 @@ export default App;
 
 const MobileWrapper = styled.div`
   font-family: 'Pretendard Variable', Pretendard, sans-serif;
+  /* background: ${({ theme }) => theme.colors.brand_bg}; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
