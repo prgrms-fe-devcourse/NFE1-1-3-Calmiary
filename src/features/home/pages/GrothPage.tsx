@@ -170,12 +170,14 @@ const GrowthWrapper = styled.div`
   width: 100%;
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.brand_bg};
+  position: relative;
 `;
 
 const GrowthLayout = styled.div`
   width: 100%;
   height: 100%;
   padding: 0 32px;
+  overflow: hidden;
 `;
 
 const GrowthContainer = styled.div`
