@@ -74,17 +74,15 @@ const useWriteForm = () => {
     setFocus('content');
   };
 
-  const postData = async (wrietData: WriteDataTypes) => {
-    console.log(wrietData);
+  const postData = async (writeData: WriteDataTypes) => {
     try {
-      const response = await axios.post('/api/post/write', wrietData);
-
+      const response = await axios.post('/api/post/write', writeData);
       const data = await response.data;
+
       setAiContent(data.ai_content);
       setContentId(data.id);
       setIsLoadingMode(false);
     } catch (error) {
-      console.error(error);
       setTimeout(() => {
         setAiContent('고민 등록에 실패했습니다 😢');
         setContentId(0);
