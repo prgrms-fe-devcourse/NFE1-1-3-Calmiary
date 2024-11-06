@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface PostPropTypes {
   id: number;
   content: string;
@@ -35,4 +37,12 @@ export interface UpdateProfileDataPropTypes {
 export interface UpdateProfileOptionsPropTypes {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
+}
+
+export interface ModalPropTypes {
+  isOpen: boolean;
+  onClose: () => void;
+  buttonText?: string;
+  isSuccess?: boolean;
+  children: ReactNode;
 }

@@ -1,14 +1,6 @@
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ReactNode } from 'react';
-
-interface ModalPropTypes {
-  isOpen: boolean;
-  onClose: () => void;
-  buttonText?: string;
-  isSuccess?: boolean;
-  children: ReactNode;
-}
+import { ModalPropTypes } from '../types/profileTypes';
 
 const Modal = ({
   isOpen,
