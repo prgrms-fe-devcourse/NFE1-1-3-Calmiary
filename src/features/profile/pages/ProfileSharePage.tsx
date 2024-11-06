@@ -109,7 +109,7 @@ export default function ProfileSharePage() {
               content={post.content}
               likes={post.like_count}
               createdAt={post.created_at}
-              nickname={post.nickname}
+              nickname={post.user_info.nickname}
               profileImg={post.user_info.profile_image}
               comments={post.comment_count}
             />

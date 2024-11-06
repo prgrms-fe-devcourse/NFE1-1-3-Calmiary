@@ -64,7 +64,7 @@ export default function ProfileMainPage() {
               <ProfileButton>공유한 고민</ProfileButton>
             </Link>
             <Link to="/likePost">
-              <ProfileButton>좋아요 한 고민</ProfileButton>
+              <ProfileButton>공감한 고민</ProfileButton>
             </Link>
           </ButtonArea>
 
