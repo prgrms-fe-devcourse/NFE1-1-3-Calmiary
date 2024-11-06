@@ -26,11 +26,7 @@ const CommentsContent = ({
           />
         ))
       )}
-      <CommentInput
-        postId={postId}
-        userId={userId}
-        refetchComments={refetchComments}
-      />
+      <CommentInput postId={postId} refetchComments={refetchComments} />
     </Wrapper>
   );
 };

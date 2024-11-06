@@ -6,15 +6,10 @@ import { useUser } from '../../home/hooks/useUser';
 
 interface CommentInputPropTypes {
   postId: number | undefined;
-  userId: number | undefined;
   refetchComments: () => void;
 }
 
-const CommentInput = ({
-  postId,
-  userId,
-  refetchComments,
-}: CommentInputPropTypes) => {
+const CommentInput = ({ postId, refetchComments }: CommentInputPropTypes) => {
   const [commentData, setCommentData] = useState('');
   const { getUserId } = useUser();
 
