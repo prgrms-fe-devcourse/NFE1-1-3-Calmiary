@@ -12,6 +12,7 @@ import { useUpdateProfileImage } from '../hook/useUpdateImageMutation';
 export default function ProfileUserPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { getUserId } = useUser();
   const userId = getUserId().user_id;
@@ -104,7 +105,17 @@ export default function ProfileUserPage() {
         </TextArea>
         <MainArea>
           <ImageArea onClick={handleImageClick}>
-            <img src={userData?.profile_image} alt="프로필이미지" />
+            {!imageLoaded && (
+              <PlaceholderWrapper>
+                <LoadImage />
+              </PlaceholderWrapper>
+            )}
+            <ProfileImage
+              src={userData?.profile_image}
+              alt="프로필 이미지"
+              onLoad={() => setImageLoaded(true)}
+              $isLoaded={imageLoaded}
+            />
             <ImageOverlay>
               <span>{isUploading ? '업로드 중...' : '이미지 변경'}</span>
             </ImageOverlay>
@@ -262,6 +273,30 @@ const ImageArea = styled.div`
   input {
     display: none;
   }
+`;
+
+const PlaceholderWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+`;
+
+const LoadImage = styled.div`
+  border-radius: 50%;
+`;
+
+const ProfileImage = styled.img<{ $isLoaded: boolean }>`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: ${(props) => (props.$isLoaded ? 1 : 0)};
+  transition: opacity 0.3s ease;
 `;
 
 const InputArea = styled.form`
