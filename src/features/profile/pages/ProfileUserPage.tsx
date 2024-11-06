@@ -209,7 +209,6 @@ export default function ProfileUserPage() {
       <Modal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        isSuccess={true}
       >
         {modalMessage}
       </Modal>

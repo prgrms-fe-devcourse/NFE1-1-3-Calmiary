@@ -80,7 +80,6 @@ export default function ProfileMainPage() {
       <Modal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        isSuccess={true}
       >
         {modalMessage}
       </Modal>

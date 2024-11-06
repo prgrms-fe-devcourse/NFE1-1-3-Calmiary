@@ -1,12 +1,19 @@
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ModalPropTypes } from '../types/profileTypes';
+import { ReactNode } from 'react';
+
+interface ModalPropTypes {
+  isOpen: boolean;
+  onClose: () => void;
+  buttonText?: string;
+  children: ReactNode;
+}
 
 const Modal = ({
   isOpen,
   onClose,
   buttonText = '확인',
-  isSuccess = false,
+
   children,
 }: ModalPropTypes) => {
   if (!isOpen) return null;
@@ -23,7 +30,7 @@ const Modal = ({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.5, opacity: 0 }}
         >
-          <StatusIcon isSuccess={isSuccess}>{isSuccess ? '✓' : '!'}</StatusIcon>
+          <StatusIcon>✓</StatusIcon>
           <ModalBody>{children}</ModalBody>
           <ButtonGroup>
             <ConfirmButton onClick={onClose}>{buttonText}</ConfirmButton>
@@ -34,7 +41,7 @@ const Modal = ({
   );
 };
 
-const StatusIcon = styled.div<{ isSuccess: boolean }>`
+const StatusIcon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
