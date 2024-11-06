@@ -2,19 +2,16 @@ import styled from 'styled-components';
 import commentUpdate from '../../../assets/comment-update.svg';
 import axios from 'axios';
 import { useState } from 'react';
+import { useUser } from '../../home/hooks/useUser';
 
 interface CommentInputPropTypes {
   postId: number | undefined;
-  userId: number | undefined;
   refetchComments: () => void;
 }
 
-const CommentInput = ({
-  postId,
-  userId,
-  refetchComments,
-}: CommentInputPropTypes) => {
+const CommentInput = ({ postId, refetchComments }: CommentInputPropTypes) => {
   const [commentData, setCommentData] = useState('');
+  const { getUserId } = useUser();
 
   const PostComment = async () => {
     const trimmedComment = commentData.trim();
@@ -27,7 +24,7 @@ const CommentInput = ({
     try {
       await axios.post(`/api/community/post/${postId}/comment`, {
         content: commentData,
-        user_id: userId,
+        user_id: getUserId().user_id,
       });
       setCommentData('');
       refetchComments();
