@@ -8,18 +8,17 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { queryClient } from '../../../network/react-query/queryClient';
 import Skeleton from '../../../components/Skeleton';
+import { useUser } from '../../home/hooks/useUser';
 
 const DetailPostContent = ({
   content,
   likesCount,
   userInfo,
-  user_id,
   isLoading,
 }: {
   content?: string;
   likesCount?: number;
   userInfo?: UserDataType;
-  user_id?: number;
   isLoading?: boolean;
 }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -28,6 +27,7 @@ const DetailPostContent = ({
   );
   const { id } = useParams<{ id: string }>();
   const post_id = Number(id);
+  const { user_id: userId } = useUser().getUserId();
 
   const empathyMutation = useMutation({
     mutationFn: async () => {
@@ -35,9 +35,7 @@ const DetailPostContent = ({
         `/api/community/post/${post_id}/like`,
         {},
         {
-          params: {
-            user_id,
-          },
+          params: { user_id: userId },
         }
       );
 

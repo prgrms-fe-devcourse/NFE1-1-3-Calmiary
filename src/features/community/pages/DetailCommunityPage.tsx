@@ -32,7 +32,6 @@ const DetailCommunityPage = () => {
         }}
         content={data?.content}
         likesCount={data?.like_count}
-        userId={data?.user_id}
         isLoading={isLoading}
       />
       <CommentsContent
