@@ -9,6 +9,7 @@ const CommentsContent = ({
   refetchComments,
   isLoading,
 }: CommentsContentPropTypes) => {
+  console.log('comment data:', comment);
   return (
     <Wrapper>
       <h2>댓글</h2>
