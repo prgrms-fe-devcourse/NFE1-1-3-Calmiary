@@ -30,7 +30,7 @@ const Div = styled.div`
   align-items: center;
   padding: 1rem;
   border-radius: 14px;
-  margin: 1.5rem 0 1.5rem 0;
+  margin: 1.5rem 0;
   line-height: 1.2rem;
 
   overflow-wrap: break-word; // 어떤 문자든 강제로 줄바꿈

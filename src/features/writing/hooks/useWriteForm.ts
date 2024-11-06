@@ -2,7 +2,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import useWritingModeStore from '../../../stores/writingModeStore';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import { useUser } from '../../home/hooks/useUser';
-import useWriteMutation from './useWriteMutation';
 import { FormTypes, WriteDataTypes } from '../types/formTypes';
 import showToast from '../utils/showToast';
 import axios from 'axios';
@@ -30,7 +29,7 @@ const useWriteForm = () => {
   // 클라이언트 정보 관리하는 로직
   const { register, handleSubmit, reset, setFocus } = useForm<FormTypes>();
 
-  const handleSubmitContent: SubmitHandler<FormTypes> = (data) => {
+  const handleSubmitContent: SubmitHandler<FormTypes> = async (data) => {
     if (data.emotion === null) {
       showToast({
         type: 'fail',
@@ -65,28 +64,21 @@ const useWriteForm = () => {
     //   content: data.content,
     // });
 
-    postData({
+    await postData({
       user_id: userId,
       emotion_type: data.emotion,
       content: data.content,
     });
 
-    Promise.resolve()
-      .then(() => reset())
-      .then(() => setFocus('content'));
+    reset();
+    setFocus('content');
   };
 
-  const api = axios.create({
-    baseURL: 'http://calmiary-be.org',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
   const postData = async (wrietData: WriteDataTypes) => {
     console.log(wrietData);
     try {
       const response = await axios.post('/api/post/write', wrietData);
-      console.log('ok');
+
       const data = await response.data;
       setAiContent(data.ai_content);
       setContentId(data.id);

@@ -58,7 +58,9 @@ const WritingPage = () => {
       <WritingLayout>
         {isQuestionMode && (
           <FadeIn>
-            <QuestionBox comment="오늘 어떤 고민이 있나요?" />
+            <QuestionBoxContainer>
+              <QuestionBox comment="오늘 어떤 고민이 있나요?" />
+            </QuestionBoxContainer>
           </FadeIn>
         )}
         {isUserResponseMode && (
@@ -117,13 +119,19 @@ const WritingWrapper = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  min-height: 100vh;
+  min-height: calc(100vh);
   font-size: 15px;
+  padding: 3rem 0;
 `;
 
 const WritingLayout = styled.div`
   max-width: 390px;
-  margin: 4.5rem auto;
+  margin: auto;
+`;
+
+const QuestionBoxContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
 `;
 
 const ResponseBoxContainer = styled.div`

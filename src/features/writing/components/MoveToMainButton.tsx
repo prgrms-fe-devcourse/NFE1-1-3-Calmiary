@@ -13,6 +13,7 @@ const Button = styled(Link)`
   border-radius: 14px;
   border: none;
   padding: 1rem;
+  margin-bottom: 4rem;
   width: 100%;
   font-size: 16px;
   font-weight: bold;
