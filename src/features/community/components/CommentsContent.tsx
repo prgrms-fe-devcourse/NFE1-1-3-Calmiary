@@ -5,7 +5,6 @@ import { CommentsContentPropTypes } from '../types';
 const CommentsContent = ({
   comment,
   postId,
-  userId,
   refetchComments,
   isLoading,
 }: CommentsContentPropTypes) => {

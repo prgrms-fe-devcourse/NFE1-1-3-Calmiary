@@ -38,7 +38,6 @@ const DetailCommunityPage = () => {
       <CommentsContent
         comment={data?.comments}
         postId={data?.id}
-        userId={Number(data?.user_id)}
         refetchComments={refetch}
         isLoading={isLoading}
       />
