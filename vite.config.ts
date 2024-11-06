@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://calmiary-be.org',
+        target: 'http://calmiary-be.org',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
