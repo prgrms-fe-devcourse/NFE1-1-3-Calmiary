@@ -14,13 +14,11 @@ const DetailPostContent = ({
   content,
   likesCount,
   userInfo,
-  user_id,
   isLoading,
 }: {
   content?: string;
   likesCount?: number;
   userInfo?: UserDataType;
-  user_id?: number;
   isLoading?: boolean;
 }) => {
   const [isLiked, setIsLiked] = useState(false);
