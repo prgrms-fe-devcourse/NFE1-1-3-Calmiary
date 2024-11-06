@@ -27,9 +27,7 @@ const DetailPostContent = ({
   );
   const { id } = useParams<{ id: string }>();
   const post_id = Number(id);
-  const { getUserId } = useUser();
-  const userId = getUserId().user_id;
-  console.log(userId);
+  const { user_id: userId } = useUser().getUserId();
 
   const empathyMutation = useMutation({
     mutationFn: async () => {
