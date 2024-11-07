@@ -20,7 +20,7 @@
 | :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------: | :--------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 |                   [김민정](https://github.com/minjeongss)                   |                    [박덕인](https://github.com/kod0751)                     |                   [정혜인](https://github.com/zelkovaria)                    |                      [한규](https://github.com/ruehan)                      |
 |                                  FrontEnd                                   |                                  FrontEnd                                   |                                   FrontEnd                                   |                              FrontEnd, BackEnd                              |
-|                                 고민 남기기                                 |                                   프로필                                    |                                   커뮤니티                                   |                                 랜딩, 메인                                  |
+|                                 고민 남기기                                 |                                   프로필                                    |                                   커뮤니티                                   |                               메인, 다이어리                                |
 
 </div>
 
@@ -53,6 +53,10 @@
 ![Swagger](https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white)
 ![OpenAI](https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white)
 ![OpenSSL](https://img.shields.io/badge/openssl-721412?style=for-the-badge&logo=openssl&logoColor=white)
+
+### Architecture
+
+![아키텍처](https://github.com/user-attachments/assets/3c8786ac-dcc1-4d42-8b8d-b68fe8598ef9)
 
 </div>
 
