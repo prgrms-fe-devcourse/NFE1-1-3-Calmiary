@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+  ScrollRestoration,
+} from 'react-router-dom';
 import useScreenSize from './hook/useScreenSize.ts';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './network/react-query/queryClient';
@@ -22,7 +26,12 @@ import styled from 'styled-components';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: (
+      <>
+        <ScrollRestoration />
+        <Layout />
+      </>
+    ),
     children: [
       {
         path: '/profile',
