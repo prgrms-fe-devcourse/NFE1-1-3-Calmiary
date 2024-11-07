@@ -105,10 +105,11 @@ export default function ProfileSharePage() {
           page.data.map((post: PostPropTypes) => (
             <ProfilePost
               key={post.id}
+              id={post.id}
               content={post.content}
               likes={post.like_count}
               createdAt={post.created_at}
-              nickname={post.nickname}
+              nickname={post.user_info.nickname}
               profileImg={post.user_info.profile_image}
               comments={post.comment_count}
             />

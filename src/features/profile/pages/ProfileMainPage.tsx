@@ -1,16 +1,20 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import ProfileButton from '../components/ProfileButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../home/hooks/useUser';
 import { useUserData } from '../hook/useUserData';
 import axios from 'axios';
+import Modal from '../components/Modal';
 
 export default function ProfileMainPage() {
   const { getUserId, logout, getAccessToken } = useUser();
   const navigate = useNavigate();
   const userId = getUserId().user_id;
-
   const { data: userData } = useUserData(userId);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleLogout = async () => {
     try {
@@ -30,7 +34,8 @@ export default function ProfileMainPage() {
       navigate('/login');
     } catch (error) {
       console.error('로그아웃 실패:', error);
-      alert('로그아웃에 실패했습니다. 다시 시도해주세요.');
+      setModalMessage('로그아웃에 실패했습니다. 다시 시도해주세요.');
+      setIsSuccessModalOpen(true);
     }
   };
 
@@ -42,7 +47,17 @@ export default function ProfileMainPage() {
         </TextArea>
         <MainArea>
           <ImageArea>
-            <img src={userData?.profile_image} alt="프로필 이미지" />
+            {!imageLoaded && (
+              <PlaceholderWrapper>
+                <LoadImage />
+              </PlaceholderWrapper>
+            )}
+            <ProfileImage
+              src={userData?.profile_image}
+              alt="프로필 이미지"
+              onLoad={() => setImageLoaded(true)}
+              $isLoaded={imageLoaded}
+            />
           </ImageArea>
 
           <ButtonArea>
@@ -53,7 +68,7 @@ export default function ProfileMainPage() {
               <ProfileButton>공유한 고민</ProfileButton>
             </Link>
             <Link to="/likePost">
-              <ProfileButton>좋아요 한 고민</ProfileButton>
+              <ProfileButton>공감한 고민</ProfileButton>
             </Link>
           </ButtonArea>
 
@@ -62,6 +77,12 @@ export default function ProfileMainPage() {
           </ProfileButton>
         </MainArea>
       </ProfileContainer>
+      <Modal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+      >
+        {modalMessage}
+      </Modal>
     </>
   );
 }
@@ -98,13 +119,31 @@ const ImageArea = styled.div`
   width: 9.375rem;
   height: 9.375rem;
   margin-top: 1rem;
+  position: relative;
+`;
 
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-  }
+const PlaceholderWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+`;
+
+const LoadImage = styled.div`
+  border-radius: 50%;
+`;
+
+const ProfileImage = styled.img<{ $isLoaded: boolean }>`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: ${(props) => (props.$isLoaded ? 1 : 0)};
+  transition: opacity 1s ease;
 `;
 
 const ButtonArea = styled.div`

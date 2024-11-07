@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Icon } from '../../../components/ui/Icon';
 import { UserPostPropTypes } from '../types/profileTypes';
+import { useNavigate } from 'react-router-dom';
 
 const formatDate = (dateString: string) => {
   const [year, month, day] = dateString.split('T')[0].split('-');
@@ -14,9 +15,15 @@ export default function ProfilePost({
   nickname,
   comments,
   profileImg,
+  id,
 }: UserPostPropTypes) {
+  const navigate = useNavigate();
+
+  const handlePostClick = () => {
+    navigate(`/community/post/${id}`);
+  };
   return (
-    <LikePostArea>
+    <PostArea onClick={handlePostClick}>
       <PostHead>
         <UserBox>
           <ImageArea>
@@ -35,11 +42,11 @@ export default function ProfilePost({
           <Icon type="community_comment" alt="댓글" size={24} /> {comments}
         </div>
       </DataArea>
-    </LikePostArea>
+    </PostArea>
   );
 }
 
-const LikePostArea = styled.div`
+const PostArea = styled.div`
   width: 328px;
   height: 243px;
   display: flex;
@@ -48,6 +55,7 @@ const LikePostArea = styled.div`
   background-color: #6b677d;
   justify-content: space-between;
   margin-bottom: 1rem;
+  cursor: pointer;
 `;
 
 const ImageArea = styled.div`
@@ -84,6 +92,12 @@ const DateBox = styled.div`
 const TextArea = styled.div`
   height: 200px;
   padding: 0 1rem;
+  line-height: 22px;
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
 `;
 
 const DataArea = styled.div`
