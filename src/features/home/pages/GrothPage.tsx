@@ -57,7 +57,7 @@ const GrowthFactorPage = () => {
           initial="hidden"
           animate="visible"
         >
-          {!isLoading && stats && (
+          {!isLoading && stats?.growth_stage && (
             <>
               <StepBox as={motion.div} variants={itemVariants}>
                 <GrowthTitle>지금까지의 나는 어떤가요?</GrowthTitle>
@@ -65,7 +65,7 @@ const GrowthFactorPage = () => {
                   initial={{ opacity: 0 }}
                   animate={{
                     opacity: 1,
-                    ...stageVariants[stats.growth_stage.toString()],
+                    ...stageVariants[(stats?.growth_stage || 1).toString()],
                   }}
                   transition={{ duration: 0.8 }}
                 >
@@ -102,7 +102,7 @@ const GrowthFactorPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <FactorCount>{stats?.this_week_posts}개</FactorCount>
+                    <FactorCount>{stats?.this_week_posts ?? 0}개</FactorCount>
                   </motion.div>
                   <FactorLabel>이번주 고민</FactorLabel>
                 </FactorBox>
@@ -116,7 +116,7 @@ const GrowthFactorPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.7 }}
                   >
-                    <FactorCount>{stats?.total_posts}개</FactorCount>
+                    <FactorCount>{stats?.total_posts ?? 0}개</FactorCount>
                   </motion.div>
                   <FactorLabel>전체 고민</FactorLabel>
                 </FactorBox>
@@ -130,7 +130,7 @@ const GrowthFactorPage = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.9 }}
                   >
-                    <FactorCount>{stats?.resolved_posts}개</FactorCount>
+                    <FactorCount>{stats?.resolved_posts ?? 0}개</FactorCount>
                   </motion.div>
                   <FactorLabel>덜어낸 고민</FactorLabel>
                 </FactorBox>
