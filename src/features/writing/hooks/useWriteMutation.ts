@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { WriteDataTypes } from '../types/formTypes';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
 import useWritingModeStore from '../../../stores/writingModeStore';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const useWriteMutation = () => {
   const { setAiContent, setContentId } = useWritingResponseStore(
@@ -15,7 +15,7 @@ const useWriteMutation = () => {
 
   return useMutation({
     mutationFn: async (newContent: WriteDataTypes) => {
-      const response = await axios.post('/api/post/write', newContent);
+      const response = await axiosInstance.post('/post/write', newContent);
       return response.data;
     },
     onSuccess: (data) => {
