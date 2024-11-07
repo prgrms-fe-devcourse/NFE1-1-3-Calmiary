@@ -15,7 +15,7 @@ const UserInfo = ({
         {user_info && (
           <>
             <img
-              src={user_info.profile_image || default_profile_image}
+              src={user_info.profileImage || default_profile_image}
               alt="userImg"
             />
             <p>{user_info.nickname}</p>
