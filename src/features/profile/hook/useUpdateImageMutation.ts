@@ -1,12 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
+import { axiosInstance } from '../../../network/axiosInstance';
 import axios from 'axios';
-
-const api = axios.create({
-  baseURL: '/api',
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-});
 
 interface UseUpdateProfileImageOptions {
   onSuccess?: () => void;
@@ -23,7 +17,7 @@ export const useUpdateProfileImage = (
       const formData = new FormData();
       formData.append('file', file);
 
-      const { data } = await api.put(
+      const { data } = await axiosInstance.put(
         `/profile/${userId}/profile-image`,
         formData
       );
