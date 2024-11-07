@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import commentUpdate from '../../../assets/comment-update.svg';
-import axios from 'axios';
 import { useState } from 'react';
 import { useUser } from '../../home/hooks/useUser';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 interface CommentInputPropTypes {
   postId: number | undefined;
@@ -22,7 +22,7 @@ const CommentInput = ({ postId, refetchComments }: CommentInputPropTypes) => {
     }
 
     try {
-      await axios.post(`/api/community/post/${postId}/comment`, {
+      await axiosInstance.post(`/community/post/${postId}/comment`, {
         content: commentData,
         user_id: getUserId().user_id,
       });

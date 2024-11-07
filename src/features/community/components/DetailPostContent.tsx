@@ -4,11 +4,11 @@ import { UserDataType } from '../types';
 import { Icon } from '../../../components/ui/Icon';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { queryClient } from '../../../network/react-query/queryClient';
 import Skeleton from '../../../components/Skeleton';
 import { useUser } from '../../home/hooks/useUser';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const DetailPostContent = ({
   content,
@@ -31,8 +31,8 @@ const DetailPostContent = ({
 
   const empathyMutation = useMutation({
     mutationFn: async () => {
-      const response = await axios.patch(
-        `/api/community/post/${post_id}/like`,
+      const response = await axiosInstance.patch(
+        `/community/post/${post_id}/like`,
         {},
         {
           params: { user_id: userId },
