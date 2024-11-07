@@ -1,3 +1,4 @@
+from typing import Tuple
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, and_
 from sqlalchemy.orm import Session
@@ -15,6 +16,8 @@ class PostStats(BaseModel):
     this_week_posts: int
     total_posts: int
     resolved_posts: int
+    growth_stage: int
+    growth_message: str
 
     class Config:
         json_schema_extra = {
@@ -114,10 +117,14 @@ async def get_post_stats(user_id: int, db: Session = Depends(get_db)):
         )
     ).count()
 
+    growth_stage, growth_message = calculate_growth_stage(resolved_posts, total_posts)
+
     return {
         "this_week_posts": this_week_posts,
         "total_posts": total_posts,
-        "resolved_posts": resolved_posts
+        "resolved_posts": resolved_posts,
+        "growth_stage": growth_stage,
+        "growth_message": growth_message
     }
 
 @router.get(
@@ -141,16 +148,25 @@ async def get_post_stats(user_id: int, db: Session = Depends(get_db)):
         }
     }
 )
-async def get_overall_stats(db: Session = Depends(get_db)):
-    total_users = db.query(models.User).count()
-    total_posts = db.query(models.Post).count()
-    resolved_posts = db.query(models.Post).filter(models.Post.is_solved == True).count()
-    
-    resolution_rate = (resolved_posts / total_posts * 100) if total_posts > 0 else 0
 
-    return {
-        "total_users": total_users,
-        "total_posts": total_posts,
-        "resolved_posts": resolved_posts,
-        "resolution_rate": round(resolution_rate, 2)
-    }
+
+def calculate_growth_stage(resolved_posts: int, total_posts: int) -> Tuple[int, str]:
+    """
+    해결된 고민의 개수와 비율을 모두 고려하여 성장 단계와 메시지를 반환
+    """
+    if total_posts == 0:
+        return 1, "첫 걸음을 시작해보세요!"
+    
+    resolution_rate = (resolved_posts / total_posts) * 100
+    
+    # 개수와 비율을 모두 고려
+    if resolved_posts < 3:
+        return 1, "천천히 시작해보세요!"
+    elif resolved_posts < 10 or resolution_rate < 20:
+        return 2, f"벌써 {resolved_posts}개의 고민을 해결했어요!"
+    elif resolved_posts < 20 or resolution_rate < 40:
+        return 3, f"{resolved_posts}개의 고민을 해결했어요. 잘 하고 있어요!"
+    elif resolved_posts < 40 or resolution_rate < 60:
+        return 4, f"무려 {resolved_posts}개의 고민을 극복했어요! ({resolution_rate:.1f}%)"
+    else:
+        return 5, f"당신은 이미 강해졌어요! ({resolution_rate:.1f}%의 해결률)"

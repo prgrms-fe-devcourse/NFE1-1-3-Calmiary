@@ -1,16 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import {
   UpdateProfileDataPropTypes,
   UpdateProfileOptionsPropTypes,
 } from '../types/profileTypes';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const updateProfile = async ({
   userId,
   nickname,
   password,
 }: UpdateProfileDataPropTypes) => {
-  const response = await axios.patch(`/api/profile/update/${userId}`, {
+  const response = await axiosInstance.patch(`/profile/update/${userId}`, {
     nickname,
     password,
   });

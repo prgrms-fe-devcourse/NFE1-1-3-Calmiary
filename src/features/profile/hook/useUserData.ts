@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 export const useUserData = (userId: string) => {
   return useQuery({
     queryKey: ['userData', userId],
     queryFn: async () => {
-      const response = await axios.get(`/api/profile/${userId}`);
+      const response = await axiosInstance.get(`/profile/${userId}`);
       return response.data;
     },
     enabled: !!userId,

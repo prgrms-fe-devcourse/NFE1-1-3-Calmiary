@@ -3,7 +3,7 @@ export type SortOptions = Record<SortKey, string>;
 
 export interface UserDataType {
   nickname: string;
-  profileImage: string;
+  profile_image: string;
 }
 
 export interface PostTypes extends BasePostTypes {

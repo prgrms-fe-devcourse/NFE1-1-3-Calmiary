@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { DropDown, Post, Title } from './components';
 import { BeatLoader } from 'react-spinners';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SortKey, PostTypes } from './types';
+import { axiosInstance } from '../../network/axiosInstance';
 
 const CommunityPage = () => {
   const [isSorted, setIsSorted] = useState<SortKey>('latest');
@@ -18,8 +18,8 @@ const CommunityPage = () => {
     page: number,
     SIZE: number
   ): Promise<PostTypes[]> => {
-    const { data } = await axios.get(
-      `/api/community/posts?sort_by=${sortedOption}&page=${page}&limit=${SIZE}`
+    const { data } = await axiosInstance.get(
+      `/community/posts?sort_by=${sortedOption}&page=${page}&limit=${SIZE}`
     );
 
     return data;

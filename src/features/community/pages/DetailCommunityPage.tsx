@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 import { CommentsContent, WorryContent } from '../components';
 import { Title } from '../components';
-import axios from 'axios';
 import { DetailPostTypes } from '../types';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const DetailCommunityPage = () => {
   const { id } = useParams();
 
   const getDetailPost = async (id: number): Promise<DetailPostTypes> => {
-    const { data } = await axios.get<DetailPostTypes>(
-      `/api/community/post/${id}`
+    const { data } = await axiosInstance.get<DetailPostTypes>(
+      `/community/post/${id}`
     );
 
     return data;
@@ -28,7 +28,7 @@ const DetailCommunityPage = () => {
       <WorryContent
         userInfo={{
           nickname: data?.nickname || '',
-          profileImage: data?.profileImage || '',
+          profile_image: data?.profile_image || '',
         }}
         content={data?.content}
         likesCount={data?.like_count}

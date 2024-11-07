@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import Dropdown from '../components/Dropdown';
 import { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PostPropTypes, SortOption } from '../types/profileTypes';
 import ProfilePost from '../components/ProfilePost';
 import { useUser } from '../../home/hooks/useUser';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const fetchLikedPosts = async ({
   pageParam = 1,
@@ -22,8 +22,8 @@ const fetchLikedPosts = async ({
       : sortOption === '좋아요순'
         ? 'likes'
         : 'comments';
-  const response = await axios.get(
-    `/api/profile/posts/liked/${userId}?sort_by=${sortBy}&page=${pageParam}&limit=3`
+  const response = await axiosInstance.get(
+    `/profile/posts/liked/${userId}?sort_by=${sortBy}&page=${pageParam}&limit=3`
   );
   return {
     data: response.data,

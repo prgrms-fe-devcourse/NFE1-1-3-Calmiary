@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { VisibilityDataTypes } from '../types/formTypes';
 import useWritingResponseStore from '../../../stores/writingResponseStore';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import showToast from '../utils/showToast';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 const useMoveMutation = () => {
   // 화면 이동 로직
@@ -14,7 +14,7 @@ const useMoveMutation = () => {
 
   return useMutation({
     mutationFn: async (userId: VisibilityDataTypes) => {
-      await axios.patch(`/api/diary/post/${contentId}/visibility`, userId);
+      await axiosInstance.patch(`/diary/post/${contentId}/visibility`, userId);
     },
     onSuccess: () => {
       navigate(`/community/post/${contentId}`);

@@ -4,8 +4,8 @@ import ProfileButton from '../components/ProfileButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../../home/hooks/useUser';
 import { useUserData } from '../hook/useUserData';
-import axios from 'axios';
 import Modal from '../components/Modal';
+import { axiosInstance } from '../../../network/axiosInstance';
 
 export default function ProfileMainPage() {
   const { getUserId, logout, getAccessToken } = useUser();
@@ -20,8 +20,8 @@ export default function ProfileMainPage() {
     try {
       const token = getAccessToken();
 
-      await axios.post(
-        '/api/auth/logout',
+      await axiosInstance.post(
+        '/auth/logout',
         {},
         {
           headers: {
