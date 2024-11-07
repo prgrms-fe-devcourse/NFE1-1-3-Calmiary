@@ -1,8 +1,9 @@
 
 from fastapi import FastAPI, Depends, Depends, HTTPException, Path, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+import uvicorn
 from utils.security import SecurityUtils
 from model.schemas import CommentResponse, LikeCreate, LikeResponse, PostResponse, S_PostResponse, UserResponse
 from model import models
@@ -29,6 +30,7 @@ app = FastAPI(
     "github": "https://github.com/prgrms-fe-devcourse/NFE1-1-3-Calmiary"
   }
 )
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -37,12 +39,14 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-# @app.middleware("http")
-# async def add_timezone_header(request, call_next):
-#     response = await call_next(request)
-#     response.headers["Timezone"] = "Asia/Seoul"
-#     return response
-
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8001,
+        ssl_keyfile="./privkey.pem",     # SSL 인증서 프라이빗 키
+        ssl_certfile="./fullchain.pem",    # SSL 인증서
+    )
 """
 API 엔드포인트 구조
 
@@ -95,7 +99,8 @@ def create_post(
     post_data: PostCreate,
     db: Session = Depends(get_db)
 ):
-    
+  
+#   raise HTTPException(status_code=200, detail="200에러 강제 발생")
   try:
       response = client.chat.completions.create(
           model="gpt-4o-mini",
@@ -310,3 +315,4 @@ async def root():
     </html>
     """
     return html_content
+
