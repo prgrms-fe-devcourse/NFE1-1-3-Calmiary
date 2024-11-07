@@ -3,8 +3,14 @@
 <a href="https://calmiary.org/">Calmiary 서비스 바로가기</a><Br/><Br/>
 **"💭 오늘 하루 나를 힘들게 한 것은 무엇인가요?"**<Br/>
 `Calmiary`는 `Calm`과 `Diary`를 합친 말로 고민을 기록하며 마음의 평화를 찾는 다이어리를 의미해요.<br/>
-몰아치는 고민에 지친 현대일들을 위한 서비스로, 실제 고민의 대부분이 현실에서 벌어지는 않는다는 연구 결과를 바탕으로 기획했어요.<br/>
+몰아치는 고민에 지친 현대인들을 위한 서비스로, 실제 고민의 대부분이 현실에서 벌어지는 않는다는 연구 결과를 바탕으로 기획했어요.<br/>
 고민을 기록하고 인공지능 혹은 사람의 의견을 받고 지금 하고 있는 고민이 별 것 아니라는 것을 깨달으면 고민을 한시름 덜 수 있다는 아이디어에서 착안하여 여러분의 마음의 짐을 덜어드리고 싶어요.
+
+# 📅 프로젝트 진행 과정
+
+- **`기획 기간`** : 2424.10.22 ~ 2424.10.25
+- **`디자인 기간`** : 2424.10.23 ~ 2424.10.27
+- **`개발 기간`** : 2424.10.23 ~ 2024.11.06
 
 # ✨ 멤버 소개
 
@@ -59,27 +65,17 @@
     <td><p>회원가입 및 로그인</p><img src="https://github.com/user-attachments/assets/bd555a62-c2a4-4f35-b9cf-1c076a6b8d51" alt="회원가입 페이지"></td>
 </table>
 
-### 메인 및 프로필
+### 메인 및 프로필 / 고민 남기기
 
 <table>
     <td><p>메인 및 프로필</p><img src="https://github.com/user-attachments/assets/afb6a8dd-3434-48c0-9e11-21b5f187da18" alt="프로필 페이지"></td>
-    </table>
-
-### 고민 남기기
-
-<table>
-  <td><p>고민 남기기</p><img src="https://github.com/user-attachments/assets/072cb302-a1db-4a63-ade0-e919f091d845" alt="고민 작성 페이지"></td>
+     <td><p>고민 남기기</p><img src="https://github.com/user-attachments/assets/072cb302-a1db-4a63-ade0-e919f091d845" alt="고민 작성 페이지"></td>
 </table>
 
-### 다이어리
+### 다이어리 / 커뮤니티
 
 <table>
   <td><p>다이어리</p><img src="https://github.com/user-attachments/assets/2532c462-834e-4354-9796-3854a1f328ff" alt="다이어리 페이지"></td>
-</table>
-
-### 커뮤니티
-
-<table>
   <td><p>커뮤니티</p><img src="https://github.com/user-attachments/assets/3b124175-f33d-4764-92e8-070271dccd85" alt="커뮤니티 페이지"></td>
 </table>
 
