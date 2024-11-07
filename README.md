@@ -68,22 +68,56 @@
 ### 랜딩 페이지 / 회원가입 및 로그인
 
 <table>
-    <td><p>랜딩 페이지</p><img src="https://github.com/user-attachments/assets/b7ac2c4e-515d-4215-bf3b-b44bcfd8d64b" alt="랜딩 페이지"></td>
-    <td><p>회원가입 및 로그인</p><img src="https://github.com/user-attachments/assets/bd555a62-c2a4-4f35-b9cf-1c076a6b8d51" alt="회원가입 페이지"></td>
+  <tr>
+    <td align="center">
+      <p><strong>랜딩 페이지</strong></p>
+      <img src="https://github.com/user-attachments/assets/b7ac2c4e-515d-4215-bf3b-b44bcfd8d64b" alt="랜딩 페이지">
+    </td>
+    <td align="center">
+      <p><strong>회원가입 및 로그인</strong></p>
+      <img src="https://github.com/user-attachments/assets/bd555a62-c2a4-4f35-b9cf-1c076a6b8d51" alt="회원가입 페이지">
+    </td>
+  </tr>
+  <tr>
+  <td></td>
+    <td colspan="2" align="center">
+      <p>중복 유저 확인, 유효성 검사</p>
+    </td>
+  </tr>
 </table>
 
 ### 메인 및 프로필 / 고민 남기기
 
 <table>
-    <td><p>메인 및 프로필</p><img src="https://github.com/user-attachments/assets/afb6a8dd-3434-48c0-9e11-21b5f187da18" alt="프로필 페이지"></td>
-     <td><p>고민 남기기</p><img src="https://github.com/user-attachments/assets/072cb302-a1db-4a63-ade0-e919f091d845" alt="고민 작성 페이지"></td>
+    <tr>
+      <td align="center"><p><strong>메인 및 프로필</strong></p><img src="https://github.com/user-attachments/assets/afb6a8dd-3434-48c0-9e11-21b5f187da18" alt="프로필 페이지"></td>
+       <td align="center"><p><strong>고민 남기기</strong></p><img src="https://github.com/user-attachments/assets/072cb302-a1db-4a63-ade0-e919f091d845" alt="고민 작성 페이지"></td>
+    </tr>
+    <tr>
+      <td align="center">
+      <p>유저 정보 수정, 무한 스크롤</p>
+      </td>
+      <td align="center">
+      <p>고민 남기기 및 맞춤형 조언</p>
+      </td>
+    </tr>
 </table>
 
 ### 다이어리 / 커뮤니티
 
 <table>
-  <td><p>다이어리</p><img src="https://github.com/user-attachments/assets/2532c462-834e-4354-9796-3854a1f328ff" alt="다이어리 페이지"></td>
-  <td><p>커뮤니티</p><img src="https://github.com/user-attachments/assets/3b124175-f33d-4764-92e8-070271dccd85" alt="커뮤니티 페이지"></td>
+  <tr>
+    <td align="center"><p><strong>다이어리</strong></p><img src="https://github.com/user-attachments/assets/2532c462-834e-4354-9796-3854a1f328ff" alt="다이어리 페이지"></td>
+    <td align="center"><p><strong>커뮤니티</strong></p><img src="https://github.com/user-attachments/assets/3b124175-f33d-4764-92e8-070271dccd85" alt="커뮤니티 페이지"></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <p>게시물 공개 여부, 고민 덜어내기</p>
+    </td>
+    <td align="center">
+      <p>무한스크롤, 좋아요, 댓글</p>
+    </td>
+  </tr>
 </table>
 
 ---
