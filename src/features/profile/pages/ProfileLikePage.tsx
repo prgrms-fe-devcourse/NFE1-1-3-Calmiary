@@ -83,7 +83,7 @@ export default function ProfileLikePage() {
   return (
     <>
       <ProfileContainer>
-        <TextArea>좋아요 한 고민들</TextArea>
+        <TextArea>공감한 고민들</TextArea>
         <DropdownArea>
           <Dropdown
             category={sortOption}
