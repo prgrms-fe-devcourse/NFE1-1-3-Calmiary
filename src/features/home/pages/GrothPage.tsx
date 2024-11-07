@@ -176,6 +176,7 @@ const GrowthWrapper = styled.div`
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.brand_bg};
   position: relative;
+  overflow: hidden;
 `;
 
 const GrowthLayout = styled.div`
