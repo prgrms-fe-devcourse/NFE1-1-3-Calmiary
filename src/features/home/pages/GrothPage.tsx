@@ -57,7 +57,7 @@ const GrowthFactorPage = () => {
           initial="hidden"
           animate="visible"
         >
-          {!isLoading && stats?.growth_stage && (
+          {!isLoading && stats && (
             <>
               <StepBox as={motion.div} variants={itemVariants}>
                 <GrowthTitle>지금까지의 나는 어떤가요?</GrowthTitle>
