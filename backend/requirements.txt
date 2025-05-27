@@ -8,6 +8,6 @@ python-multipart
 pytz
 bcrypt>=4.0.0
 python-jose[cryptography]>=3.3.0
-redis>=5.0.0
 requests>=2.28.0
 cloudflare>=2.11.0
+passlib[bcrypt]>=1.7.0

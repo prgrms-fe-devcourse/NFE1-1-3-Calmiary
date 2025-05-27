@@ -1,10 +1,4 @@
 #!/bin/bash
 
-# Redis 백그라운드 실행
-redis-server --port 6379 &
-
-# Redis 시작 대기
-sleep 3
-
-# FastAPI 실행
+# FastAPI만 실행 (Redis는 별도 서비스 사용)
 python main.py
