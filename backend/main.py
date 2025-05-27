@@ -40,12 +40,18 @@ app.add_middleware(
 )
 
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", 8001))
+    
+    # SSL 설정 - 인증서 파일이 존재하는 경우에만 적용
+    ssl_keyfile = "./privkey.pem" if os.path.exists("./privkey.pem") else None
+    ssl_certfile = "./fullchain.pem" if os.path.exists("./fullchain.pem") else None
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=8001,
-        ssl_keyfile="./privkey.pem",     # SSL 인증서 프라이빗 키
-        ssl_certfile="./fullchain.pem",    # SSL 인증서
+        port=port,
+        ssl_keyfile=ssl_keyfile,
+        ssl_certfile=ssl_certfile,
     )
 """
 API 엔드포인트 구조
@@ -103,7 +109,7 @@ def create_post(
 #   raise HTTPException(status_code=200, detail="200에러 강제 발생")
   try:
       response = client.chat.completions.create(
-          model="gpt-4o-mini",
+          model="gpt-4.1-mini",
           messages=[
               {"role": "system", "content": "당신은 사용자의 걱정을 들어주고, 친근하게 위로와 격려를 해주는 도우미예요. 항상 해요체를 사용해 주세요. 응답은 '위로'와 '제안'으로 구분해서 작성해 주세요. 그리고 위로와 제안의 응답은 각각 최소한 하나씩 제공되어야 해요"},
               {"role": "user", "content": f"오늘 제가 걱정한 건: {post_data.content}. 저 좀 위로해 주실 수 있을까요? 아니면 어떻게 해결하면 좋을까요?"}
